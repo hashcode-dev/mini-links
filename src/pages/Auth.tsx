@@ -22,7 +22,7 @@ export default function Auth() {
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
               <LinkIcon size={20} />
             </div>
-            <span className="text-xl font-black text-primary dark:text-teal-400 font-display leading-none">LinkPrecision</span>
+            <span className="text-xl font-black text-primary dark:text-teal-400 font-display leading-none">Mini Links</span>
           </Link>
 
           <div className="space-y-2 mb-8">
@@ -144,7 +144,7 @@ export default function Auth() {
               ))}
             </div>
             <p className="text-xl font-medium leading-relaxed mb-6">
-              "LinkPrecision has completely transformed how we track our campaigns. The interface is incredibly clean, and the analytics are exactly what we needed to scale."
+              "Mini Links has completely transformed how we track our campaigns. The interface is incredibly clean, and the analytics are exactly what we needed to scale."
             </p>
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center font-bold text-xl">

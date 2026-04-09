@@ -43,7 +43,7 @@ export default function Home() {
               Shorten. <span className="text-primary dark:text-teal-400">Brand.</span> <br/>Track.
             </h1>
             <p className="text-xl text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed">
-              Transform long, messy links into powerful marketing assets. LinkPrecision offers the architectural precision your digital presence demands.
+              Transform long, messy links into powerful marketing assets. Mini Links offers the architectural precision your digital presence demands.
             </p>
             <div className="flex items-center gap-6">
               <div className="flex flex-col">
@@ -117,7 +117,7 @@ export default function Home() {
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Domain</label>
                         <select className="w-full px-4 py-3 bg-surface-container-low dark:bg-navy border border-surface-container-high dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded text-navy dark:text-white font-medium transition-all outline-none appearance-none">
-                          <option>LinkPrecision.com</option>
+                          <option>MiniLinks.com</option>
                           <option>lp.at</option>
                         </select>
                       </div>
@@ -147,7 +147,7 @@ export default function Home() {
                     </button>
                     
                     <p className="text-center text-[10px] text-slate-400 leading-relaxed px-4">
-                      By clicking Shorten Link, you agree to the <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a> of LinkPrecision.
+                      By clicking Shorten Link, you agree to the <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a> of Mini Links.
                     </p>
                   </form>
                 )}
@@ -183,9 +183,9 @@ export default function Home() {
                 </thead>
                 <tbody className="divide-y divide-surface-container-high dark:divide-slate-700">
                   {[
-                    { short: 'LinkPrecision.com/ux-case', original: 'https://dribbble.com/shots/2349583-Case-St...', icon: 'https://cdn.brandfetch.io/dribbble.com/w/400/h/400' },
-                    { short: 'LinkPrecision.com/fig-proto', original: 'https://www.figma.com/file/ASh2849AsJ/Desi...', icon: 'https://cdn.brandfetch.io/figma.com/w/400/h/400' },
-                    { short: 'LinkPrecision.com/pay-portal', original: 'https://stripe.com/docs/api/checkout/sessions...', icon: 'https://cdn.brandfetch.io/stripe.com/w/400/h/400' },
+                    { short: 'MiniLinks.com/ux-case', original: 'https://dribbble.com/shots/2349583-Case-St...', icon: 'https://cdn.brandfetch.io/dribbble.com/w/400/h/400' },
+                    { short: 'MiniLinks.com/fig-proto', original: 'https://www.figma.com/file/ASh2849AsJ/Desi...', icon: 'https://cdn.brandfetch.io/figma.com/w/400/h/400' },
+                    { short: 'MiniLinks.com/pay-portal', original: 'https://stripe.com/docs/api/checkout/sessions...', icon: 'https://cdn.brandfetch.io/stripe.com/w/400/h/400' },
                   ].map((link, i) => (
                     <tr key={i} className="hover:bg-surface-container-low/50 dark:hover:bg-navy-light/50 transition-colors">
                       <td className="px-6 py-5">
@@ -228,8 +228,8 @@ export default function Home() {
       <footer className="bg-surface-container-lowest dark:bg-navy-light w-full py-8 mt-auto border-t border-surface-container-high dark:border-slate-800">
         <div className="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-8">
           <div className="flex flex-col items-center md:items-start gap-2">
-            <span className="font-semibold text-navy dark:text-white font-display">LinkPrecision</span>
-            <p className="text-slate-500 dark:text-slate-400 text-xs">© 2026 LinkPrecision Inc. All rights reserved.</p>
+            <span className="font-semibold text-navy dark:text-white font-display">Mini Links</span>
+            <p className="text-slate-500 dark:text-slate-400 text-xs">© 2026 Mini Links Inc. All rights reserved.</p>
           </div>
           <div className="flex flex-wrap justify-center gap-8">
             <a href="#" className="text-slate-500 dark:text-slate-400 text-sm hover:text-navy dark:hover:text-white underline-offset-4 hover:underline transition-all">Privacy Policy</a>

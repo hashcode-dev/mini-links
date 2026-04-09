@@ -57,7 +57,7 @@ export default function QRCode() {
           <div className="bg-gradient-to-r from-primary to-primary-dark p-4 rounded-xl text-white shadow-md flex items-start gap-3">
             <Crown size={20} className="shrink-0 mt-0.5 text-yellow-300" />
             <div>
-              <p className="text-sm font-bold">Remove LinkPrecision logo</p>
+              <p className="text-sm font-bold">Remove Mini Links logo</p>
               <p className="text-xs text-white/80 mt-1">Upgrade to Pro for fully white-labeled QR codes.</p>
               <button className="mt-3 text-xs font-bold bg-white text-primary px-3 py-1.5 rounded hover:bg-surface transition-colors">
                 Upgrade to Pro

@@ -28,7 +28,7 @@ export default function Navbar({ isPublicPage, toggleDarkMode, isDarkMode }: Nav
     <header className="sticky top-0 z-30 glass-panel flex justify-between items-center w-full px-6 py-4 border-b border-surface-container-high dark:border-navy shadow-sm">
       <div className="flex items-center gap-8">
         <Link to="/" className={clsx("text-xl font-bold tracking-tight font-display", !isPublicPage && "md:hidden")}>
-          LinkPrecision
+          Mini Links
         </Link>
         
         <nav className="hidden lg:flex items-center gap-6 text-sm font-display font-medium">

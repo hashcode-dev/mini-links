@@ -20,7 +20,7 @@ export default function Sidebar() {
           <LinkIcon size={20} />
         </div>
         <div>
-          <h1 className="text-lg font-black text-primary dark:text-teal-400 font-display leading-none">LinkPrecision</h1>
+          <h1 className="text-lg font-black text-primary dark:text-teal-400 font-display leading-none">Mini Links</h1>
           <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-semibold mt-1">Editorial Analytics</p>
         </div>
       </div>
