@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Link as LinkIcon, Zap, ArrowRight, ExternalLink, QrCode, Share2, Copy, Check, Download } from 'lucide-react';
+import { Link as LinkIcon, Zap, ArrowRight, ExternalLink, QrCode, Share2, Copy, Check, Download, X } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useLinks } from '../context/LinksContext';
 
@@ -18,7 +18,9 @@ export default function Home() {
   const [qrDomain, setQrDomain] = useState('minilinks.com');
   const [qrShortUrl, setQrShortUrl] = useState('');
   const [copiedQrUrl, setCopiedQrUrl] = useState(false);
+  const [showQrModal, setShowQrModal] = useState(false);
   const qrTabSvgRef = useRef<SVGSVGElement | null>(null);
+  const qrModalSvgRef = useRef<SVGSVGElement | null>(null);
   const { createLink } = useLinks();
 
   const normalizeUrl = (rawUrl: string): string => {
@@ -76,8 +78,7 @@ export default function Home() {
   };
 
   const handleOpenQrTabFromShorten = () => {
-    setQrShortUrl(shortenedUrl);
-    setActiveTab('qr');
+    setShowQrModal(true);
   };
 
   const handleGenerateQr = (e: React.FormEvent) => {
@@ -142,6 +143,21 @@ export default function Home() {
     };
 
     image.src = objectUrl;
+  };
+
+  const downloadSvgAsFile = (svgElement: SVGSVGElement | null, fileName: string) => {
+    if (!svgElement) {
+      return;
+    }
+    const serializer = new XMLSerializer();
+    const source = serializer.serializeToString(svgElement);
+    const blob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -233,9 +249,54 @@ export default function Home() {
                       <button type="button" onClick={handleVisitShortUrl} className="py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
                         Visit URL
                       </button>
-                      <button type="button" onClick={handleOpenQrTabFromShorten} className="py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
-                        QR
-                      </button>
+                      <div className="relative">
+                        <button type="button" onClick={handleOpenQrTabFromShorten} className="w-full py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
+                          QR
+                        </button>
+                        {showQrModal && (
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-50 w-[280px] bg-white dark:bg-navy-light rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 overflow-hidden animate-in fade-in zoom-in duration-200">
+                            {/* Subscribe banner */}
+                            <div className="bg-teal-50 dark:bg-teal-900/30 border-b border-teal-100 dark:border-teal-800 px-4 py-3">
+                              <p className="text-xs text-center text-slate-700 dark:text-slate-300 leading-relaxed">
+                                Want to generate a QR code without the logo? <Link to="/pricing" className="text-primary dark:text-teal-400 font-bold hover:underline">Subscribe now.</Link>
+                              </p>
+                            </div>
+                            {/* QR content */}
+                            <div className="p-5 flex gap-4 items-start">
+                              <div className="bg-white p-1.5 rounded-lg border border-slate-100 dark:border-slate-700 shrink-0">
+                                <QRCodeSVG ref={qrModalSvgRef} value={`https://${shortenedUrl}`} size={90} level="M" imageSettings={{ src: '/favicon.ico', height: 20, width: 20, excavate: true }} />
+                              </div>
+                              <div className="flex flex-col gap-2.5 flex-1 min-w-0">
+                                <h4 className="text-sm font-bold text-navy dark:text-white leading-tight">Download Your QR Code</h4>
+                                <button
+                                  type="button"
+                                  onClick={() => downloadSvgAsFile(qrModalSvgRef.current, 'mini-links-qr.svg')}
+                                  className="flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-xs font-bold transition-colors"
+                                >
+                                  <Download size={13} />
+                                  Download SVG
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => downloadSvgAsPng(qrModalSvgRef.current, 'mini-links-qr.png')}
+                                  className="flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-xs font-bold transition-colors"
+                                >
+                                  <Download size={13} />
+                                  Download PNG
+                                </button>
+                              </div>
+                            </div>
+                            {/* Close button */}
+                            <button
+                              type="button"
+                              onClick={() => setShowQrModal(false)}
+                              className="absolute top-2 right-2 p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                            >
+                              <X size={14} />
+                            </button>
+                          </div>
+                        )}
+                      </div>
                       <button type="button" onClick={handleShareShortUrl} className="py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
                         Share
                       </button>
@@ -244,7 +305,7 @@ export default function Home() {
                       </button>
                     </div>
                     <button 
-                      onClick={() => setShortenedUrl('')}
+                      onClick={() => { setShortenedUrl(''); setShowQrModal(false); }}
                       className="w-full py-3 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-sm font-bold transition-colors mt-auto"
                     >
                       Shorten another link
