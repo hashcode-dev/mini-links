@@ -166,6 +166,13 @@ export default function Auth() {
               {isLogin ? 'Sign Up' : 'Sign In'}
             </button>
           </p>
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="mt-3 w-full rounded-lg border border-surface-container-high dark:border-slate-700 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-slate-800 transition-colors"
+          >
+            Back to Home
+          </button>
         </div>
       </div>
 
