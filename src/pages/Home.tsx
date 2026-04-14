@@ -434,7 +434,7 @@ export default function Home() {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleGenerateQr} className="space-y-3 flex flex-col h-full overflow-y-auto lg:overflow-hidden pr-1">
+                  <form onSubmit={handleGenerateQr} className="space-y-5 flex flex-col h-full overflow-y-auto pr-1">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
                       <div className="relative">
@@ -445,19 +445,19 @@ export default function Home() {
                           value={qrLongUrl}
                           onChange={(e) => setQrLongUrl(e.target.value)}
                           placeholder="https://very-long-architectural-url.com/destination-page"
-                          className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
+                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
                         />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Domain</label>
                         <input
                           type="text"
                           value={qrDomain}
                           readOnly
-                          className="w-full px-4 py-2.5 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 rounded text-slate-900 dark:text-white font-medium transition-all outline-none text-sm cursor-default"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 rounded text-slate-900 dark:text-white font-medium transition-all outline-none text-sm cursor-default"
                         />
                       </div>
                       <div className="space-y-2">
@@ -467,16 +467,16 @@ export default function Home() {
                           value={qrAlias}
                           onChange={(e) => setQrAlias(e.target.value)}
                           placeholder="custom-alias"
-                          className="w-full px-4 py-2.5 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
                         />
                       </div>
                     </div>
 
-                    <div className="space-y-3 pt-1">
+                    <div className="space-y-4 pt-2">
                       <button
                         type="submit"
                         disabled={isQrCreating}
-                        className="w-full py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                        className="w-full py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                       >
                         {isQrCreating ? (
                           <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -488,7 +488,7 @@ export default function Home() {
                         )}
                       </button>
 
-                      <p className="text-center text-[9px] text-slate-400 leading-tight px-2">
+                      <p className="text-center text-[10px] text-slate-400 leading-relaxed px-4">
                         By clicking Generate QR Code, you agree to LinkPrecision's <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a>.
                       </p>
                     </div>
