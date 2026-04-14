@@ -277,7 +277,7 @@ export default function Home() {
                           QR
                         </button>
                         {showQrModal && (
-                          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 z-50 w-[280px] bg-white dark:bg-navy-light rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 overflow-hidden animate-in fade-in zoom-in duration-200">
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-50 w-[280px] bg-white dark:bg-navy-light rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 overflow-hidden animate-in fade-in zoom-in duration-200">
                             {/* Subscribe banner */}
                             <div className="bg-teal-50 dark:bg-teal-900/30 border-b border-teal-100 dark:border-teal-800 px-4 py-3">
                               <p className="text-xs text-center text-slate-700 dark:text-slate-300 leading-relaxed">
