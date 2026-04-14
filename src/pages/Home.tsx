@@ -216,7 +216,7 @@ export default function Home() {
 
           {/* Right: Widget Card */}
           <div className="bg-white dark:bg-navy-light p-1 rounded-xl shadow-xl ring-1 ring-slate-100 dark:ring-slate-700">
-            <div className="bg-white dark:bg-navy-light rounded-lg overflow-hidden">
+            <div className="bg-white dark:bg-navy-light rounded-lg overflow-visible">
               {/* Tabs */}
               <div className="flex gap-2 p-3 bg-slate-100/80 dark:bg-navy/60 rounded-t-lg">
                 <button 
@@ -244,7 +244,7 @@ export default function Home() {
               {/* Form Content */}
               <div className="p-8 flex flex-col h-[360px]">
                 {activeTab === 'shorten' ? shortenedUrl ? (
-                  <div className="space-y-3 animate-in fade-in zoom-in duration-300 flex flex-col h-full overflow-hidden">
+                  <div className="space-y-3 animate-in fade-in zoom-in duration-300 flex flex-col h-full overflow-visible">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
                       <div className="h-[50px] px-4 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 rounded-lg flex items-center">
