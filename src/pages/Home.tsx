@@ -106,7 +106,7 @@ export default function Home() {
   };
 
   const handleCopyQrUrl = () => {
-    navigator.clipboard.writeText(qrShortUrl);
+    navigator.clipboard.writeText(`https://${qrShortUrl}`);
     setCopiedQrUrl(true);
     setTimeout(() => setCopiedQrUrl(false), 2000);
   };
@@ -372,38 +372,65 @@ export default function Home() {
                     </div>
                   </form>
                 ) : qrShortUrl ? (
-                  <div className="space-y-2.5 animate-in fade-in zoom-in duration-300 flex flex-col h-full overflow-y-auto lg:overflow-hidden pr-1">
-                    <div className="p-3 bg-teal-50/70 border border-teal-200 dark:bg-teal-900/20 dark:border-teal-800 rounded-lg flex items-center justify-between gap-2">
-                      <span className="font-mono text-teal-700 dark:text-teal-400 font-bold text-sm truncate">{qrShortUrl}</span>
-                      <button
-                        type="button"
-                        onClick={handleCopyQrUrl}
-                        className="px-2 py-1.5 bg-primary text-white rounded hover:bg-primary-dark transition-colors flex items-center gap-1.5 shrink-0"
-                      >
-                        {copiedQrUrl ? <Check size={14} /> : <Copy size={14} />}
-                        <span className="text-xs font-bold">{copiedQrUrl ? 'Copied' : 'Copy'}</span>
-                      </button>
-                    </div>
-                    <div className="p-3 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-navy flex flex-col items-center gap-2.5">
-                      <div className="bg-white p-1.5 rounded-lg">
-                        <QRCodeSVG ref={qrTabSvgRef} value={`https://${qrShortUrl}`} size={160} level="M" />
+                  <div className="animate-in fade-in zoom-in duration-300 h-full overflow-y-auto lg:overflow-hidden pr-1 flex flex-col justify-between gap-3">
+                    <div className="space-y-3">
+                      <div className="flex gap-4 items-start">
+                        <div className="bg-white p-1.5 rounded-lg border border-slate-100 dark:border-slate-700 shrink-0">
+                          <QRCodeSVG ref={qrTabSvgRef} value={`https://${qrShortUrl}`} size={132} level="M" />
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-2">
+                          <h4 className="text-[15px] font-bold text-navy dark:text-white leading-tight">Download Your QR Code</h4>
+                          <button
+                            type="button"
+                            onClick={() => downloadSvgAsFile(qrTabSvgRef.current, 'mini-links-generated-qr.svg')}
+                            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-sm font-bold transition-colors"
+                          >
+                            <Download size={13} />
+                            Download SVG
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => downloadSvgAsPng(qrTabSvgRef.current, 'mini-links-generated-qr.png')}
+                            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-sm font-bold transition-colors"
+                          >
+                            <Download size={13} />
+                            Download PNG
+                          </button>
+                        </div>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => downloadSvgAsPng(qrTabSvgRef.current, 'mini-links-generated-qr.png')}
-                        className="px-3 py-1.5 bg-white dark:bg-navy-light text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center gap-1.5"
-                      >
-                        <Download size={14} />
-                        Download QR PNG
-                      </button>
+
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-start gap-3">
+                          <span className="min-w-[120px] font-semibold text-slate-700 dark:text-slate-200">Destination URL</span>
+                          <span className="text-slate-700 dark:text-slate-300 truncate" title={qrLongUrl}>{qrLongUrl}</span>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <span className="min-w-[120px] font-semibold text-slate-700 dark:text-slate-200">TinyURL Link</span>
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="text-slate-700 dark:text-slate-300 truncate" title={`https://${qrShortUrl}`}>{`https://${qrShortUrl}`}</span>
+                            <button
+                              type="button"
+                              onClick={handleCopyQrUrl}
+                              className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal-400 transition-colors shrink-0"
+                              title="Copy TinyURL"
+                            >
+                              {copiedQrUrl ? <Check size={14} /> : <Copy size={14} />}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        TinyURL may earn commissions from this link. <a href="#" className="underline">Learn more.</a>
+                      </p>
                     </div>
 
                     <button
                       type="button"
                       onClick={handleGenerateAnotherQr}
-                      className="w-full py-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-xs font-bold transition-colors mt-auto"
+                      className="w-full py-2.5 bg-cta hover:bg-cta-dark text-white rounded-lg font-bold transition-colors"
                     >
-                      Generate another QR for another link
+                      Generate Another
                     </button>
                   </div>
                 ) : (
