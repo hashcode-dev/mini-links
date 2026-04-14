@@ -379,7 +379,7 @@ export default function Home() {
                           <QRCodeSVG ref={qrTabSvgRef} value={`https://${qrShortUrl}`} size={132} level="M" />
                         </div>
                         <div className="flex-1 min-w-0 space-y-2">
-                          <h4 className="text-[15px] font-bold text-navy dark:text-white leading-tight">Download Your QR Code</h4>
+                          <h4 className="text-[15px] font-bold text-navy dark:text-white leading-tight text-center">Download Your QR Code</h4>
                           <button
                             type="button"
                             onClick={() => downloadSvgAsFile(qrTabSvgRef.current, 'mini-links-generated-qr.svg')}
