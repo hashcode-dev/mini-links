@@ -180,28 +180,28 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative min-h-[720px] flex items-center px-6 lg:px-12 py-16 overflow-hidden bg-surface-container-low dark:bg-navy">
+      <section className="relative min-h-[620px] flex items-center px-6 lg:px-12 py-10 overflow-hidden bg-surface-container-low dark:bg-navy">
         {/* Background Decoration */}
         <div className="absolute top-0 right-0 w-2/3 h-full opacity-10 pointer-events-none">
           <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary rounded-full blur-[120px]"></div>
           <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-cta rounded-full blur-[100px]"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative z-10">
           {/* Left: Headline Content */}
-          <div className="space-y-8">
+          <div className="space-y-5">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
               <span className="text-xs font-bold text-primary dark:text-teal-400 tracking-widest uppercase">Precision URL Management</span>
             </div>
-            <h1 className="text-6xl lg:text-7xl font-extrabold font-display leading-[1.1] tracking-tight text-navy dark:text-white">
+            <h1 className="text-5xl lg:text-6xl font-extrabold font-display leading-[1.1] tracking-tight text-navy dark:text-white">
               Shorten. <br/><span className="text-primary dark:text-teal-400">Brand.</span> <br/>Track.
             </h1>
-            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-md leading-relaxed">
+            <p className="text-base text-slate-600 dark:text-slate-300 max-w-md leading-relaxed">
               Transform lengthy, cluttered links into powerful marketing<br/>
               assets. Mini Links Atelier provides the architectural<br/>
               precision your digital presence demands.
             </p>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-5">
               <div className="flex flex-col">
                 <span className="text-2xl font-bold text-navy dark:text-white">45M+</span>
                 <span className="text-sm text-slate-500 dark:text-slate-400">Links Managed</span>
@@ -218,10 +218,10 @@ export default function Home() {
           <div className="bg-white dark:bg-navy-light p-1 rounded-xl shadow-xl ring-1 ring-slate-100 dark:ring-slate-700">
             <div className="bg-white dark:bg-navy-light rounded-lg overflow-visible">
               {/* Tabs */}
-              <div className="flex gap-2 p-3 bg-slate-100/80 dark:bg-navy/60 rounded-t-lg">
-                <button 
+              <div className="flex gap-2 p-2.5 bg-slate-100/80 dark:bg-navy/60 rounded-t-lg">
+                <button
                   onClick={() => setActiveTab('shorten')}
-                  className={`flex-1 py-3 px-4 text-sm font-bold rounded-lg transition-all duration-200 ${
+                  className={`flex-1 py-2.5 px-3.5 text-sm font-bold rounded-lg transition-all duration-200 ${
                     activeTab === 'shorten'
                       ? 'bg-teal-700 text-white shadow-md shadow-teal-900/20'
                       : 'bg-white dark:bg-navy-light text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 ring-1 ring-slate-200 dark:ring-slate-700'
@@ -231,7 +231,7 @@ export default function Home() {
                 </button>
                 <button 
                   onClick={() => setActiveTab('qr')}
-                  className={`flex-1 py-3 px-4 text-sm font-bold rounded-lg transition-all duration-200 ${
+                  className={`flex-1 py-2.5 px-3.5 text-sm font-bold rounded-lg transition-all duration-200 ${
                     activeTab === 'qr'
                       ? 'bg-teal-700 text-white shadow-md shadow-teal-900/20'
                       : 'bg-white dark:bg-navy-light text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 ring-1 ring-slate-200 dark:ring-slate-700'
@@ -242,7 +242,7 @@ export default function Home() {
               </div>
 
               {/* Form Content */}
-              <div className="p-8 flex flex-col h-[360px]">
+              <div className="p-6 flex flex-col h-[330px]">
                 {activeTab === 'shorten' ? shortenedUrl ? (
                   <div className="space-y-3 animate-in fade-in zoom-in duration-300 flex flex-col h-full overflow-visible">
                     <div className="space-y-2">
@@ -335,7 +335,7 @@ export default function Home() {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleShorten} className="space-y-5 flex flex-col h-full overflow-hidden">
+                  <form onSubmit={handleShorten} className="space-y-4 flex flex-col h-full overflow-hidden">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
                       <div className="relative">
@@ -373,11 +373,11 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="space-y-4 pt-2">
-                      <button 
+                    <div className="space-y-3 pt-1.5">
+                      <button
                         type="submit"
                         disabled={isShortening}
-                        className="w-full py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                        className="w-full py-3.5 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                       >
                         {isShortening ? (
                           <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -395,7 +395,7 @@ export default function Home() {
                     </div>
                   </form>
                 ) : qrShortUrl ? (
-                  <div className="animate-in fade-in zoom-in duration-300 h-full overflow-hidden flex flex-col justify-between gap-3">
+                  <div className="animate-in fade-in zoom-in duration-300 h-full overflow-hidden flex flex-col justify-between gap-2.5">
                     <div className="space-y-3">
                       <div className="flex gap-4 items-start">
                         <div className="bg-white p-1.5 rounded-lg border border-slate-100 dark:border-slate-700 shrink-0">
@@ -457,7 +457,7 @@ export default function Home() {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleGenerateQr} className="space-y-5 flex flex-col h-full overflow-hidden">
+                  <form onSubmit={handleGenerateQr} className="space-y-4 flex flex-col h-full overflow-hidden">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
                       <div className="relative">
@@ -495,11 +495,11 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="space-y-4 pt-2">
+                    <div className="space-y-3 pt-1.5">
                       <button
                         type="submit"
                         disabled={isQrCreating}
-                        className="w-full py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                        className="w-full py-3.5 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                       >
                         {isQrCreating ? (
                           <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -524,9 +524,9 @@ export default function Home() {
       </section>
 
       {/* Recent Links Section */}
-      <section className="bg-surface-container-lowest dark:bg-navy-light py-20 px-6 border-t border-surface-container-high dark:border-slate-800">
+      <section className="bg-surface-container-lowest dark:bg-navy-light py-12 px-6 border-t border-surface-container-high dark:border-slate-800">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-end mb-12">
+          <div className="flex justify-between items-end mb-8">
             <div>
               <h2 className="text-3xl font-bold font-display text-navy dark:text-white mb-2">Your Recent Links</h2>
               <p className="text-slate-500 dark:text-slate-400">Instant access to your latest architectural digital bridges.</p>
@@ -541,10 +541,10 @@ export default function Home() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-surface-container-low dark:bg-navy-light border-b border-surface-container-high dark:border-slate-700">
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Icon</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Short Link</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Original URL</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">Actions</th>
+                    <th className="px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Icon</th>
+                    <th className="px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Short Link</th>
+                    <th className="px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Original URL</th>
+                    <th className="px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-container-high dark:divide-slate-700">
@@ -554,21 +554,21 @@ export default function Home() {
                     { short: 'MiniLinks.com/pay-portal', original: 'https://stripe.com/docs/api/checkout/session...', icon: 'https://cdn.brandfetch.io/stripe.com/w/400/h/400' },
                   ].map((link, i) => (
                     <tr key={i} className="hover:bg-surface-container-low/50 dark:hover:bg-navy-light/50 transition-colors">
-                      <td className="px-6 py-5">
+                      <td className="px-6 py-4">
                         <div className="w-8 h-8 rounded bg-surface-container-lowest dark:bg-navy border border-surface-container-high dark:border-slate-700 p-1 flex items-center justify-center">
                           <img src={link.icon} alt="Favicon" className="w-full h-full object-contain rounded-sm" />
                         </div>
                       </td>
-                      <td className="px-6 py-5">
+                      <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <span className="text-primary dark:text-teal-400 font-bold font-mono text-sm">{link.short}</span>
                           <Copy size={14} className="text-slate-400 cursor-pointer hover:text-navy dark:hover:text-white" />
                         </div>
                       </td>
-                      <td className="px-6 py-5">
+                      <td className="px-6 py-4">
                         <span className="text-slate-500 dark:text-slate-400 text-sm truncate max-w-xs block">{link.original}</span>
                       </td>
-                      <td className="px-6 py-5 text-right">
+                      <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button className="p-2 rounded bg-surface-container-low dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 hover:bg-primary/10 transition-all">
                             <ExternalLink size={18} />
@@ -591,7 +591,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-surface-container-lowest dark:bg-navy-light w-full py-8 mt-auto border-t border-surface-container-high dark:border-slate-800">
+      <footer className="bg-surface-container-lowest dark:bg-navy-light w-full py-6 mt-auto border-t border-surface-container-high dark:border-slate-800">
         <div className="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-8">
           <div className="flex flex-col items-center md:items-start gap-2">
             <span className="font-semibold text-navy dark:text-white font-display">Mini Links</span>
