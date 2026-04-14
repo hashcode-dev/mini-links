@@ -1,16 +1,14 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Moon, Sun, Search, User } from 'lucide-react';
+import { Search, User } from 'lucide-react';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import { clearAuthSession } from '../lib/auth';
 
 interface NavbarProps {
   isPublicPage: boolean;
-  toggleDarkMode: () => void;
-  isDarkMode: boolean;
 }
 
-export default function Navbar({ isPublicPage, toggleDarkMode, isDarkMode }: NavbarProps) {
+export default function Navbar({ isPublicPage }: NavbarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -97,9 +95,6 @@ export default function Navbar({ isPublicPage, toggleDarkMode, isDarkMode }: Nav
           </div>
         )}
 
-        <button onClick={toggleDarkMode} className="p-2 text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 transition-colors">
-          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
 
         <div ref={profileMenuRef} className="relative">
           <button
