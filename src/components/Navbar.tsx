@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Search, User } from 'lucide-react';
+import { Search, User, Link as LinkIcon } from 'lucide-react';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import { clearAuthSession } from '../lib/auth';
@@ -46,8 +46,8 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
 
   const navLinks = isPublicPage 
     ? [
-        { name: 'Home', path: '/' },
         { name: 'Pricing', path: '/pricing' },
+        { name: 'Features', path: '/#features' },
       ]
     : [
         { name: 'Dashboard', path: '/dashboard' },
@@ -58,8 +58,11 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
   return (
     <header className="sticky top-0 z-30 glass-panel flex justify-between items-center w-full px-6 py-4 border-b border-surface-container-high dark:border-navy shadow-sm">
       <div className="flex items-center gap-8">
-        <Link to="/" className={clsx("text-xl font-bold tracking-tight font-display", !isPublicPage && "md:hidden")}>
-          Mini Links
+        <Link to="/" className={clsx("flex items-center gap-2 text-xl font-bold tracking-tight font-display", !isPublicPage && "md:hidden")}>
+          <span className="w-7 h-7 rounded-md bg-primary flex items-center justify-center">
+            <LinkIcon size={16} className="text-white" />
+          </span>
+          <span className="text-navy dark:text-white">Mini Links</span>
         </Link>
         
         <nav className="hidden lg:flex items-center gap-6 text-sm font-display font-medium">
@@ -99,7 +102,7 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
         <div ref={profileMenuRef} className="relative">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high dark:bg-slate-700 border border-surface-container-low dark:border-slate-600 flex items-center justify-center text-slate-500 dark:text-slate-300"
+            className="w-9 h-9 rounded-full overflow-hidden bg-primary/15 dark:bg-teal-900/40 border-2 border-primary/30 dark:border-teal-600/40 flex items-center justify-center text-primary dark:text-teal-400"
           >
             <User size={18} />
           </button>

@@ -12,10 +12,10 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [longUrl, setLongUrl] = useState('');
   const [alias, setAlias] = useState('');
-  const [domain, setDomain] = useState('lp.at');
+  const [domain, setDomain] = useState('minilinks.com');
   const [qrLongUrl, setQrLongUrl] = useState('');
   const [qrAlias, setQrAlias] = useState('');
-  const [qrDomain, setQrDomain] = useState('lp.at');
+  const [qrDomain, setQrDomain] = useState('minilinks.com');
   const [qrShortUrl, setQrShortUrl] = useState('');
   const [copiedQrUrl, setCopiedQrUrl] = useState(false);
   const qrTabSvgRef = useRef<SVGSVGElement | null>(null);
@@ -147,7 +147,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative min-h-[800px] flex items-center px-6 lg:px-12 py-16 overflow-hidden bg-surface-container-low dark:bg-navy">
+      <section className="relative min-h-[720px] flex items-center px-6 lg:px-12 py-16 overflow-hidden bg-surface-container-low dark:bg-navy">
         {/* Background Decoration */}
         <div className="absolute top-0 right-0 w-2/3 h-full opacity-10 pointer-events-none">
           <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary rounded-full blur-[120px]"></div>
@@ -158,13 +158,15 @@ export default function Home() {
           {/* Left: Headline Content */}
           <div className="space-y-8">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
-              <span className="text-xs font-bold text-primary dark:text-teal-400 tracking-widest uppercase">Precise URL Management</span>
+              <span className="text-xs font-bold text-primary dark:text-teal-400 tracking-widest uppercase">Precision URL Management</span>
             </div>
             <h1 className="text-6xl lg:text-7xl font-extrabold font-display leading-[1.1] tracking-tight text-navy dark:text-white">
-              Shorten. <span className="text-primary dark:text-teal-400">Brand.</span> <br/>Track.
+              Shorten. <br/><span className="text-primary dark:text-teal-400">Brand.</span> <br/>Track.
             </h1>
-            <p className="text-xl text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed">
-              Transform long, messy links into powerful marketing assets. Mini Links offers the architectural precision your digital presence demands.
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-md leading-relaxed">
+              Transform lengthy, cluttered links into powerful marketing<br/>
+              assets. Mini Links Atelier provides the architectural<br/>
+              precision your digital presence demands.
             </p>
             <div className="flex items-center gap-6">
               <div className="flex flex-col">
@@ -207,9 +209,9 @@ export default function Home() {
               </div>
 
               {/* Form Content */}
-              <div className="p-8 h-[560px] flex flex-col">
+              <div className="p-8 flex flex-col">
                 {activeTab === 'shorten' ? shortenedUrl ? (
-                  <div className="space-y-4 animate-in fade-in zoom-in duration-300 h-full flex flex-col">
+                  <div className="space-y-4 animate-in fade-in zoom-in duration-300 flex flex-col">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">TinyURL Link</label>
                       <div className="p-4 bg-teal-50/70 border border-teal-200 dark:bg-teal-900/20 dark:border-teal-800 rounded-lg flex items-center justify-between">
@@ -249,7 +251,7 @@ export default function Home() {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleShorten} className="space-y-6 h-full flex flex-col">
+                  <form onSubmit={handleShorten} className="space-y-5 flex flex-col">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
                       <div className="relative">
@@ -259,8 +261,8 @@ export default function Home() {
                           required
                           value={longUrl}
                           onChange={(e) => setLongUrl(e.target.value)}
-                          placeholder="https://your-long-and-complex-url.com/destination" 
-                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none"
+                          placeholder="https://very-long-architectural-url.com/destination-page" 
+                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
                         />
                       </div>
                     </div>
@@ -268,14 +270,12 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Domain</label>
-                        <select
+                        <input
+                          type="text"
                           value={domain}
-                          onChange={(e) => setDomain(e.target.value)}
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white font-medium transition-all outline-none appearance-none"
-                        >
-                          <option value="minilinks.com">MiniLinks.com</option>
-                          <option value="lp.at">lp.at</option>
-                        </select>
+                          readOnly
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 rounded text-slate-900 dark:text-white font-medium transition-all outline-none text-sm cursor-default"
+                        />
                       </div>
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Alias (Optional)</label>
@@ -284,16 +284,16 @@ export default function Home() {
                           value={alias}
                           onChange={(e) => setAlias(e.target.value)}
                           placeholder="custom-alias" 
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
                         />
                       </div>
                     </div>
 
-                    <div className="mt-auto space-y-4">
+                    <div className="space-y-4 pt-2">
                       <button 
                         type="submit"
                         disabled={isShortening}
-                        className="w-full py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                        className="w-full py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                       >
                         {isShortening ? (
                           <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -306,12 +306,12 @@ export default function Home() {
                       </button>
                       
                       <p className="text-center text-[10px] text-slate-400 leading-relaxed px-4">
-                      By clicking Shorten Link, you agree to the <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a> of Mini Links.
+                      By clicking Shorten Link, you agree to LinkPrecision's <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a>.
                       </p>
                     </div>
                   </form>
                 ) : qrShortUrl ? (
-                  <div className="space-y-4 animate-in fade-in zoom-in duration-300 h-full flex flex-col">
+                  <div className="space-y-4 animate-in fade-in zoom-in duration-300 flex flex-col">
                     <div className="p-4 bg-teal-50/70 border border-teal-200 dark:bg-teal-900/20 dark:border-teal-800 rounded-lg flex items-center justify-between">
                       <span className="font-mono text-teal-700 dark:text-teal-400 font-bold text-lg">{qrShortUrl}</span>
                       <button
@@ -346,7 +346,7 @@ export default function Home() {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleGenerateQr} className="space-y-6 h-full flex flex-col">
+                  <form onSubmit={handleGenerateQr} className="space-y-5 flex flex-col">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
                       <div className="relative">
@@ -356,8 +356,8 @@ export default function Home() {
                           required
                           value={qrLongUrl}
                           onChange={(e) => setQrLongUrl(e.target.value)}
-                          placeholder="https://your-long-and-complex-url.com/destination"
-                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none"
+                          placeholder="https://very-long-architectural-url.com/destination-page"
+                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
                         />
                       </div>
                     </div>
@@ -365,14 +365,12 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Domain</label>
-                        <select
+                        <input
+                          type="text"
                           value={qrDomain}
-                          onChange={(e) => setQrDomain(e.target.value)}
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white font-medium transition-all outline-none appearance-none"
-                        >
-                          <option value="minilinks.com">MiniLinks.com</option>
-                          <option value="lp.at">lp.at</option>
-                        </select>
+                          readOnly
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 rounded text-slate-900 dark:text-white font-medium transition-all outline-none text-sm cursor-default"
+                        />
                       </div>
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Alias (Optional)</label>
@@ -381,16 +379,16 @@ export default function Home() {
                           value={qrAlias}
                           onChange={(e) => setQrAlias(e.target.value)}
                           placeholder="custom-alias"
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
                         />
                       </div>
                     </div>
 
-                    <div className="mt-auto space-y-4">
+                    <div className="space-y-4 pt-2">
                       <button
                         type="submit"
                         disabled={isQrCreating}
-                        className="w-full py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                        className="w-full py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                       >
                         {isQrCreating ? (
                           <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -403,7 +401,7 @@ export default function Home() {
                       </button>
 
                       <p className="text-center text-[10px] text-slate-400 leading-relaxed px-4">
-                        By clicking Generate QR Code, you agree to the <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a> of Mini Links.
+                        By clicking Generate QR Code, you agree to LinkPrecision's <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a>.
                       </p>
                     </div>
                   </form>
@@ -420,7 +418,7 @@ export default function Home() {
           <div className="flex justify-between items-end mb-12">
             <div>
               <h2 className="text-3xl font-bold font-display text-navy dark:text-white mb-2">Your Recent Links</h2>
-              <p className="text-slate-500 dark:text-slate-400">Instant access to your latest digital bridges.</p>
+              <p className="text-slate-500 dark:text-slate-400">Instant access to your latest architectural digital bridges.</p>
             </div>
             <Link to="/dashboard" className="flex items-center gap-2 text-primary dark:text-teal-400 font-bold hover:gap-3 transition-all">
               View Analytics <ArrowRight size={18} />
@@ -442,7 +440,7 @@ export default function Home() {
                   {[
                     { short: 'MiniLinks.com/ux-case', original: 'https://dribbble.com/shots/2349583-Case-St...', icon: 'https://cdn.brandfetch.io/dribbble.com/w/400/h/400' },
                     { short: 'MiniLinks.com/fig-proto', original: 'https://www.figma.com/file/ASh2849AsJ/Desi...', icon: 'https://cdn.brandfetch.io/figma.com/w/400/h/400' },
-                    { short: 'MiniLinks.com/pay-portal', original: 'https://stripe.com/docs/api/checkout/sessions...', icon: 'https://cdn.brandfetch.io/stripe.com/w/400/h/400' },
+                    { short: 'MiniLinks.com/pay-portal', original: 'https://stripe.com/docs/api/checkout/session...', icon: 'https://cdn.brandfetch.io/stripe.com/w/400/h/400' },
                   ].map((link, i) => (
                     <tr key={i} className="hover:bg-surface-container-low/50 dark:hover:bg-navy-light/50 transition-colors">
                       <td className="px-6 py-5">
@@ -486,12 +484,11 @@ export default function Home() {
         <div className="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-8">
           <div className="flex flex-col items-center md:items-start gap-2">
             <span className="font-semibold text-navy dark:text-white font-display">Mini Links</span>
-            <p className="text-slate-500 dark:text-slate-400 text-xs">© 2026 Mini Links Inc. All rights reserved.</p>
+            <p className="text-slate-500 dark:text-slate-400 text-xs">© 2024 Mini Links Inc. All rights reserved.</p>
           </div>
           <div className="flex flex-wrap justify-center gap-8">
             <a href="#" className="text-slate-500 dark:text-slate-400 text-sm hover:text-navy dark:hover:text-white underline-offset-4 hover:underline transition-all">Privacy Policy</a>
             <a href="#" className="text-slate-500 dark:text-slate-400 text-sm hover:text-navy dark:hover:text-white underline-offset-4 hover:underline transition-all">Terms of Service</a>
-            <a href="#" className="text-slate-500 dark:text-slate-400 text-sm hover:text-navy dark:hover:text-white underline-offset-4 hover:underline transition-all">API Documentation</a>
             <a href="#" className="text-slate-500 dark:text-slate-400 text-sm hover:text-navy dark:hover:text-white underline-offset-4 hover:underline transition-all">Support</a>
           </div>
         </div>
