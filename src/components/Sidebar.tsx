@@ -1,9 +1,16 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Link as LinkIcon, QrCode, BarChart3, Settings, HelpCircle, LogOut, Plus } from 'lucide-react';
 import clsx from 'clsx';
+import { clearAuthSession } from '../lib/auth';
 
 export default function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    clearAuthSession();
+    navigate('/auth');
+  };
 
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
@@ -48,19 +55,23 @@ export default function Sidebar() {
       </nav>
 
       <div className="mt-auto pt-4 space-y-1">
-        <button className="w-full mb-6 py-3 bg-cta hover:bg-cta-dark text-white font-bold rounded-lg flex items-center justify-center gap-2 transition-all active:scale-95">
+        <Link to="/links/new" className="w-full mb-6 py-3 bg-cta hover:bg-cta-dark text-white font-bold rounded-lg flex items-center justify-center gap-2 transition-all active:scale-95">
           <Plus size={18} />
           <span>Create Link</span>
-        </button>
+        </Link>
         
         <div className="px-3 py-2 text-slate-500 dark:text-slate-400 flex items-center gap-3 hover:bg-surface-container-high dark:hover:bg-navy rounded-lg cursor-pointer transition-all">
           <HelpCircle size={18} />
           <span className="text-sm">Support</span>
         </div>
-        <div className="px-3 py-2 text-slate-500 dark:text-slate-400 flex items-center gap-3 hover:bg-surface-container-high dark:hover:bg-navy rounded-lg cursor-pointer transition-all">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="w-full px-3 py-2 text-slate-500 dark:text-slate-400 flex items-center gap-3 hover:bg-surface-container-high dark:hover:bg-navy rounded-lg cursor-pointer transition-all"
+        >
           <LogOut size={18} />
           <span className="text-sm">Log Out</span>
-        </div>
+        </button>
       </div>
     </aside>
   );

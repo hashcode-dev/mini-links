@@ -1,7 +1,8 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Moon, Sun, Search, User } from 'lucide-react';
 import clsx from 'clsx';
 import { useState } from 'react';
+import { clearAuthSession } from '../lib/auth';
 
 interface NavbarProps {
   isPublicPage: boolean;
@@ -11,7 +12,14 @@ interface NavbarProps {
 
 export default function Navbar({ isPublicPage, toggleDarkMode, isDarkMode }: NavbarProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleLogout = () => {
+    clearAuthSession();
+    setIsDropdownOpen(false);
+    navigate('/auth');
+  };
 
   const navLinks = isPublicPage 
     ? [
@@ -83,7 +91,13 @@ export default function Navbar({ isPublicPage, toggleDarkMode, isDarkMode }: Nav
               <Link to="/settings" className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Settings</Link>
               <Link to="/pricing" className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Billing</Link>
               <div className="border-t border-surface-container-high dark:border-slate-700 my-1"></div>
-              <Link to="/auth" className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20">Log Out</Link>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+              >
+                Log Out
+              </button>
             </div>
           )}
         </div>

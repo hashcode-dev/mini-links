@@ -1,26 +1,147 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Link as LinkIcon, Zap, ArrowRight, ExternalLink, QrCode, Share2, Copy, Check } from 'lucide-react';
+import { Link as LinkIcon, Zap, ArrowRight, ExternalLink, QrCode, Share2, Copy, Check, Download } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
+import { useLinks } from '../context/LinksContext';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'shorten' | 'qr'>('shorten');
   const [isShortening, setIsShortening] = useState(false);
+  const [isQrCreating, setIsQrCreating] = useState(false);
   const [shortenedUrl, setShortenedUrl] = useState('');
   const [copied, setCopied] = useState(false);
+  const [longUrl, setLongUrl] = useState('');
+  const [alias, setAlias] = useState('');
+  const [domain, setDomain] = useState('lp.at');
+  const [qrLongUrl, setQrLongUrl] = useState('');
+  const [qrAlias, setQrAlias] = useState('');
+  const [qrDomain, setQrDomain] = useState('lp.at');
+  const [qrShortUrl, setQrShortUrl] = useState('');
+  const [copiedQrUrl, setCopiedQrUrl] = useState(false);
+  const qrTabSvgRef = useRef<SVGSVGElement | null>(null);
+  const { createLink } = useLinks();
+
+  const normalizeUrl = (rawUrl: string): string => {
+    const trimmed = rawUrl.trim();
+    if (!trimmed) {
+      throw new Error('URL is required.');
+    }
+
+    const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+    new URL(candidate);
+    return candidate;
+  };
 
   const handleShorten = (e: React.FormEvent) => {
     e.preventDefault();
     setIsShortening(true);
     setTimeout(() => {
-      setIsShortening(false);
-      setShortenedUrl('lp.at/ux-case');
-    }, 1000);
+      try {
+        const validUrl = normalizeUrl(longUrl);
+        const link = createLink({
+          originalUrl: validUrl,
+          alias,
+          domain,
+        });
+        setShortenedUrl(link.shortUrl);
+      } finally {
+        setIsShortening(false);
+      }
+    }, 500);
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(shortenedUrl);
+    navigator.clipboard.writeText(`https://${shortenedUrl}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleVisitShortUrl = () => {
+    window.open(`https://${shortenedUrl}`, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleShareShortUrl = async () => {
+    const shareUrl = `https://${shortenedUrl}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ url: shareUrl, title: 'Mini Link' });
+        return;
+      }
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Ignore share cancel/errors.
+    }
+  };
+
+  const handleOpenQrTabFromShorten = () => {
+    setQrShortUrl(shortenedUrl);
+    setActiveTab('qr');
+  };
+
+  const handleGenerateQr = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsQrCreating(true);
+    setTimeout(() => {
+      try {
+        const validUrl = normalizeUrl(qrLongUrl);
+        const link = createLink({
+          originalUrl: validUrl,
+          alias: qrAlias,
+          domain: qrDomain,
+        });
+        setQrShortUrl(link.shortUrl);
+      } finally {
+        setIsQrCreating(false);
+      }
+    }, 500);
+  };
+
+  const handleGenerateAnotherQr = () => {
+    setQrLongUrl('');
+    setQrAlias('');
+    setQrShortUrl('');
+  };
+
+  const handleCopyQrUrl = () => {
+    navigator.clipboard.writeText(qrShortUrl);
+    setCopiedQrUrl(true);
+    setTimeout(() => setCopiedQrUrl(false), 2000);
+  };
+
+  const downloadSvgAsPng = (svgElement: SVGSVGElement | null, fileName: string) => {
+    if (!svgElement) {
+      return;
+    }
+
+    const serializer = new XMLSerializer();
+    const source = serializer.serializeToString(svgElement);
+    const svgBlob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
+    const objectUrl = URL.createObjectURL(svgBlob);
+    const image = new Image();
+    const size = 220;
+
+    image.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const context = canvas.getContext('2d');
+      if (!context) {
+        URL.revokeObjectURL(objectUrl);
+        return;
+      }
+      context.drawImage(image, 0, 0, size, size);
+      URL.revokeObjectURL(objectUrl);
+
+      const png = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = png;
+      link.download = fileName;
+      link.click();
+    };
+
+    image.src = objectUrl;
   };
 
   return (
@@ -59,47 +180,76 @@ export default function Home() {
           </div>
 
           {/* Right: Widget Card */}
-          <div className="bg-surface-container-lowest dark:bg-navy-light p-1 rounded-xl shadow-xl ring-1 ring-surface-container-high dark:ring-slate-700">
-            <div className="bg-surface-container-lowest dark:bg-navy-light rounded-lg overflow-hidden">
+          <div className="bg-white dark:bg-navy-light p-1 rounded-xl shadow-xl ring-1 ring-slate-100 dark:ring-slate-700">
+            <div className="bg-white dark:bg-navy-light rounded-lg overflow-hidden">
               {/* Tabs */}
-              <div className="flex border-b border-surface-container-high dark:border-slate-700 bg-surface-container-low/50 dark:bg-navy/50">
+              <div className="flex border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-navy/50">
                 <button 
                   onClick={() => setActiveTab('shorten')}
-                  className={`flex-1 py-4 text-sm font-bold transition-all ${activeTab === 'shorten' ? 'text-primary dark:text-teal-400 border-b-2 border-primary dark:border-teal-400 bg-surface-container-lowest dark:bg-navy-light' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                  className={`flex-1 py-4 text-sm font-bold transition-all ${
+                    activeTab === 'shorten'
+                      ? 'text-teal-700 dark:text-teal-400 bg-white dark:bg-navy-light border-b-2 border-teal-600'
+                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                  }`}
                 >
                   Shorten a Link
                 </button>
                 <button 
                   onClick={() => setActiveTab('qr')}
-                  className={`flex-1 py-4 text-sm font-bold transition-all ${activeTab === 'qr' ? 'text-primary dark:text-teal-400 border-b-2 border-primary dark:border-teal-400 bg-surface-container-lowest dark:bg-navy-light' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                  className={`flex-1 py-4 text-sm font-semibold transition-all ${
+                    activeTab === 'qr'
+                      ? 'text-teal-700 dark:text-teal-400 bg-white dark:bg-navy-light border-b-2 border-teal-600'
+                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                  }`}
                 >
                   Generate QR Code
                 </button>
               </div>
 
               {/* Form Content */}
-              <div className="p-8 space-y-6">
-                {shortenedUrl ? (
-                  <div className="space-y-4 animate-in fade-in zoom-in duration-300">
-                    <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-center justify-between">
-                      <span className="font-mono text-primary dark:text-teal-400 font-bold text-lg">{shortenedUrl}</span>
-                      <button 
-                        onClick={handleCopy}
-                        className="p-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors flex items-center gap-2"
-                      >
-                        {copied ? <Check size={18} /> : <Copy size={18} />}
-                        <span className="text-sm font-bold">{copied ? 'Copied' : 'Copy'}</span>
+              <div className="p-8 h-[560px] flex flex-col">
+                {activeTab === 'shorten' ? shortenedUrl ? (
+                  <div className="space-y-4 animate-in fade-in zoom-in duration-300 h-full flex flex-col">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">TinyURL Link</label>
+                      <div className="p-4 bg-teal-50/70 border border-teal-200 dark:bg-teal-900/20 dark:border-teal-800 rounded-lg flex items-center justify-between">
+                        <span className="font-mono text-teal-700 dark:text-teal-400 font-bold text-lg">{`https://${shortenedUrl}`}</span>
+                        <button
+                          type="button"
+                          onClick={handleCopy}
+                          className="text-slate-700 dark:text-slate-200 hover:text-primary transition-colors"
+                          title="Copy URL"
+                        >
+                          {copied ? <Check size={20} /> : <Copy size={20} />}
+                        </button>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      TinyURL may earn commissions from this link. <a href="#" className="underline">Learn more.</a>
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      <button type="button" onClick={handleVisitShortUrl} className="py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
+                        Visit URL
+                      </button>
+                      <button type="button" onClick={handleOpenQrTabFromShorten} className="py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
+                        QR
+                      </button>
+                      <button type="button" onClick={handleShareShortUrl} className="py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
+                        Share
+                      </button>
+                      <button type="button" onClick={handleCopy} className="py-3 bg-[#062f57] hover:bg-[#052748] text-white rounded-lg font-bold transition-colors text-sm">
+                        {copied ? 'Copied' : 'Copy'}
                       </button>
                     </div>
                     <button 
                       onClick={() => setShortenedUrl('')}
-                      className="w-full py-3 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-sm font-bold transition-colors"
+                      className="w-full py-3 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-sm font-bold transition-colors mt-auto"
                     >
                       Shorten another link
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleShorten} className="space-y-6">
+                  <form onSubmit={handleShorten} className="space-y-6 h-full flex flex-col">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
                       <div className="relative">
@@ -107,8 +257,10 @@ export default function Home() {
                         <input 
                           type="url" 
                           required
+                          value={longUrl}
+                          onChange={(e) => setLongUrl(e.target.value)}
                           placeholder="https://your-long-and-complex-url.com/destination" 
-                          className="w-full pl-10 pr-4 py-3 bg-surface-container-low dark:bg-navy border border-surface-container-high dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded text-navy dark:text-white transition-all placeholder:text-slate-400 outline-none"
+                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none"
                         />
                       </div>
                     </div>
@@ -116,39 +268,144 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Domain</label>
-                        <select className="w-full px-4 py-3 bg-surface-container-low dark:bg-navy border border-surface-container-high dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded text-navy dark:text-white font-medium transition-all outline-none appearance-none">
-                          <option>MiniLinks.com</option>
-                          <option>lp.at</option>
+                        <select
+                          value={domain}
+                          onChange={(e) => setDomain(e.target.value)}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white font-medium transition-all outline-none appearance-none"
+                        >
+                          <option value="minilinks.com">MiniLinks.com</option>
+                          <option value="lp.at">lp.at</option>
                         </select>
                       </div>
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Alias (Optional)</label>
                         <input 
                           type="text" 
+                          value={alias}
+                          onChange={(e) => setAlias(e.target.value)}
                           placeholder="custom-alias" 
-                          className="w-full px-4 py-3 bg-surface-container-low dark:bg-navy border border-surface-container-high dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded text-navy dark:text-white transition-all placeholder:text-slate-400 outline-none"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none"
                         />
                       </div>
                     </div>
 
-                    <button 
-                      type="submit"
-                      disabled={isShortening}
-                      className="w-full py-4 bg-cta hover:bg-cta-dark text-white font-bold rounded shadow-lg shadow-cta/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
-                    >
-                      {isShortening ? (
-                        <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      ) : (
-                        <>
-                          <span>Shorten Link</span>
-                          <Zap size={18} />
-                        </>
-                      )}
-                    </button>
-                    
-                    <p className="text-center text-[10px] text-slate-400 leading-relaxed px-4">
+                    <div className="mt-auto space-y-4">
+                      <button 
+                        type="submit"
+                        disabled={isShortening}
+                        className="w-full py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                      >
+                        {isShortening ? (
+                          <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        ) : (
+                          <>
+                            <span>Shorten Link</span>
+                            <Zap size={18} />
+                          </>
+                        )}
+                      </button>
+                      
+                      <p className="text-center text-[10px] text-slate-400 leading-relaxed px-4">
                       By clicking Shorten Link, you agree to the <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a> of Mini Links.
-                    </p>
+                      </p>
+                    </div>
+                  </form>
+                ) : qrShortUrl ? (
+                  <div className="space-y-4 animate-in fade-in zoom-in duration-300 h-full flex flex-col">
+                    <div className="p-4 bg-teal-50/70 border border-teal-200 dark:bg-teal-900/20 dark:border-teal-800 rounded-lg flex items-center justify-between">
+                      <span className="font-mono text-teal-700 dark:text-teal-400 font-bold text-lg">{qrShortUrl}</span>
+                      <button
+                        type="button"
+                        onClick={handleCopyQrUrl}
+                        className="p-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors flex items-center gap-2"
+                      >
+                        {copiedQrUrl ? <Check size={18} /> : <Copy size={18} />}
+                        <span className="text-sm font-bold">{copiedQrUrl ? 'Copied' : 'Copy'}</span>
+                      </button>
+                    </div>
+                    <div className="p-5 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-navy flex flex-col items-center gap-4">
+                      <div className="bg-white p-3 rounded-lg">
+                        <QRCodeSVG ref={qrTabSvgRef} value={`https://${qrShortUrl}`} size={220} level="M" />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => downloadSvgAsPng(qrTabSvgRef.current, 'mini-links-generated-qr.png')}
+                        className="px-4 py-2 bg-white dark:bg-navy-light text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center gap-2"
+                      >
+                        <Download size={16} />
+                        Download QR PNG
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleGenerateAnotherQr}
+                      className="w-full py-3 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-sm font-bold transition-colors mt-auto"
+                    >
+                      Generate another QR for another link
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleGenerateQr} className="space-y-6 h-full flex flex-col">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
+                      <div className="relative">
+                        <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                        <input
+                          type="url"
+                          required
+                          value={qrLongUrl}
+                          onChange={(e) => setQrLongUrl(e.target.value)}
+                          placeholder="https://your-long-and-complex-url.com/destination"
+                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Domain</label>
+                        <select
+                          value={qrDomain}
+                          onChange={(e) => setQrDomain(e.target.value)}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white font-medium transition-all outline-none appearance-none"
+                        >
+                          <option value="minilinks.com">MiniLinks.com</option>
+                          <option value="lp.at">lp.at</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Alias (Optional)</label>
+                        <input
+                          type="text"
+                          value={qrAlias}
+                          onChange={(e) => setQrAlias(e.target.value)}
+                          placeholder="custom-alias"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-auto space-y-4">
+                      <button
+                        type="submit"
+                        disabled={isQrCreating}
+                        className="w-full py-4 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                      >
+                        {isQrCreating ? (
+                          <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        ) : (
+                          <>
+                            <span>Generate QR Code</span>
+                            <Zap size={18} />
+                          </>
+                        )}
+                      </button>
+
+                      <p className="text-center text-[10px] text-slate-400 leading-relaxed px-4">
+                        By clicking Generate QR Code, you agree to the <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a> of Mini Links.
+                      </p>
+                    </div>
                   </form>
                 )}
               </div>

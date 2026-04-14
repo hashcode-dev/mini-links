@@ -9,6 +9,8 @@ This contains everything you need to run your app locally.
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+2. Set env vars in `.env.local`:
+   - `GEMINI_API_KEY` for Gemini API calls
+   - `VITE_GOOGLE_CLIENT_ID` (Google OAuth Web Client ID) for Google login/signup
 3. Run the app:
    `npm run dev`

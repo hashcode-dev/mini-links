@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Link as LinkIcon, MousePointerClick, BarChart2, Activity, TrendingUp, TrendingDown, Download, ExternalLink } from 'lucide-react';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { useLinks } from '../context/LinksContext';
 
 const trendData = [
   { date: 'Nov 1', clicks: 1200 }, { date: 'Nov 7', clicks: 2100 },
@@ -15,15 +16,23 @@ const deviceData = [
 ];
 
 export default function Dashboard() {
+  const { links } = useLinks();
+  const totalLinks = links.length;
+  const activeLinks = links.filter((link) => link.status === 'Active').length;
+  const allClicks = links.reduce((total, link) => total + link.clicks, 0);
+  const topLinks = [...links]
+    .sort((a, b) => b.clicks - a.clicks)
+    .slice(0, 4);
+
   return (
     <div className="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
       {/* Summary Stats */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { title: 'Total Links Created', value: '1,284', change: '+12%', isPositive: true, icon: LinkIcon },
-          { title: 'Total Clicks Today', value: '42,910', change: '+24%', isPositive: true, icon: MousePointerClick },
-          { title: 'All-Time Clicks', value: '2.4M', change: '-3%', isPositive: false, icon: BarChart2 },
-          { title: 'Active Links', value: '942', change: '+8%', isPositive: true, icon: Activity },
+          { title: 'Total Links Created', value: totalLinks.toLocaleString('en-US'), change: '+12%', isPositive: true, icon: LinkIcon },
+          { title: 'Total Clicks Today', value: Math.round(allClicks * 0.08).toLocaleString('en-US'), change: '+24%', isPositive: true, icon: MousePointerClick },
+          { title: 'All-Time Clicks', value: allClicks.toLocaleString('en-US'), change: '-3%', isPositive: false, icon: BarChart2 },
+          { title: 'Active Links', value: activeLinks.toLocaleString('en-US'), change: '+8%', isPositive: true, icon: Activity },
         ].map((stat, i) => {
           const Icon = stat.icon;
           return (
@@ -102,20 +111,15 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody className="text-sm divide-y divide-surface-container-high dark:divide-slate-700">
-                {[
-                  { short: 'lp.at/d9f8s', orig: 'marketing.campaign/fall...', clicks: '12,842', status: 'Active' },
-                  { short: 'lp.at/z7x2q', orig: 'blog.company.com/new...', clicks: '8,321', status: 'Active' },
-                  { short: 'lp.at/v4b9n', orig: 'github.com/atelier/prec...', clicks: '4,102', status: 'Expired' },
-                  { short: 'lp.at/a1m6p', orig: 'social.link/bio-update...', clicks: '2,449', status: 'Inactive' },
-                ].map((row, i) => (
-                  <tr key={i} className="hover:bg-surface-container-low/30 dark:hover:bg-navy/30 transition-colors">
+                {topLinks.map((row) => (
+                  <tr key={row.id} className="hover:bg-surface-container-low/30 dark:hover:bg-navy/30 transition-colors">
                     <td className="px-6 py-4">
-                      <Link to="/links/1" className="text-primary dark:text-teal-400 font-mono font-medium hover:underline flex items-center gap-1">
-                        {row.short} <ExternalLink size={12} />
+                      <Link to={`/links/${row.id}`} className="text-primary dark:text-teal-400 font-mono font-medium hover:underline flex items-center gap-1">
+                        {row.shortUrl} <ExternalLink size={12} />
                       </Link>
                     </td>
-                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400 truncate max-w-[150px]">{row.orig}</td>
-                    <td className="px-6 py-4 text-navy dark:text-white font-bold">{row.clicks}</td>
+                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400 truncate max-w-[150px]">{row.originalUrl}</td>
+                    <td className="px-6 py-4 text-navy dark:text-white font-bold">{row.clicks.toLocaleString('en-US')}</td>
                     <td className="px-6 py-4">
                       <span className={`px-2 py-1 rounded text-[10px] font-black uppercase tracking-tighter ${
                         row.status === 'Active' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :

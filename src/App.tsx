@@ -7,6 +7,8 @@ import Links from './pages/Links';
 import QRCode from './pages/QRCode';
 import Pricing from './pages/Pricing';
 import Auth from './pages/Auth';
+import RequireAuth from './components/RequireAuth';
+import CreateLink from './pages/CreateLink';
 
 export default function App() {
   return (
@@ -14,10 +16,11 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="links" element={<Links />} />
-          <Route path="links/:id" element={<LinkAnalytics />} />
-          <Route path="qr" element={<QRCode />} />
+          <Route path="dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
+          <Route path="links" element={<RequireAuth><Links /></RequireAuth>} />
+          <Route path="links/new" element={<RequireAuth><CreateLink /></RequireAuth>} />
+          <Route path="links/:id" element={<RequireAuth><LinkAnalytics /></RequireAuth>} />
+          <Route path="qr" element={<RequireAuth><QRCode /></RequireAuth>} />
           <Route path="pricing" element={<Pricing />} />
         </Route>
         <Route path="/auth" element={<Auth />} />
