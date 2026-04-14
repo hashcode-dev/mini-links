@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Link as LinkIcon, Zap, ArrowRight, ExternalLink, QrCode, Share2, Copy, Check, Download, X } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
@@ -21,6 +21,7 @@ export default function Home() {
   const [showQrModal, setShowQrModal] = useState(false);
   const qrTabSvgRef = useRef<SVGSVGElement | null>(null);
   const qrModalSvgRef = useRef<SVGSVGElement | null>(null);
+  const qrPopoverRef = useRef<HTMLDivElement | null>(null);
   const { createLink } = useLinks();
 
   const normalizeUrl = (rawUrl: string): string => {
@@ -78,8 +79,24 @@ export default function Home() {
   };
 
   const handleOpenQrTabFromShorten = () => {
-    setShowQrModal(true);
+    setShowQrModal((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (!showQrModal) {
+      return;
+    }
+
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (qrPopoverRef.current?.contains(event.target as Node)) {
+        return;
+      }
+      setShowQrModal(false);
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [showQrModal]);
 
   const handleGenerateQr = (e: React.FormEvent) => {
     e.preventDefault();
@@ -227,34 +244,40 @@ export default function Home() {
               {/* Form Content */}
               <div className="p-8 flex flex-col h-[360px]">
                 {activeTab === 'shorten' ? shortenedUrl ? (
-                  <div className="space-y-4 animate-in fade-in zoom-in duration-300 flex flex-col h-full overflow-y-auto pr-1">
+                  <div className="space-y-3 animate-in fade-in zoom-in duration-300 flex flex-col h-full overflow-hidden">
                     <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mini Links Link</label>
-                      <div className="p-4 bg-teal-50/70 border border-teal-200 dark:bg-teal-900/20 dark:border-teal-800 rounded-lg flex items-center justify-between">
-                        <span className="font-mono text-teal-700 dark:text-teal-400 font-bold text-lg">{`https://${shortenedUrl}`}</span>
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
+                      <div className="h-[50px] px-4 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 rounded-lg flex items-center">
+                        <span className="text-slate-700 dark:text-slate-300 text-sm truncate block w-full" title={longUrl}>{longUrl}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Short URL</label>
+                      <div className="h-[50px] px-4 bg-teal-50/70 border border-teal-200 dark:bg-teal-900/20 dark:border-teal-800 rounded-lg flex items-center justify-between gap-2">
+                        <span className="font-mono text-teal-700 dark:text-teal-400 font-bold text-sm truncate" title={`https://${shortenedUrl}`}>{`https://${shortenedUrl}`}</span>
                         <button
                           type="button"
                           onClick={handleCopy}
-                          className="text-slate-700 dark:text-slate-200 hover:text-primary transition-colors"
+                          className="text-slate-700 dark:text-slate-200 hover:text-primary transition-colors shrink-0"
                           title="Copy URL"
                         >
-                          {copied ? <Check size={20} /> : <Copy size={20} />}
+                          {copied ? <Check size={18} /> : <Copy size={18} />}
                         </button>
                       </div>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
                       Mini Links may earn commissions from this link. <a href="#" className="underline">Learn more.</a>
                     </p>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      <button type="button" onClick={handleVisitShortUrl} className="py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+                      <button type="button" onClick={handleVisitShortUrl} className="py-2.5 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
                         Visit URL
                       </button>
-                      <div className="relative">
-                        <button type="button" onClick={handleOpenQrTabFromShorten} className="w-full py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
+                      <div ref={qrPopoverRef} className="relative">
+                        <button type="button" onClick={handleOpenQrTabFromShorten} className="w-full py-2.5 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
                           QR
                         </button>
                         {showQrModal && (
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-50 w-[280px] bg-white dark:bg-navy-light rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 overflow-hidden animate-in fade-in zoom-in duration-200">
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 z-50 w-[280px] bg-white dark:bg-navy-light rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 overflow-hidden animate-in fade-in zoom-in duration-200">
                             {/* Subscribe banner */}
                             <div className="bg-teal-50 dark:bg-teal-900/30 border-b border-teal-100 dark:border-teal-800 px-4 py-3">
                               <p className="text-xs text-center text-slate-700 dark:text-slate-300 leading-relaxed">
@@ -297,22 +320,22 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                      <button type="button" onClick={handleShareShortUrl} className="py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
+                      <button type="button" onClick={handleShareShortUrl} className="py-2.5 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
                         Share
                       </button>
-                      <button type="button" onClick={handleCopy} className="py-3 bg-[#062f57] hover:bg-[#052748] text-white rounded-lg font-bold transition-colors text-sm">
+                      <button type="button" onClick={handleCopy} className="py-2.5 bg-[#062f57] hover:bg-[#052748] text-white rounded-lg font-bold transition-colors text-sm">
                         {copied ? 'Copied' : 'Copy'}
                       </button>
                     </div>
                     <button 
                       onClick={() => { setShortenedUrl(''); setShowQrModal(false); }}
-                      className="w-full py-3 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-sm font-bold transition-colors mt-auto"
+                      className="w-full py-2.5 bg-cta hover:bg-cta-dark text-white rounded-lg font-bold transition-colors mt-auto"
                     >
-                      Shorten another link
+                      Shorten Another Link
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleShorten} className="space-y-5 flex flex-col h-full overflow-y-auto pr-1">
+                  <form onSubmit={handleShorten} className="space-y-5 flex flex-col h-full overflow-hidden">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
                       <div className="relative">
@@ -372,7 +395,7 @@ export default function Home() {
                     </div>
                   </form>
                 ) : qrShortUrl ? (
-                  <div className="animate-in fade-in zoom-in duration-300 h-full overflow-y-auto lg:overflow-hidden pr-1 flex flex-col justify-between gap-3">
+                  <div className="animate-in fade-in zoom-in duration-300 h-full overflow-hidden flex flex-col justify-between gap-3">
                     <div className="space-y-3">
                       <div className="flex gap-4 items-start">
                         <div className="bg-white p-1.5 rounded-lg border border-slate-100 dark:border-slate-700 shrink-0">
@@ -434,7 +457,7 @@ export default function Home() {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleGenerateQr} className="space-y-5 flex flex-col h-full overflow-y-auto pr-1">
+                  <form onSubmit={handleGenerateQr} className="space-y-5 flex flex-col h-full overflow-hidden">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
                       <div className="relative">
