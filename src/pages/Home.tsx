@@ -201,23 +201,23 @@ export default function Home() {
           <div className="bg-white dark:bg-navy-light p-1 rounded-xl shadow-xl ring-1 ring-slate-100 dark:ring-slate-700">
             <div className="bg-white dark:bg-navy-light rounded-lg overflow-hidden">
               {/* Tabs */}
-              <div className="flex border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-navy/50">
+              <div className="flex gap-2 p-3 bg-slate-100/80 dark:bg-navy/60 rounded-t-lg">
                 <button 
                   onClick={() => setActiveTab('shorten')}
-                  className={`flex-1 py-4 text-sm font-bold transition-all ${
+                  className={`flex-1 py-3 px-4 text-sm font-bold rounded-lg transition-all duration-200 ${
                     activeTab === 'shorten'
-                      ? 'text-teal-700 dark:text-teal-400 bg-white dark:bg-navy-light border-b-2 border-teal-600'
-                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                      ? 'bg-teal-700 text-white shadow-md shadow-teal-900/20'
+                      : 'bg-white dark:bg-navy-light text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 ring-1 ring-slate-200 dark:ring-slate-700'
                   }`}
                 >
                   Shorten a Link
                 </button>
                 <button 
                   onClick={() => setActiveTab('qr')}
-                  className={`flex-1 py-4 text-sm font-semibold transition-all ${
+                  className={`flex-1 py-3 px-4 text-sm font-bold rounded-lg transition-all duration-200 ${
                     activeTab === 'qr'
-                      ? 'text-teal-700 dark:text-teal-400 bg-white dark:bg-navy-light border-b-2 border-teal-600'
-                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                      ? 'bg-teal-700 text-white shadow-md shadow-teal-900/20'
+                      : 'bg-white dark:bg-navy-light text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 ring-1 ring-slate-200 dark:ring-slate-700'
                   }`}
                 >
                   Generate QR Code
