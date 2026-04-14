@@ -229,7 +229,7 @@ export default function Home() {
                 {activeTab === 'shorten' ? shortenedUrl ? (
                   <div className="space-y-4 animate-in fade-in zoom-in duration-300 flex flex-col h-full overflow-y-auto pr-1">
                     <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">TinyURL Link</label>
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mini Links Link</label>
                       <div className="p-4 bg-teal-50/70 border border-teal-200 dark:bg-teal-900/20 dark:border-teal-800 rounded-lg flex items-center justify-between">
                         <span className="font-mono text-teal-700 dark:text-teal-400 font-bold text-lg">{`https://${shortenedUrl}`}</span>
                         <button
@@ -243,7 +243,7 @@ export default function Home() {
                       </div>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      TinyURL may earn commissions from this link. <a href="#" className="underline">Learn more.</a>
+                      Mini Links may earn commissions from this link. <a href="#" className="underline">Learn more.</a>
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       <button type="button" onClick={handleVisitShortUrl} className="py-3 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
@@ -367,7 +367,7 @@ export default function Home() {
                       </button>
                       
                       <p className="text-center text-[10px] text-slate-400 leading-relaxed px-4">
-                      By clicking Shorten Link, you agree to LinkPrecision's <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a>.
+                      By clicking Shorten Link, you agree to Mini Links' <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a>.
                       </p>
                     </div>
                   </form>
@@ -405,14 +405,14 @@ export default function Home() {
                           <span className="text-slate-700 dark:text-slate-300 truncate" title={qrLongUrl}>{qrLongUrl}</span>
                         </div>
                         <div className="flex items-start gap-3">
-                          <span className="min-w-[120px] font-semibold text-slate-700 dark:text-slate-200">TinyURL Link</span>
+                          <span className="min-w-[120px] font-semibold text-slate-700 dark:text-slate-200">Mini Links Link</span>
                           <div className="flex items-center gap-2 min-w-0">
                             <span className="text-slate-700 dark:text-slate-300 truncate" title={`https://${qrShortUrl}`}>{`https://${qrShortUrl}`}</span>
                             <button
                               type="button"
                               onClick={handleCopyQrUrl}
                               className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal-400 transition-colors shrink-0"
-                              title="Copy TinyURL"
+                              title="Copy Mini Links"
                             >
                               {copiedQrUrl ? <Check size={14} /> : <Copy size={14} />}
                             </button>
@@ -421,7 +421,7 @@ export default function Home() {
                       </div>
 
                       <p className="text-xs text-slate-500 dark:text-slate-400">
-                        TinyURL may earn commissions from this link. <a href="#" className="underline">Learn more.</a>
+                        Mini Links may earn commissions from this link. <a href="#" className="underline">Learn more.</a>
                       </p>
                     </div>
 
@@ -489,7 +489,7 @@ export default function Home() {
                       </button>
 
                       <p className="text-center text-[10px] text-slate-400 leading-relaxed px-4">
-                        By clicking Generate QR Code, you agree to LinkPrecision's <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a>.
+                        By clicking Generate QR Code, you agree to Mini Links' <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Terms of Service</a> and <a href="#" className="underline hover:text-slate-600 dark:hover:text-slate-300">Privacy Policy</a>.
                       </p>
                     </div>
                   </form>
