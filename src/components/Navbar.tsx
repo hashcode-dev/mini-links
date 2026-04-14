@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Moon, Sun, Search, User } from 'lucide-react';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { clearAuthSession } from '../lib/auth';
 
 interface NavbarProps {
@@ -14,6 +14,31 @@ export default function Navbar({ isPublicPage, toggleDarkMode, isDarkMode }: Nav
   const location = useLocation();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleDocumentClick = (event: MouseEvent) => {
+      if (!isDropdownOpen) {
+        return;
+      }
+
+      if (profileMenuRef.current?.contains(event.target as Node)) {
+        return;
+      }
+
+      setIsDropdownOpen(false);
+    };
+
+    document.addEventListener('click', handleDocumentClick);
+
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, [isDropdownOpen]);
+
+  useEffect(() => {
+    setIsDropdownOpen(false);
+  }, [location.pathname]);
 
   const handleLogout = () => {
     clearAuthSession();
@@ -76,8 +101,8 @@ export default function Navbar({ isPublicPage, toggleDarkMode, isDarkMode }: Nav
           {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        <div className="relative">
-          <button 
+        <div ref={profileMenuRef} className="relative">
+          <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high dark:bg-slate-700 border border-surface-container-low dark:border-slate-600 flex items-center justify-center text-slate-500 dark:text-slate-300"
           >
@@ -86,10 +111,10 @@ export default function Navbar({ isPublicPage, toggleDarkMode, isDarkMode }: Nav
 
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-surface-container-lowest dark:bg-navy-light rounded-lg shadow-lg border border-surface-container-high dark:border-slate-700 py-1 z-50">
-              <Link to="/dashboard" className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Dashboard</Link>
-              <Link to="/links" className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">My Links</Link>
-              <Link to="/settings" className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Settings</Link>
-              <Link to="/pricing" className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Billing</Link>
+              <Link to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Dashboard</Link>
+              <Link to="/links" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">My Links</Link>
+              <Link to="/settings" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Settings</Link>
+              <Link to="/pricing" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Billing</Link>
               <div className="border-t border-surface-container-high dark:border-slate-700 my-1"></div>
               <button
                 type="button"
