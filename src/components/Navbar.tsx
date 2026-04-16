@@ -67,7 +67,12 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
         
         <nav className="hidden lg:flex items-center gap-6 text-sm font-display font-medium">
           {navLinks.map((link) => {
-            const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
+            const [linkPath, linkHash] = link.path.split('#');
+            const normalizedPath = linkPath || '/';
+            const isHashLink = Boolean(linkHash);
+            const isActive = isHashLink
+              ? location.pathname === normalizedPath && location.hash === `#${linkHash}`
+              : location.pathname === normalizedPath || (normalizedPath !== '/' && location.pathname.startsWith(normalizedPath));
             return (
               <Link
                 key={link.name}

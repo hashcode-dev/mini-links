@@ -524,7 +524,7 @@ export default function Home() {
       </section>
 
       {/* Recent Links Section */}
-      <section className="bg-surface-container-lowest dark:bg-navy-light py-12 px-6 border-t border-surface-container-high dark:border-slate-800">
+      <section id="features" className="bg-surface-container-lowest dark:bg-navy-light py-12 px-6 border-t border-surface-container-high dark:border-slate-800">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-8">
             <div>
