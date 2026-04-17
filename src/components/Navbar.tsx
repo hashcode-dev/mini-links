@@ -1,5 +1,15 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Search, User, Link as LinkIcon } from 'lucide-react';
+import {
+  Search,
+  User,
+  Link as LinkIcon,
+  Pencil,
+  Link2,
+  QrCode,
+  ListChecks,
+  Target,
+  Code2,
+} from 'lucide-react';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import { clearAuthSession } from '../lib/auth';
@@ -12,7 +22,75 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isFeaturesModalOpen, setIsFeaturesModalOpen] = useState(false);
+  const [featuresModalStyle, setFeaturesModalStyle] = useState({ left: 16, top: 72, width: 980 });
   const profileMenuRef = useRef<HTMLDivElement>(null);
+  const featuresTriggerRef = useRef<HTMLDivElement>(null);
+  const featuresModalRef = useRef<HTMLDivElement>(null);
+
+  const featureItems = [
+    {
+      title: 'Link Editor',
+      description: 'Keep all your links dynamic, and extend their value in the long run',
+      icon: Pencil,
+    },
+    {
+      title: 'Branded Links',
+      description: 'Turn heads and hold attention with fully custom short links',
+      icon: Link2,
+    },
+    {
+      title: 'QR Code Generator',
+      description: "Elevate your customer\'s experiences with dynamic, scannable codes",
+      icon: QrCode,
+    },
+    {
+      title: 'Link Management',
+      description: 'Organize as many links as you need with our powerful, intuitive platform',
+      icon: ListChecks,
+    },
+    {
+      title: 'Short URL Tracking',
+      description: 'Measure the success of your efforts and make smarter, data-driven choices',
+      icon: Target,
+    },
+    {
+      title: 'Short URL API',
+      description: 'Build powerful apps and automations with our link shortening API',
+      icon: Code2,
+    },
+  ];
+
+  const updateFeaturesModalPosition = () => {
+    const triggerRect = featuresTriggerRef.current?.getBoundingClientRect();
+    if (!triggerRect) {
+      return;
+    }
+
+    const horizontalPadding = 16;
+    const desiredWidth = 980;
+    const maxWidth = Math.max(320, window.innerWidth - horizontalPadding * 2);
+    const width = Math.min(desiredWidth, maxWidth);
+    const preferredLeft = triggerRect.left + triggerRect.width / 2 - width / 2;
+    const minLeft = horizontalPadding;
+    const maxLeft = window.innerWidth - width - horizontalPadding;
+    const left = Math.min(Math.max(preferredLeft, minLeft), Math.max(minLeft, maxLeft));
+
+    setFeaturesModalStyle({
+      left,
+      top: triggerRect.bottom + 8,
+      width,
+    });
+  };
+
+  const handleOpenFeaturesModal = () => {
+    updateFeaturesModalPosition();
+    setIsFeaturesModalOpen(true);
+  };
+
+  const handleCloseFeaturesModal = () => {
+    setIsFeaturesModalOpen(false);
+  };
 
   const isNavLinkActive = (path: string) => {
     const [linkPath, linkHash] = path.split('#');
@@ -57,7 +135,40 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
 
   useEffect(() => {
     setIsDropdownOpen(false);
+    setIsFeaturesModalOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isFeaturesModalOpen) {
+      return;
+    }
+
+    const handleWindowChange = () => {
+      updateFeaturesModalPosition();
+    };
+
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (featuresTriggerRef.current?.contains(event.target as Node)) {
+        return;
+      }
+
+      if (featuresModalRef.current?.contains(event.target as Node)) {
+        return;
+      }
+
+      setIsFeaturesModalOpen(false);
+    };
+
+    window.addEventListener('resize', handleWindowChange);
+    window.addEventListener('scroll', handleWindowChange, true);
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowChange);
+      window.removeEventListener('scroll', handleWindowChange, true);
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isFeaturesModalOpen]);
 
   const handleLogout = () => {
     clearAuthSession();
@@ -89,6 +200,64 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
         <nav className="hidden lg:flex items-center gap-6 text-sm font-display font-medium">
           {navLinks.map((link) => {
             const isActive = isNavLinkActive(link.path);
+
+            if (isPublicPage && link.name === 'Features') {
+              return (
+                <div
+                  key={link.name}
+                  ref={featuresTriggerRef}
+                  className="relative"
+                  onMouseEnter={handleOpenFeaturesModal}
+                  onMouseLeave={handleCloseFeaturesModal}
+                >
+                  <Link
+                    to={link.path}
+                    onFocus={handleOpenFeaturesModal}
+                    aria-haspopup="true"
+                    className={clsx(
+                      "transition-colors pb-1",
+                      isActive
+                        ? "text-primary dark:text-teal-400 border-b-2 border-primary dark:border-teal-400 font-semibold"
+                        : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal-400"
+                    )}
+                  >
+                    {link.name}
+                  </Link>
+
+                  {isFeaturesModalOpen && (
+                    <div
+                      ref={featuresModalRef}
+                      className="fixed z-40 pt-2"
+                      style={{
+                        left: `${featuresModalStyle.left}px`,
+                        top: `${featuresModalStyle.top}px`,
+                        width: `${featuresModalStyle.width}px`,
+                      }}
+                      onMouseEnter={handleOpenFeaturesModal}
+                      onMouseLeave={handleCloseFeaturesModal}
+                    >
+                      <div className="w-full rounded-xl border border-surface-container-high dark:border-slate-700 bg-surface-container-lowest dark:bg-navy-light shadow-xl p-8">
+                        <div className="grid grid-cols-3 gap-x-8 gap-y-7">
+                          {featureItems.map((item) => {
+                            const Icon = item.icon;
+                            return (
+                              <div key={item.title} className="space-y-1.5">
+                                <div className="flex items-center gap-2 text-navy dark:text-white">
+                                  <Icon size={15} className="text-slate-700 dark:text-slate-300" />
+                                  <h3 className="text-[30px] font-semibold leading-7">{item.title}</h3>
+                                </div>
+                                <p className="text-lg text-slate-600 dark:text-slate-300 leading-6 pl-6">{item.description}</p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
             return (
               <Link
                 key={link.name}
