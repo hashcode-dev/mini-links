@@ -128,7 +128,9 @@ export default function Home() {
     setTimeout(() => setCopiedQrUrl(false), 2000);
   };
 
-  const downloadSvgAsPng = (svgElement: SVGSVGElement | null, fileName: string) => {
+  const HIGH_DEFINITION_QR_PNG_SIZE = 2048;
+
+  const downloadSvgAsPng = (svgElement: SVGSVGElement | null, fileName: string, exportSize = HIGH_DEFINITION_QR_PNG_SIZE) => {
     if (!svgElement) {
       return;
     }
@@ -138,18 +140,17 @@ export default function Home() {
     const svgBlob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
     const objectUrl = URL.createObjectURL(svgBlob);
     const image = new Image();
-    const size = 220;
-
     image.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = size;
-      canvas.height = size;
+      canvas.width = exportSize;
+      canvas.height = exportSize;
       const context = canvas.getContext('2d');
       if (!context) {
         URL.revokeObjectURL(objectUrl);
         return;
       }
-      context.drawImage(image, 0, 0, size, size);
+      context.imageSmoothingEnabled = false;
+      context.drawImage(image, 0, 0, exportSize, exportSize);
       URL.revokeObjectURL(objectUrl);
 
       const png = canvas.toDataURL('image/png');
@@ -297,15 +298,15 @@ export default function Home() {
                                   className="flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-xs font-bold transition-colors"
                                 >
                                   <Download size={13} />
-                                  Download SVG
+                                  Download SVG (Best for print)
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => downloadSvgAsPng(qrModalSvgRef.current, 'mini-links-qr.png')}
+                                  onClick={() => downloadSvgAsPng(qrModalSvgRef.current, 'mini-links-qr-hd.png')}
                                   className="flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-xs font-bold transition-colors"
                                 >
                                   <Download size={13} />
-                                  Download PNG
+                                  Download PNG (HD)
                                 </button>
                               </div>
                             </div>
@@ -409,15 +410,15 @@ export default function Home() {
                             className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-sm font-bold transition-colors"
                           >
                             <Download size={13} />
-                            Download SVG
+                            Download SVG (Best for print)
                           </button>
                           <button
                             type="button"
-                            onClick={() => downloadSvgAsPng(qrTabSvgRef.current, 'mini-links-generated-qr.png')}
+                            onClick={() => downloadSvgAsPng(qrTabSvgRef.current, 'mini-links-generated-qr-hd.png')}
                             className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-sm font-bold transition-colors"
                           >
                             <Download size={13} />
-                            Download PNG
+                            Download PNG (HD)
                           </button>
                         </div>
                       </div>
