@@ -14,6 +14,27 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
 
+  const isNavLinkActive = (path: string) => {
+    const [linkPath, linkHash] = path.split('#');
+    const normalizedPath = linkPath || '/';
+
+    if (linkHash) {
+      return location.pathname === normalizedPath && location.hash === `#${linkHash}`;
+    }
+
+    if (!isPublicPage) {
+      if (normalizedPath === '/links') {
+        return location.pathname === '/links' || location.pathname === '/links/new';
+      }
+
+      if (normalizedPath === '/links/1') {
+        return /^\/links\/[^/]+$/.test(location.pathname) && location.pathname !== '/links/new';
+      }
+    }
+
+    return location.pathname === normalizedPath;
+  };
+
   useEffect(() => {
     const handleDocumentClick = (event: MouseEvent) => {
       if (!isDropdownOpen) {
@@ -67,12 +88,7 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
         
         <nav className="hidden lg:flex items-center gap-6 text-sm font-display font-medium">
           {navLinks.map((link) => {
-            const [linkPath, linkHash] = link.path.split('#');
-            const normalizedPath = linkPath || '/';
-            const isHashLink = Boolean(linkHash);
-            const isActive = isHashLink
-              ? location.pathname === normalizedPath && location.hash === `#${linkHash}`
-              : location.pathname === normalizedPath || (normalizedPath !== '/' && location.pathname.startsWith(normalizedPath));
+            const isActive = isNavLinkActive(link.path);
             return (
               <Link
                 key={link.name}
