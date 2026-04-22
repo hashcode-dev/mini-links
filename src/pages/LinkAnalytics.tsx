@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Copy, Calendar, MousePointerClick, Edit2, Trash2, Globe, Smartphone, Monitor, Terminal, Link as LinkIcon, Clock } from 'lucide-react';
-import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar, YAxis } from 'recharts';
+import { Copy, Calendar, MousePointerClick, Edit2, Trash2, Globe, Monitor, Terminal, Link as LinkIcon, Clock } from 'lucide-react';
+import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, BarChart, Bar, YAxis } from 'recharts';
 import { useLinks } from '../context/LinksContext';
+import ClicksByDeviceCard from '../components/ClicksByDeviceCard';
 
 function buildTrendData(totalClicks: number) {
   const days = ['Nov 1', 'Nov 7', 'Nov 14', 'Nov 21', 'Nov 28', 'Dec 1'];
@@ -36,8 +37,9 @@ export default function LinkAnalytics() {
   }
 
   const deviceData = [
-    { name: 'Mobile', value: 72, color: '#008080' },
+    { name: 'Mobile', value: 64, color: '#008080' },
     { name: 'Desktop', value: 28, color: '#4FD1C5' },
+    { name: 'Tablet', value: 8, color: '#E2E8F0' },
   ];
   const browserData = [
     { name: 'Chrome', value: 64 },
@@ -154,28 +156,7 @@ export default function LinkAnalytics() {
           </div>
         </div>
 
-        <div className="bg-surface-container-lowest dark:bg-navy-light rounded-xl p-6 shadow-sm border border-surface-container-high dark:border-slate-700 flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-            <h4 className="font-display font-bold text-sm text-navy dark:text-white">Clicks by Device</h4>
-            <Smartphone className="text-slate-400" size={16} />
-          </div>
-          <div className="flex-1 flex flex-col items-center justify-center relative py-4">
-            <div className="h-32 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={deviceData} innerRadius={40} outerRadius={60} paddingAngle={2} dataKey="value" stroke="none">
-                    {deviceData.map((entry) => <Cell key={entry.name} fill={entry.color} />)}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-xl font-bold font-display text-navy dark:text-white">72%</span>
-              <span className="text-[10px] text-slate-500 font-semibold uppercase">Mobile</span>
-            </div>
-          </div>
-        </div>
+        <ClicksByDeviceCard data={deviceData} />
 
         <div className="bg-surface-container-lowest dark:bg-navy-light rounded-xl p-6 shadow-sm border border-surface-container-high dark:border-slate-700 flex flex-col">
           <div className="flex justify-between items-center mb-6">

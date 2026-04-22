@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Link as LinkIcon, MousePointerClick, BarChart2, Activity, TrendingUp, TrendingDown, Download, ExternalLink } from 'lucide-react';
-import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useLinks } from '../context/LinksContext';
+import ClicksByDeviceCard from '../components/ClicksByDeviceCard';
 
 const trendData = [
   { date: 'Nov 1', clicks: 1200 }, { date: 'Nov 7', clicks: 2100 },
@@ -82,7 +83,7 @@ export default function Dashboard() {
                 </linearGradient>
               </defs>
               <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} dy={10} />
-              <Tooltip 
+              <Tooltip
                 contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                 itemStyle={{ color: '#008080', fontWeight: 'bold' }}
               />
@@ -139,44 +140,7 @@ export default function Dashboard() {
         {/* Right Side Charts */}
         <div className="flex flex-col gap-6">
           {/* Clicks by Device */}
-          <div className="bg-surface-container-lowest dark:bg-navy-light p-6 rounded-xl border border-surface-container-high dark:border-slate-700 shadow-sm flex flex-col">
-            <h2 className="text-md font-bold text-navy dark:text-white mb-4 font-display">Clicks by Device</h2>
-            <div className="flex-1 flex flex-col items-center justify-center relative">
-              <div className="h-40 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={deviceData}
-                      innerRadius={50}
-                      outerRadius={70}
-                      paddingAngle={2}
-                      dataKey="value"
-                      stroke="none"
-                    >
-                      {deviceData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-2xl font-bold text-navy dark:text-white">64%</span>
-                <span className="text-[10px] text-slate-500 uppercase font-bold">Mobile</span>
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-2 mt-4">
-              {deviceData.map(d => (
-                <div key={d.name} className="text-center">
-                  <div className="flex items-center justify-center gap-1 text-[10px] text-slate-500 uppercase font-bold mb-1">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }}></span>
-                    {d.name}
-                  </div>
-                  <div className="text-sm font-bold text-navy dark:text-white">{d.value}%</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <ClicksByDeviceCard data={deviceData} />
 
           {/* Clicks by Country */}
           <div className="bg-surface-container-lowest dark:bg-navy-light p-6 rounded-xl border border-surface-container-high dark:border-slate-700 shadow-sm flex flex-col">
