@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Copy, Calendar, MousePointerClick, Edit2, Trash2, Monitor, Terminal, Link as LinkIcon, Clock } from 'lucide-react';
+import { Copy, Calendar, MousePointerClick, Edit2, Trash2, Monitor, Link as LinkIcon, Clock } from 'lucide-react';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, BarChart, Bar, YAxis } from 'recharts';
 import { useLinks } from '../context/LinksContext';
 import ClicksByDeviceCard from '../components/ClicksByDeviceCard';
 import ClicksByCountryCard from '../components/ClicksByCountryCard';
+import ClicksByOperatingSystemCard from '../components/ClicksByOperatingSystemCard';
 
 function buildTrendData(totalClicks: number) {
   const days = ['Nov 1', 'Nov 7', 'Nov 14', 'Nov 21', 'Nov 28', 'Dec 1'];
@@ -53,7 +54,10 @@ export default function LinkAnalytics() {
     { name: 'Android', value: 24 },
     { name: 'macOS', value: 18 },
     { name: 'Windows', value: 10 },
-  ];
+  ].map((os) => ({
+    ...os,
+    count: Math.round((link.clicks * os.value) / 100),
+  }));
   const timeData = [
     { time: '00:00', clicks: 10 },
     { time: '04:00', clicks: 5 },
@@ -162,25 +166,7 @@ export default function LinkAnalytics() {
           </div>
         </div>
 
-        <div className="bg-surface-container-lowest dark:bg-navy-light rounded-xl p-6 shadow-sm border border-surface-container-high dark:border-slate-700 flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-            <h4 className="font-display font-bold text-sm text-navy dark:text-white">Operating Systems</h4>
-            <Terminal className="text-slate-400" size={16} />
-          </div>
-          <div className="space-y-5 flex-1 justify-center flex flex-col">
-            {osData.map((os, index) => (
-              <div key={os.name} className="space-y-1">
-                <div className="flex justify-between text-xs mb-1 font-medium text-slate-600 dark:text-slate-300">
-                  <span>{os.name}</span>
-                  <span className="font-bold text-navy dark:text-white">{os.value}%</span>
-                </div>
-                <div className="w-full h-2 bg-surface-container-high dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div className="h-full bg-primary dark:bg-teal-500 rounded-full" style={{ width: `${os.value}%`, opacity: 1 - (index * 0.2) }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ClicksByOperatingSystemCard data={osData} />
 
         <div className="bg-surface-container-lowest dark:bg-navy-light rounded-xl p-6 shadow-sm border border-surface-container-high dark:border-slate-700 flex flex-col lg:col-span-2">
           <div className="flex justify-between items-center mb-6">
