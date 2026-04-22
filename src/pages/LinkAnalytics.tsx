@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Copy, Calendar, MousePointerClick, Edit2, Trash2, Globe, Monitor, Terminal, Link as LinkIcon, Clock } from 'lucide-react';
+import { Copy, Calendar, MousePointerClick, Edit2, Trash2, Monitor, Terminal, Link as LinkIcon, Clock } from 'lucide-react';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, BarChart, Bar, YAxis } from 'recharts';
 import { useLinks } from '../context/LinksContext';
 import ClicksByDeviceCard from '../components/ClicksByDeviceCard';
+import ClicksByCountryCard from '../components/ClicksByCountryCard';
 
 function buildTrendData(totalClicks: number) {
   const days = ['Nov 1', 'Nov 7', 'Nov 14', 'Nov 21', 'Nov 28', 'Dec 1'];
@@ -60,6 +61,12 @@ export default function LinkAnalytics() {
     { time: '12:00', clicks: 80 },
     { time: '16:00', clicks: 60 },
     { time: '20:00', clicks: 30 },
+  ];
+  const countryData = [
+    { name: 'United States', val: 51, count: '12,402' },
+    { name: 'United Kingdom', val: 17, count: '4,120' },
+    { name: 'Germany', val: 8, count: '2,011' },
+    { name: 'Spain', val: 5, count: '1,200' },
   ];
 
   const handleDelete = () => {
@@ -131,30 +138,7 @@ export default function LinkAnalytics() {
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-surface-container-lowest dark:bg-navy-light rounded-xl p-6 shadow-sm border border-surface-container-high dark:border-slate-700 flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-            <h4 className="font-display font-bold text-sm text-navy dark:text-white">Clicks by Country</h4>
-            <Globe className="text-slate-400" size={16} />
-          </div>
-          <div className="space-y-4 flex-1 justify-center flex flex-col">
-            {[
-              { name: 'United States', val: 51, count: '12,402' },
-              { name: 'United Kingdom', val: 17, count: '4,120' },
-              { name: 'Germany', val: 8, count: '2,011' },
-              { name: 'Spain', val: 5, count: '1,200' },
-            ].map((country, index) => (
-              <div key={country.name} className="space-y-1">
-                <div className="flex justify-between text-xs font-medium">
-                  <span className="text-slate-600 dark:text-slate-300">{country.name}</span>
-                  <span className="font-bold text-navy dark:text-white">{country.count} ({country.val}%)</span>
-                </div>
-                <div className="w-full h-1.5 bg-surface-container-high dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div className="bg-primary dark:bg-teal-500 h-full rounded-full" style={{ width: `${country.val}%`, opacity: 1 - (index * 0.15) }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ClicksByCountryCard data={countryData} />
 
         <ClicksByDeviceCard data={deviceData} />
 

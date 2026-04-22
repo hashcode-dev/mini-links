@@ -3,6 +3,7 @@ import { Link as LinkIcon, MousePointerClick, BarChart2, Activity, TrendingUp, T
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useLinks } from '../context/LinksContext';
 import ClicksByDeviceCard from '../components/ClicksByDeviceCard';
+import ClicksByCountryCard from '../components/ClicksByCountryCard';
 
 const trendData = [
   { date: 'Nov 1', clicks: 1200 }, { date: 'Nov 7', clicks: 2100 },
@@ -14,6 +15,13 @@ const deviceData = [
   { name: 'Mobile', value: 64, color: '#008080' },
   { name: 'Desktop', value: 28, color: '#4FD1C5' },
   { name: 'Tablet', value: 8, color: '#E2E8F0' }
+];
+
+const countryData = [
+  { name: 'United States', val: 45, count: '10,931' },
+  { name: 'United Kingdom', val: 22, count: '5,344' },
+  { name: 'Spain', val: 18, count: '4,372' },
+  { name: 'Mexico', val: 10, count: '2,429' },
 ];
 
 export default function Dashboard() {
@@ -143,27 +151,7 @@ export default function Dashboard() {
           <ClicksByDeviceCard data={deviceData} />
 
           {/* Clicks by Country */}
-          <div className="bg-surface-container-lowest dark:bg-navy-light p-6 rounded-xl border border-surface-container-high dark:border-slate-700 shadow-sm flex flex-col">
-            <h2 className="text-md font-bold text-navy dark:text-white mb-4 font-display">Clicks by Country</h2>
-            <div className="space-y-4">
-              {[
-                { name: 'United States', val: 45 },
-                { name: 'United Kingdom', val: 22 },
-                { name: 'Spain', val: 18 },
-                { name: 'Mexico', val: 10 },
-              ].map((country, i) => (
-                <div key={i} className="space-y-1">
-                  <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 font-medium">
-                    <span>{country.name}</span>
-                    <span className="font-bold text-navy dark:text-white">{country.val}%</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-surface-container-high dark:bg-slate-700 rounded-full overflow-hidden">
-                    <div className="bg-primary dark:bg-teal-500 h-full rounded-full" style={{ width: `${country.val}%`, opacity: 1 - (i * 0.2) }}></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <ClicksByCountryCard data={countryData} />
         </div>
       </section>
     </div>
