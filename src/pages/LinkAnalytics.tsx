@@ -42,10 +42,10 @@ export default function LinkAnalytics() {
     { name: 'Tablet', value: 8, color: '#E2E8F0' },
   ];
   const browserData = [
-    { name: 'Chrome', value: 64 },
-    { name: 'Safari', value: 22 },
-    { name: 'Firefox', value: 8 },
-    { name: 'Edge', value: 4 },
+    { name: 'Chrome', value: 64, count: '15,571' },
+    { name: 'Safari', value: 22, count: '5,350' },
+    { name: 'Firefox', value: 8, count: '1,946' },
+    { name: 'Edge', value: 4, count: '973' },
   ];
   const osData = [
     { name: 'iOS', value: 48 },
@@ -168,7 +168,7 @@ export default function LinkAnalytics() {
               <div key={browser.name} className="space-y-1">
                 <div className="flex justify-between text-xs mb-1 font-medium text-slate-600 dark:text-slate-300">
                   <span>{browser.name}</span>
-                  <span className="font-bold text-navy dark:text-white">{browser.value}%</span>
+                  <span className="font-bold text-navy dark:text-white">{browser.count} ({browser.value}%)</span>
                 </div>
                 <div className="w-full h-2 bg-surface-container-high dark:bg-slate-700 rounded-full overflow-hidden">
                   <div className="h-full bg-primary dark:bg-teal-500 rounded-full" style={{ width: `${browser.value}%`, opacity: 1 - (index * 0.2) }} />
