@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Link as LinkIcon, Mail, Lock, ArrowRight, Github } from 'lucide-react';
+import { Link as LinkIcon, Mail, Lock, ArrowRight } from 'lucide-react';
 import { isAuthenticated, setAuthSession } from '../lib/auth';
 import { signInWithGoogle } from '../lib/googleAuth';
 
@@ -84,10 +84,6 @@ export default function Auth() {
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
               </svg>
               {isGoogleLoading ? 'Connecting to Google...' : 'Continue with Google'}
-            </button>
-            <button type="button" className="w-full py-3 px-4 bg-surface-container-lowest dark:bg-navy-light border border-surface-container-high dark:border-slate-700 rounded-lg text-sm font-bold text-navy dark:text-white hover:bg-surface-container-low dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-3">
-              <Github size={20} />
-              Continue with GitHub
             </button>
           </div>
 
