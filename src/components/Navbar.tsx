@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
-import { clearAuthSession } from '../lib/auth';
+import { clearAuthSession, isAuthenticated } from '../lib/auth';
 
 interface NavbarProps {
   isPublicPage: boolean;
@@ -186,6 +186,7 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
         { name: 'Links', path: '/links' },
         { name: 'Analytics', path: '/links/1' },
       ];
+  const isUserAuthenticated = isAuthenticated();
 
   return (
     <header className="sticky top-0 z-30 glass-panel flex justify-between items-center w-full px-6 py-4 border-b border-surface-container-high dark:border-navy shadow-sm">
@@ -299,18 +300,28 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
 
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-surface-container-lowest dark:bg-navy-light rounded-lg shadow-lg border border-surface-container-high dark:border-slate-700 py-1 z-50">
-              <Link to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Dashboard</Link>
-              <Link to="/links" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">My Links</Link>
-              <Link to="/settings" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Settings</Link>
-              <Link to="/pricing" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Billing</Link>
-              <div className="border-t border-surface-container-high dark:border-slate-700 my-1"></div>
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-              >
-                Log Out
-              </button>
+              {isUserAuthenticated ? (
+                <>
+                  <Link to="/settings" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Profile</Link>
+                  <Link to="/pricing" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy">Billing</Link>
+                  <div className="border-t border-surface-container-high dark:border-slate-700 my-1"></div>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setIsDropdownOpen(false)}
+                  className="block px-4 py-2 text-sm text-primary dark:text-teal-400 hover:bg-surface-container-low dark:hover:bg-navy"
+                >
+                  Sign In
+                </Link>
+              )}
             </div>
           )}
         </div>
