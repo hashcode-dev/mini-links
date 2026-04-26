@@ -20,6 +20,7 @@ export default function Home() {
   const [qrShortUrl, setQrShortUrl] = useState('');
   const [copiedQrUrl, setCopiedQrUrl] = useState(false);
   const [showQrModal, setShowQrModal] = useState(false);
+  const [failedFaviconIds, setFailedFaviconIds] = useState<Record<string, boolean>>({});
   const qrTabSvgRef = useRef<SVGSVGElement | null>(null);
   const qrModalSvgRef = useRef<SVGSVGElement | null>(null);
   const qrPopoverRef = useRef<HTMLDivElement | null>(null);
@@ -39,6 +40,15 @@ export default function Home() {
     const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
     new URL(candidate);
     return candidate;
+  };
+
+  const getFaviconUrl = (url: string): string | null => {
+    try {
+      const hostname = new URL(url).hostname;
+      return `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
+    } catch {
+      return null;
+    }
   };
 
   const handleShorten = (e: React.FormEvent) => {
@@ -572,7 +582,18 @@ export default function Home() {
                     <tr key={link.id} className="hover:bg-surface-container-low/50 dark:hover:bg-navy-light/50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="w-8 h-8 rounded bg-surface-container-lowest dark:bg-navy border border-surface-container-high dark:border-slate-700 p-1 flex items-center justify-center">
-                          <LinkIcon size={14} className="text-slate-400" />
+                          {getFaviconUrl(link.originalUrl) && !failedFaviconIds[link.id] ? (
+                            <img
+                              src={getFaviconUrl(link.originalUrl) || undefined}
+                              alt="Website favicon"
+                              className="w-full h-full object-contain rounded-sm"
+                              loading="lazy"
+                              referrerPolicy="no-referrer"
+                              onError={() => setFailedFaviconIds((prev) => ({ ...prev, [link.id]: true }))}
+                            />
+                          ) : (
+                            <LinkIcon size={14} className="text-slate-400" />
+                          )}
                         </div>
                       </td>
                       <td className="px-6 py-4">
