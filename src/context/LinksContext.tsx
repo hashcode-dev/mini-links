@@ -1,5 +1,6 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+import { isAuthenticated } from '../lib/auth';
 
 export type LinkStatus = 'Active' | 'Expired' | 'Private';
 
@@ -29,6 +30,7 @@ interface CreateLinkInput {
 
 interface LinksContextValue {
   links: ShortLink[];
+  recentLinks: ShortLink[];
   createLink: (input: CreateLinkInput) => ShortLink;
   updateLink: (id: string, updates: Partial<ShortLink>) => void;
   deleteLink: (id: string) => void;
@@ -36,6 +38,8 @@ interface LinksContextValue {
 }
 
 const LINKS_STORAGE_KEY = 'mini-links-records';
+const RECENT_LINKS_STORAGE_KEY = 'mini-links-recent-records';
+const MAX_RECENT_LINKS = 10;
 
 const seedLinks: ShortLink[] = [
   {
@@ -120,14 +124,38 @@ function loadInitialLinks(): ShortLink[] {
   }
 }
 
+function loadRecentLinks(): ShortLink[] {
+  const stored = localStorage.getItem(RECENT_LINKS_STORAGE_KEY);
+  if (!stored) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(stored) as ShortLink[];
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+    return parsed.slice(0, MAX_RECENT_LINKS);
+  } catch {
+    return [];
+  }
+}
+
 const LinksContext = createContext<LinksContextValue | undefined>(undefined);
 
 export function LinksProvider({ children }: { children: ReactNode }) {
   const [links, setLinks] = useState<ShortLink[]>(() => loadInitialLinks());
+  const [recentLinks, setRecentLinks] = useState<ShortLink[]>(() => loadRecentLinks());
 
   const persist = (nextLinks: ShortLink[]) => {
     setLinks(nextLinks);
     localStorage.setItem(LINKS_STORAGE_KEY, JSON.stringify(nextLinks));
+  };
+
+  const persistRecent = (nextLinks: ShortLink[]) => {
+    const limitedLinks = nextLinks.slice(0, MAX_RECENT_LINKS);
+    setRecentLinks(limitedLinks);
+    localStorage.setItem(RECENT_LINKS_STORAGE_KEY, JSON.stringify(limitedLinks));
   };
 
   const createLink = (input: CreateLinkInput): ShortLink => {
@@ -148,7 +176,11 @@ export function LinksProvider({ children }: { children: ReactNode }) {
       passwordProtected: Boolean(input.passwordProtected),
     };
 
-    persist([newLink, ...links]);
+    if (isAuthenticated()) {
+      persist([newLink, ...links]);
+    } else {
+      persistRecent([newLink, ...recentLinks]);
+    }
     return newLink;
   };
 
@@ -165,12 +197,13 @@ export function LinksProvider({ children }: { children: ReactNode }) {
   const value = useMemo<LinksContextValue>(
     () => ({
       links,
+      recentLinks,
       createLink,
       updateLink,
       deleteLink,
       getLinkById,
     }),
-    [links],
+    [links, recentLinks],
   );
 
   return <LinksContext.Provider value={value}>{children}</LinksContext.Provider>;

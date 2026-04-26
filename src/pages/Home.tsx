@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Link as LinkIcon, Zap, ArrowRight, ExternalLink, QrCode, Share2, Copy, Check, Download, X } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useLinks } from '../context/LinksContext';
+import { isAuthenticated } from '../lib/auth';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'shorten' | 'qr'>('shorten');
@@ -22,7 +23,12 @@ export default function Home() {
   const qrTabSvgRef = useRef<SVGSVGElement | null>(null);
   const qrModalSvgRef = useRef<SVGSVGElement | null>(null);
   const qrPopoverRef = useRef<HTMLDivElement | null>(null);
-  const { createLink } = useLinks();
+  const { createLink, links, recentLinks } = useLinks();
+  const isUserAuthenticated = isAuthenticated();
+  const recentGeneratedLinks = (isUserAuthenticated ? links : recentLinks)
+    .slice()
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 10);
 
   const normalizeUrl = (rawUrl: string): string => {
     const trimmed = rawUrl.trim();
@@ -128,6 +134,19 @@ export default function Home() {
     setTimeout(() => setCopiedQrUrl(false), 2000);
   };
 
+  const handleShareRecentLink = async (shortUrl: string) => {
+    const shareUrl = `https://${shortUrl}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ url: shareUrl, title: 'Mini Link' });
+        return;
+      }
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      // Ignore share cancel/errors.
+    }
+  };
+
   const HIGH_DEFINITION_QR_PNG_SIZE = 2048;
 
   const downloadSvgAsPng = (svgElement: SVGSVGElement | null, fileName: string, exportSize = HIGH_DEFINITION_QR_PNG_SIZE) => {
@@ -199,7 +218,7 @@ export default function Home() {
             </h1>
             <p className="text-base text-slate-600 dark:text-slate-300 max-w-md leading-relaxed">
               Transform lengthy, cluttered links into powerful marketing<br/>
-              assets. Mini Links Atelier provides the architectural<br/>
+              assets. Mini Links provides the architectural<br/>
               precision your digital presence demands.
             </p>
             <div className="flex items-center gap-5">
@@ -549,41 +568,66 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-container-high dark:divide-slate-700">
-                  {[
-                    { short: 'MiniLinks.com/ux-case', original: 'https://dribbble.com/shots/2349583-Case-St...', icon: 'https://cdn.brandfetch.io/dribbble.com/w/400/h/400' },
-                    { short: 'MiniLinks.com/fig-proto', original: 'https://www.figma.com/file/ASh2849AsJ/Desi...', icon: 'https://cdn.brandfetch.io/figma.com/w/400/h/400' },
-                    { short: 'MiniLinks.com/pay-portal', original: 'https://stripe.com/docs/api/checkout/session...', icon: 'https://cdn.brandfetch.io/stripe.com/w/400/h/400' },
-                  ].map((link, i) => (
-                    <tr key={i} className="hover:bg-surface-container-low/50 dark:hover:bg-navy-light/50 transition-colors">
+                  {recentGeneratedLinks.map((link) => (
+                    <tr key={link.id} className="hover:bg-surface-container-low/50 dark:hover:bg-navy-light/50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="w-8 h-8 rounded bg-surface-container-lowest dark:bg-navy border border-surface-container-high dark:border-slate-700 p-1 flex items-center justify-center">
-                          <img src={link.icon} alt="Favicon" className="w-full h-full object-contain rounded-sm" />
+                          <LinkIcon size={14} className="text-slate-400" />
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <span className="text-primary dark:text-teal-400 font-bold font-mono text-sm">{link.short}</span>
-                          <Copy size={14} className="text-slate-400 cursor-pointer hover:text-navy dark:hover:text-white" />
+                          <span className="text-primary dark:text-teal-400 font-bold font-mono text-sm">{link.shortUrl}</span>
+                          <button
+                            type="button"
+                            onClick={() => navigator.clipboard.writeText(`https://${link.shortUrl}`)}
+                            className="text-slate-400 hover:text-navy dark:hover:text-white transition-colors"
+                            title="Copy short link"
+                          >
+                            <Copy size={14} />
+                          </button>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-slate-500 dark:text-slate-400 text-sm truncate max-w-xs block">{link.original}</span>
+                        <span className="text-slate-500 dark:text-slate-400 text-sm truncate max-w-xs block">{link.originalUrl}</span>
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <button className="p-2 rounded bg-surface-container-low dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 hover:bg-primary/10 transition-all">
+                          <button
+                            type="button"
+                            onClick={() => window.open(link.originalUrl, '_blank', 'noopener,noreferrer')}
+                            className="p-2 rounded bg-surface-container-low dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 hover:bg-primary/10 transition-all"
+                            title="Open destination"
+                          >
                             <ExternalLink size={18} />
                           </button>
-                          <button className="p-2 rounded bg-surface-container-low dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 hover:bg-primary/10 transition-all">
+                          <button
+                            type="button"
+                            onClick={() => navigator.clipboard.writeText(`https://${link.shortUrl}`)}
+                            className="p-2 rounded bg-surface-container-low dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 hover:bg-primary/10 transition-all"
+                            title="Copy short link"
+                          >
                             <QrCode size={18} />
                           </button>
-                          <button className="p-2 rounded bg-surface-container-low dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 hover:bg-primary/10 transition-all">
+                          <button
+                            type="button"
+                            onClick={() => handleShareRecentLink(link.shortUrl)}
+                            className="p-2 rounded bg-surface-container-low dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 hover:bg-primary/10 transition-all"
+                            title="Share short link"
+                          >
                             <Share2 size={18} />
                           </button>
                         </div>
                       </td>
                     </tr>
                   ))}
+                  {recentGeneratedLinks.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">
+                        No recent links yet. Shorten a URL to see it here.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
