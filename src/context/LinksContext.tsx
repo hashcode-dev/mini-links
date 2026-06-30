@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { isAuthenticated } from '../lib/auth';
 
@@ -144,8 +144,42 @@ function loadRecentLinks(): ShortLink[] {
 const LinksContext = createContext<LinksContextValue | undefined>(undefined);
 
 export function LinksProvider({ children }: { children: ReactNode }) {
-  const [links, setLinks] = useState<ShortLink[]>(() => loadInitialLinks());
+  const [links, setLinks] = useState<ShortLink[]>([]);
   const [recentLinks, setRecentLinks] = useState<ShortLink[]>(() => loadRecentLinks());
+
+useEffect(() => {
+  const fetchLinks = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/getAllShortUrls");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch links");
+      }
+
+      const data = await response.json();
+
+      const formattedLinks: ShortLink[] = data.map(
+        (item: any, index: number) => ({
+          id: String(index + 1),
+          shortCode: item.alias || item.shortUrl,
+          domain: "localhost:8080",
+          shortUrl: `localhost:8080/${item.shortUrl}`,
+          originalUrl: item.originalUrl,
+          createdAt: item.createdAt,
+          clicks: item.clickCount,
+          status: item.active ? "Active" : "Expired",
+          passwordProtected: false,
+        })
+      );
+
+      setLinks(formattedLinks);
+    } catch (error) {
+      console.error("Error fetching links:", error);
+    }
+  };
+
+  fetchLinks();
+}, []);
 
   const persist = (nextLinks: ShortLink[]) => {
     setLinks(nextLinks);
