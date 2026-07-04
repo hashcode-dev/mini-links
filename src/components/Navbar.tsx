@@ -220,19 +220,16 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
                 onMouseEnter={handleOpenFeaturesModal}
                 onMouseLeave={handleCloseFeaturesModal}
               >
-                <Link
-                  to={link.path}
-                  onFocus={handleOpenFeaturesModal}
-                  aria-haspopup="true"
+                <span
                   className={clsx(
-                    "transition-colors pb-1",
+                    "transition-colors pb-1 cursor-default select-none",
                     isActive
                       ? "text-primary dark:text-teal-400 border-b-2 border-primary dark:border-teal-400 font-semibold"
                       : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal-400"
                   )}
                 >
                   {link.name}
-                </Link>
+                </span>
 
                 {isFeaturesModalOpen && (
                   <div
