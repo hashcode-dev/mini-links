@@ -178,7 +178,12 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
 
   const navLinks = isPublicPage 
     ? [
-        { name: 'Pricing', path: '/pricing' },
+        { name: 'Home', path: '/' },
+        { name: 'About Us', path: '/about' },
+        { name: 'Privacy Policy', path: '/privacy-policy' },
+        { name: 'Terms of Service', path: '/terms-of-service' },
+        { name: 'Contact Support', path: '/contact' },
+        { name: 'Pricing Plan', path: '/pricing' },
         { name: 'Features', path: '/#features' },
       ]
     : [
@@ -191,103 +196,106 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
 
   return (
     <header className="sticky top-0 z-30 glass-panel flex justify-between items-center w-full px-6 py-4 border-b border-surface-container-high dark:border-navy shadow-sm">
-      <div className="flex items-center gap-8">
+      {/* Left Column: Brand Logo */}
+      <div className="flex-1 flex items-center justify-start">
         <Link to="/" className={clsx("flex items-center gap-2 text-xl font-bold tracking-tight font-display", !isPublicPage && "md:hidden")}>
           <span className="w-7 h-7 rounded-md bg-primary flex items-center justify-center">
             <LinkIcon size={16} className="text-white" />
           </span>
           <span className="text-navy dark:text-white">Mini Links</span>
         </Link>
-        
-        <nav className="hidden lg:flex items-center gap-6 text-sm font-display font-medium">
-          {navLinks.map((link) => {
-            const isActive = isNavLinkActive(link.path);
+      </div>
+      
+      {/* Center Column: Navigation links */}
+      <nav className="hidden lg:flex flex-initial items-center justify-center gap-6 text-sm font-display font-medium">
+        {navLinks.map((link) => {
+          const isActive = isNavLinkActive(link.path);
 
-            if (isPublicPage && link.name === 'Features') {
-              return (
-                <div
-                  key={link.name}
-                  ref={featuresTriggerRef}
-                  className="relative"
-                  onMouseEnter={handleOpenFeaturesModal}
-                  onMouseLeave={handleCloseFeaturesModal}
+          if (isPublicPage && link.name === 'Features') {
+            return (
+              <div
+                key={link.name}
+                ref={featuresTriggerRef}
+                className="relative"
+                onMouseEnter={handleOpenFeaturesModal}
+                onMouseLeave={handleCloseFeaturesModal}
+              >
+                <Link
+                  to={link.path}
+                  onFocus={handleOpenFeaturesModal}
+                  aria-haspopup="true"
+                  className={clsx(
+                    "transition-colors pb-1",
+                    isActive
+                      ? "text-primary dark:text-teal-400 border-b-2 border-primary dark:border-teal-400 font-semibold"
+                      : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal-400"
+                  )}
                 >
-                  <Link
-                    to={link.path}
-                    onFocus={handleOpenFeaturesModal}
-                    aria-haspopup="true"
-                    className={clsx(
-                      "transition-colors pb-1",
-                      isActive
-                        ? "text-primary dark:text-teal-400 border-b-2 border-primary dark:border-teal-400 font-semibold"
-                        : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal-400"
-                    )}
-                  >
-                    {link.name}
-                  </Link>
+                  {link.name}
+                </Link>
 
-                  {isFeaturesModalOpen && (
-                    <div
-                      ref={featuresModalRef}
-                      className="fixed z-40 pt-2"
-                      style={{
-                        left: `${featuresModalStyle.left}px`,
-                        top: `${featuresModalStyle.top}px`,
-                        width: `${featuresModalStyle.width}px`,
-                      }}
-                      onMouseEnter={handleOpenFeaturesModal}
-                      onMouseLeave={handleCloseFeaturesModal}
-                    >
-                      <div className="w-full rounded-2xl border border-surface-container-high dark:border-slate-800 bg-surface-container-lowest/95 dark:bg-navy-light/95 backdrop-blur-[20px] shadow-2xl p-6 transition-all duration-300">
-                        <div className="grid grid-cols-3 gap-4">
-                          {featureItems.map((item) => {
-                            const Icon = item.icon;
-                            return (
-                              <div
-                                key={item.title}
-                                className="flex items-start gap-4 p-4 rounded-xl hover:bg-surface-container-low dark:hover:bg-navy/40 transition-all duration-200 group cursor-pointer border border-transparent hover:border-surface-container-high dark:hover:border-slate-800"
-                              >
-                                <div className="p-2.5 bg-primary/10 dark:bg-teal-950/30 text-primary dark:text-teal-400 rounded-lg group-hover:scale-110 transition-transform duration-200 shrink-0">
-                                  <Icon size={18} />
-                                </div>
-                                <div className="space-y-1">
-                                  <h3 className="text-[15px] font-bold font-display text-navy dark:text-white leading-snug group-hover:text-primary dark:group-hover:text-teal-400 transition-colors">
-                                    {item.title}
-                                  </h3>
-                                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                                    {item.description}
-                                  </p>
-                                </div>
+                {isFeaturesModalOpen && (
+                  <div
+                    ref={featuresModalRef}
+                    className="fixed z-40 pt-2"
+                    style={{
+                      left: `${featuresModalStyle.left}px`,
+                      top: `${featuresModalStyle.top}px`,
+                      width: `${featuresModalStyle.width}px`,
+                    }}
+                    onMouseEnter={handleOpenFeaturesModal}
+                    onMouseLeave={handleCloseFeaturesModal}
+                  >
+                    <div className="w-full rounded-2xl border border-surface-container-high dark:border-slate-800 bg-surface-container-lowest/95 dark:bg-navy-light/95 backdrop-blur-[20px] shadow-2xl p-6 transition-all duration-300">
+                      <div className="grid grid-cols-3 gap-4">
+                        {featureItems.map((item) => {
+                          const Icon = item.icon;
+                          return (
+                            <div
+                              key={item.title}
+                              className="flex items-start gap-4 p-4 rounded-xl hover:bg-surface-container-low dark:hover:bg-navy/40 transition-all duration-200 group cursor-pointer border border-transparent hover:border-surface-container-high dark:hover:border-slate-800"
+                            >
+                              <div className="p-2.5 bg-primary/10 dark:bg-teal-950/30 text-primary dark:text-teal-400 rounded-lg group-hover:scale-110 transition-transform duration-200 shrink-0">
+                                <Icon size={18} />
                               </div>
-                            );
-                          })}
-                        </div>
+                              <div className="space-y-1">
+                                <h3 className="text-[15px] font-bold font-display text-navy dark:text-white leading-snug group-hover:text-primary dark:group-hover:text-teal-400 transition-colors">
+                                  {item.title}
+                                </h3>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                  {item.description}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
-                  )}
-                </div>
-              );
-            }
-
-            return (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={clsx(
-                  "transition-colors pb-1",
-                  isActive 
-                    ? "text-primary dark:text-teal-400 border-b-2 border-primary dark:border-teal-400 font-semibold" 
-                    : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal-400"
+                  </div>
                 )}
-              >
-                {link.name}
-              </Link>
+              </div>
             );
-          })}
-        </nav>
-      </div>
+          }
 
-      <div className="flex items-center gap-4">
+          return (
+            <Link
+              key={link.name}
+              to={link.path}
+              className={clsx(
+                "transition-colors pb-1",
+                isActive 
+                  ? "text-primary dark:text-teal-400 border-b-2 border-primary dark:border-teal-400 font-semibold" 
+                  : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal-400"
+              )}
+            >
+              {link.name}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Right Column: Actions */}
+      <div className="flex-1 flex items-center justify-end gap-4">
         {!isPublicPage && (
           <div className="hidden sm:block relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
