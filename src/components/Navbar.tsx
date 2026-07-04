@@ -238,17 +238,26 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
                       onMouseEnter={handleOpenFeaturesModal}
                       onMouseLeave={handleCloseFeaturesModal}
                     >
-                      <div className="w-full rounded-xl border border-surface-container-high dark:border-slate-700 bg-surface-container-lowest dark:bg-navy-light shadow-xl p-8">
-                        <div className="grid grid-cols-3 gap-x-8 gap-y-7">
+                      <div className="w-full rounded-2xl border border-surface-container-high dark:border-slate-800 bg-surface-container-lowest/95 dark:bg-navy-light/95 backdrop-blur-[20px] shadow-2xl p-6 transition-all duration-300">
+                        <div className="grid grid-cols-3 gap-4">
                           {featureItems.map((item) => {
                             const Icon = item.icon;
                             return (
-                              <div key={item.title} className="space-y-1.5">
-                                <div className="flex items-center gap-2 text-navy dark:text-white">
-                                  <Icon size={15} className="text-slate-700 dark:text-slate-300" />
-                                  <h3 className="text-[30px] font-semibold leading-7">{item.title}</h3>
+                              <div
+                                key={item.title}
+                                className="flex items-start gap-4 p-4 rounded-xl hover:bg-surface-container-low dark:hover:bg-navy/40 transition-all duration-200 group cursor-pointer border border-transparent hover:border-surface-container-high dark:hover:border-slate-800"
+                              >
+                                <div className="p-2.5 bg-primary/10 dark:bg-teal-950/30 text-primary dark:text-teal-400 rounded-lg group-hover:scale-110 transition-transform duration-200 shrink-0">
+                                  <Icon size={18} />
                                 </div>
-                                <p className="text-lg text-slate-600 dark:text-slate-300 leading-6 pl-6">{item.description}</p>
+                                <div className="space-y-1">
+                                  <h3 className="text-[15px] font-bold font-display text-navy dark:text-white leading-snug group-hover:text-primary dark:group-hover:text-teal-400 transition-colors">
+                                    {item.title}
+                                  </h3>
+                                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                    {item.description}
+                                  </p>
+                                </div>
                               </div>
                             );
                           })}
