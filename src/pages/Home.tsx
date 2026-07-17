@@ -245,26 +245,26 @@ export default function Home() {
           </div>
 
           {/* Right: Widget Card */}
-          <div className="bg-white dark:bg-navy-light p-1 rounded-xl shadow-xl ring-1 ring-slate-100 dark:ring-slate-700">
-            <div className="bg-white dark:bg-navy-light rounded-lg overflow-visible">
+          <div className="bg-white dark:bg-navy-light p-1.5 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-navy-light rounded-xl overflow-visible">
               {/* Tabs */}
-              <div className="flex gap-2 p-2.5 bg-slate-100/80 dark:bg-navy/60 rounded-t-lg">
+              <div className="flex gap-2.5 p-3 bg-slate-50 dark:bg-navy/40 rounded-t-xl border-b border-slate-200 dark:border-slate-700">
                 <button
                   onClick={() => setActiveTab('shorten')}
-                  className={`flex-1 py-2.5 px-3.5 text-sm font-bold rounded-lg transition-all duration-200 ${
+                  className={`flex-1 py-2.5 px-4 text-sm font-bold rounded-lg transition-all duration-200 ${
                     activeTab === 'shorten'
-                      ? 'bg-teal-700 text-white shadow-md shadow-teal-900/20'
-                      : 'bg-white dark:bg-navy-light text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 ring-1 ring-slate-200 dark:ring-slate-700'
+                      ? 'bg-primary text-white shadow-md shadow-primary/30'
+                      : 'bg-white dark:bg-navy-light text-slate-600 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50'
                   }`}
                 >
                   Shorten a Link
                 </button>
-                <button 
+                <button
                   onClick={() => setActiveTab('qr')}
-                  className={`flex-1 py-2.5 px-3.5 text-sm font-bold rounded-lg transition-all duration-200 ${
+                  className={`flex-1 py-2.5 px-4 text-sm font-bold rounded-lg transition-all duration-200 ${
                     activeTab === 'qr'
-                      ? 'bg-teal-700 text-white shadow-md shadow-teal-900/20'
-                      : 'bg-white dark:bg-navy-light text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 ring-1 ring-slate-200 dark:ring-slate-700'
+                      ? 'bg-primary text-white shadow-md shadow-primary/30'
+                      : 'bg-white dark:bg-navy-light text-slate-600 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50'
                   }`}
                 >
                   Generate QR Code
@@ -277,18 +277,18 @@ export default function Home() {
                   <div className="space-y-3 animate-in fade-in zoom-in duration-300 flex flex-col h-full overflow-visible">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
-                      <div className="h-[50px] px-4 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 rounded-lg flex items-center">
+                      <div className="h-[50px] px-4 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 rounded-lg flex items-center">
                         <span className="text-slate-700 dark:text-slate-300 text-sm truncate block w-full" title={longUrl}>{longUrl}</span>
                       </div>
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Short URL</label>
-                      <div className="h-[50px] px-4 bg-teal-50/70 border border-teal-200 dark:bg-teal-900/20 dark:border-teal-800 rounded-lg flex items-center justify-between gap-2">
-                        <span className="font-mono text-teal-700 dark:text-teal-400 font-bold text-sm truncate" title={`https://${shortenedUrl}`}>{`https://${shortenedUrl}`}</span>
+                      <div className="h-[50px] px-4 bg-primary/5 border border-primary/20 dark:bg-primary/10 dark:border-primary/30 rounded-lg flex items-center justify-between gap-2">
+                        <span className="font-mono text-primary dark:text-primary-light font-bold text-sm truncate" title={`https://${shortenedUrl}`}>{`https://${shortenedUrl}`}</span>
                         <button
                           type="button"
                           onClick={handleCopy}
-                          className="text-slate-700 dark:text-slate-200 hover:text-primary transition-colors shrink-0"
+                          className="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors shrink-0"
                           title="Copy URL"
                         >
                           {copied ? <Check size={18} /> : <Copy size={18} />}
@@ -299,11 +299,11 @@ export default function Home() {
                       Mini Links may earn commissions from this link. <a href="#" className="underline">Learn more.</a>
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-                      <button type="button" onClick={handleVisitShortUrl} className="py-2.5 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
+                      <button type="button" onClick={handleVisitShortUrl} className="py-2.5 bg-primary hover:bg-primary-light text-white rounded-lg font-bold transition-all text-sm shadow-sm hover:shadow-md">
                         Visit URL
                       </button>
                       <div ref={qrPopoverRef} className="relative">
-                        <button type="button" onClick={handleOpenQrTabFromShorten} className="w-full py-2.5 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
+                        <button type="button" onClick={handleOpenQrTabFromShorten} className="w-full py-2.5 bg-primary hover:bg-primary-light text-white rounded-lg font-bold transition-all text-sm shadow-sm hover:shadow-md">
                           QR
                         </button>
                         {showQrModal && (
@@ -324,7 +324,7 @@ export default function Home() {
                                 <button
                                   type="button"
                                   onClick={() => downloadSvgAsFile(qrModalSvgRef.current, 'mini-links-qr.svg')}
-                                  className="flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-xs font-bold transition-colors"
+                                  className="flex items-center justify-center gap-1.5 px-3 py-2 bg-primary hover:bg-primary-light text-white rounded-lg text-xs font-bold transition-all"
                                 >
                                   <Download size={13} />
                                   Download SVG (Best for print)
@@ -332,7 +332,7 @@ export default function Home() {
                                 <button
                                   type="button"
                                   onClick={() => downloadSvgAsPng(qrModalSvgRef.current, 'mini-links-qr-hd.png')}
-                                  className="flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-xs font-bold transition-colors"
+                                  className="flex items-center justify-center gap-1.5 px-3 py-2 bg-primary hover:bg-primary-light text-white rounded-lg text-xs font-bold transition-all"
                                 >
                                   <Download size={13} />
                                   Download PNG (HD)
@@ -350,16 +350,16 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                      <button type="button" onClick={handleShareShortUrl} className="py-2.5 bg-[#0f7d98] hover:bg-[#0d6d85] text-white rounded-lg font-bold transition-colors text-sm">
+                      <button type="button" onClick={handleShareShortUrl} className="py-2.5 bg-primary hover:bg-primary-light text-white rounded-lg font-bold transition-all text-sm shadow-sm hover:shadow-md">
                         Share
                       </button>
-                      <button type="button" onClick={handleCopy} className="py-2.5 bg-[#062f57] hover:bg-[#052748] text-white rounded-lg font-bold transition-colors text-sm">
+                      <button type="button" onClick={handleCopy} className="py-2.5 bg-slate-700 hover:bg-slate-800 text-white rounded-lg font-bold transition-all text-sm shadow-sm hover:shadow-md">
                         {copied ? 'Copied' : 'Copy'}
                       </button>
                     </div>
-                    <button 
+                    <button
                       onClick={() => { setShortenedUrl(''); setShowQrModal(false); }}
-                      className="w-full py-2.5 bg-cta hover:bg-cta-dark text-white rounded-lg font-bold transition-colors mt-auto"
+                      className="w-full py-2.5 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-bold transition-all mt-auto shadow-sm hover:shadow-md"
                     >
                       Shorten Another Link
                     </button>
@@ -370,13 +370,13 @@ export default function Home() {
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
                       <div className="relative">
                         <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <input 
-                          type="url" 
+                        <input
+                          type="url"
                           required
                           value={longUrl}
                           onChange={(e) => setLongUrl(e.target.value)}
-                          placeholder="https://very-long-architectural-url.com/destination-page" 
-                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
+                          placeholder="https://very-long-architectural-url.com/destination-page"
+                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-lg text-slate-900 dark:text-white transition-all placeholder:text-slate-400 outline-none text-sm"
                         />
                       </div>
                     </div>
@@ -388,17 +388,17 @@ export default function Home() {
                           type="text"
                           value={domain}
                           readOnly
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 rounded text-slate-900 dark:text-white font-medium transition-all outline-none text-sm cursor-default"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-medium transition-all outline-none text-sm cursor-default"
                         />
                       </div>
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Alias (Optional)</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={alias}
                           onChange={(e) => setAlias(e.target.value)}
-                          placeholder="custom-alias" 
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
+                          placeholder="custom-alias"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-lg text-slate-900 dark:text-white transition-all placeholder:text-slate-400 outline-none text-sm"
                         />
                       </div>
                     </div>
@@ -407,7 +407,7 @@ export default function Home() {
                       <button
                         type="submit"
                         disabled={isShortening}
-                        className="w-full py-3.5 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                        className="w-full py-3.5 bg-primary hover:bg-primary-light text-white font-bold rounded-lg shadow-lg shadow-primary/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
                       >
                         {isShortening ? (
                           <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -436,7 +436,7 @@ export default function Home() {
                           <button
                             type="button"
                             onClick={() => downloadSvgAsFile(qrTabSvgRef.current, 'mini-links-generated-qr.svg')}
-                            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-sm font-bold transition-colors"
+                            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-primary hover:bg-primary-light text-white rounded-lg text-sm font-bold transition-all"
                           >
                             <Download size={13} />
                             Download SVG (Best for print)
@@ -444,7 +444,7 @@ export default function Home() {
                           <button
                             type="button"
                             onClick={() => downloadSvgAsPng(qrTabSvgRef.current, 'mini-links-generated-qr-hd.png')}
-                            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-sm font-bold transition-colors"
+                            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-primary hover:bg-primary-light text-white rounded-lg text-sm font-bold transition-all"
                           >
                             <Download size={13} />
                             Download PNG (HD)
@@ -481,7 +481,7 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={handleGenerateAnotherQr}
-                      className="w-full py-2.5 bg-cta hover:bg-cta-dark text-white rounded-lg font-bold transition-colors shrink-0"
+                      className="w-full py-2.5 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-bold transition-all shrink-0 shadow-sm hover:shadow-md"
                     >
                       Generate Another
                     </button>
@@ -498,7 +498,7 @@ export default function Home() {
                           value={qrLongUrl}
                           onChange={(e) => setQrLongUrl(e.target.value)}
                           placeholder="https://very-long-architectural-url.com/destination-page"
-                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
+                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-lg text-slate-900 dark:text-white transition-all placeholder:text-slate-400 outline-none text-sm"
                         />
                       </div>
                     </div>
@@ -510,7 +510,7 @@ export default function Home() {
                           type="text"
                           value={qrDomain}
                           readOnly
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 rounded text-slate-900 dark:text-white font-medium transition-all outline-none text-sm cursor-default"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-medium transition-all outline-none text-sm cursor-default"
                         />
                       </div>
                       <div className="space-y-2">
@@ -520,7 +520,7 @@ export default function Home() {
                           value={qrAlias}
                           onChange={(e) => setQrAlias(e.target.value)}
                           placeholder="custom-alias"
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-100 dark:border-slate-700 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded text-slate-900 dark:text-white transition-all placeholder:text-slate-300 outline-none text-sm"
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-lg text-slate-900 dark:text-white transition-all placeholder:text-slate-400 outline-none text-sm"
                         />
                       </div>
                     </div>
@@ -529,7 +529,7 @@ export default function Home() {
                       <button
                         type="submit"
                         disabled={isQrCreating}
-                        className="w-full py-3.5 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-lg shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                        className="w-full py-3.5 bg-primary hover:bg-primary-light text-white font-bold rounded-lg shadow-lg shadow-primary/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
                       >
                         {isQrCreating ? (
                           <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -554,34 +554,34 @@ export default function Home() {
       </section>
 
       {/* Recent Links Section */}
-      <section id="features" className="bg-surface-container-lowest dark:bg-navy-light py-12 px-6 border-t border-surface-container-high dark:border-slate-800">
+      <section id="features" className="bg-surface-container-lowest dark:bg-navy-light py-16 px-6 border-t border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-8">
             <div>
-              <h2 className="text-3xl font-bold font-display text-navy dark:text-white mb-2">Your Recent Links</h2>
-              <p className="text-slate-500 dark:text-slate-400">Instant access to your latest architectural digital bridges.</p>
+              <h2 className="text-4xl font-bold font-display text-navy dark:text-white mb-3">Your Recent Links</h2>
+              <p className="text-slate-600 dark:text-slate-400 text-base">Instant access to your latest architectural digital bridges.</p>
             </div>
-            <Link to="/dashboard" className="flex items-center gap-2 text-primary dark:text-teal-400 font-bold hover:gap-3 transition-all">
+            <Link to="/dashboard" className="flex items-center gap-2 text-primary dark:text-primary-light font-bold hover:gap-3 transition-all hover:text-primary-light">
               View Analytics <ArrowRight size={18} />
             </Link>
           </div>
 
-          <div className="bg-surface-container-lowest dark:bg-navy rounded-xl overflow-hidden border border-surface-container-high dark:border-slate-700 shadow-sm">
+          <div className="bg-surface-container-lowest dark:bg-navy rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-lg">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-surface-container-low dark:bg-navy-light border-b border-surface-container-high dark:border-slate-700">
-                    <th className="px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Icon</th>
-                    <th className="px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Short Link</th>
-                    <th className="px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Original URL</th>
-                    <th className="px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 text-right">Actions</th>
+                  <tr className="bg-slate-50 dark:bg-navy-light border-b border-slate-200 dark:border-slate-700">
+                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Icon</th>
+                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Short Link</th>
+                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Original URL</th>
+                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-surface-container-high dark:divide-slate-700">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
                   {recentGeneratedLinks.map((link) => (
-                    <tr key={link.id} className="hover:bg-surface-container-low/50 dark:hover:bg-navy-light/50 transition-colors">
+                    <tr key={link.id} className="hover:bg-slate-50 dark:hover:bg-navy-light/50 transition-colors">
                       <td className="px-6 py-4">
-                        <div className="w-8 h-8 rounded bg-surface-container-lowest dark:bg-navy border border-surface-container-high dark:border-slate-700 p-1 flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-navy border border-slate-200 dark:border-slate-700 p-1 flex items-center justify-center">
                           {getFaviconUrl(link.originalUrl) && !failedFaviconIds[link.id] ? (
                             <img
                               src={getFaviconUrl(link.originalUrl) || undefined}
@@ -617,7 +617,7 @@ export default function Home() {
                           <button
                             type="button"
                             onClick={() => window.open(link.originalUrl, '_blank', 'noopener,noreferrer')}
-                            className="p-2 rounded bg-surface-container-low dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 hover:bg-primary/10 transition-all"
+                            className="p-2.5 rounded-lg bg-slate-100 dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light hover:bg-primary/10 dark:hover:bg-primary/20 transition-all"
                             title="Open destination"
                           >
                             <ExternalLink size={18} />
@@ -625,7 +625,7 @@ export default function Home() {
                           <button
                             type="button"
                             onClick={() => navigator.clipboard.writeText(`https://${link.shortUrl}`)}
-                            className="p-2 rounded bg-surface-container-low dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 hover:bg-primary/10 transition-all"
+                            className="p-2.5 rounded-lg bg-slate-100 dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light hover:bg-primary/10 dark:hover:bg-primary/20 transition-all"
                             title="Copy short link"
                           >
                             <QrCode size={18} />
@@ -633,7 +633,7 @@ export default function Home() {
                           <button
                             type="button"
                             onClick={() => handleShareRecentLink(link.shortUrl)}
-                            className="p-2 rounded bg-surface-container-low dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-teal-400 hover:bg-primary/10 transition-all"
+                            className="p-2.5 rounded-lg bg-slate-100 dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light hover:bg-primary/10 dark:hover:bg-primary/20 transition-all"
                             title="Share short link"
                           >
                             <Share2 size={18} />
