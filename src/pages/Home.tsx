@@ -208,102 +208,91 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-navy">
       {/* Hero Section */}
-      <section className="relative min-h-[620px] flex items-center px-6 lg:px-12 py-10 overflow-hidden bg-surface-container-low dark:bg-navy">
+      <section className="relative min-h-[620px] flex items-center px-6 lg:px-12 py-10 overflow-hidden bg-gradient-to-br from-navy via-navy-light to-navy">
         {/* Background Decoration */}
-        <div className="absolute top-0 right-0 w-2/3 h-full opacity-10 pointer-events-none">
-          <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary rounded-full blur-[120px]"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-cta rounded-full blur-[100px]"></div>
+        <div className="absolute top-0 right-0 w-2/3 h-full opacity-5 pointer-events-none">
+          <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary-light rounded-full blur-[120px]"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-primary rounded-full blur-[100px]"></div>
         </div>
 
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative z-10">
           {/* Left: Headline Content */}
           <div className="space-y-5">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
-              <span className="text-xs font-bold text-primary dark:text-teal-400 tracking-widest uppercase">Precision URL Management</span>
-            </div>
-            <h1 className="text-5xl lg:text-6xl font-extrabold font-display leading-[1.1] tracking-tight text-navy dark:text-white">
-              Shorten. <br/><span className="text-primary dark:text-teal-400">Brand.</span> <br/>Track.
+            <h1 className="text-5xl lg:text-6xl font-extrabold font-display leading-[1.1] tracking-tight text-white">
+              URL Shortener, Branded Short Links & Analytics
             </h1>
-            <p className="text-base text-slate-600 dark:text-slate-300 max-w-md leading-relaxed">
-              Transform lengthy, cluttered links into powerful marketing<br/>
-              assets. Mini Links provides the architectural<br/>
-              precision your digital presence demands.
+            <p className="text-lg text-text-muted max-w-xl leading-relaxed">
+              Welcome to the original link shortener — simplifying the Internet through the power of the URL since 2002.
             </p>
-            <div className="flex items-center gap-5">
-              <div className="flex flex-col">
-                <span className="text-2xl font-bold text-navy dark:text-white">45M+</span>
-                <span className="text-sm text-slate-500 dark:text-slate-400">Links Managed</span>
-              </div>
-              <div className="w-px h-8 bg-surface-container-high dark:bg-slate-700"></div>
-              <div className="flex flex-col">
-                <span className="text-2xl font-bold text-navy dark:text-white">99.9%</span>
-                <span className="text-sm text-slate-500 dark:text-slate-400">Uptime</span>
-              </div>
-            </div>
+            <p className="text-lg text-text-muted max-w-xl leading-relaxed">
+              You can use branded domains for fully custom links, track link analytics, and enjoy other powerful features with our paid plans.
+            </p>
+            <button className="inline-flex items-center px-6 py-3 bg-white text-navy font-bold rounded-lg hover:bg-gray-100 transition-colors">
+              View Plans
+            </button>
           </div>
 
           {/* Right: Widget Card */}
-          <div className="bg-white dark:bg-navy-light p-1.5 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
-            <div className="bg-white dark:bg-navy-light rounded-xl overflow-visible">
+          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className="overflow-visible">
               {/* Tabs */}
-              <div className="flex gap-2.5 p-3 bg-slate-50 dark:bg-navy/40 rounded-t-xl border-b border-slate-200 dark:border-slate-700">
+              <div className="flex gap-0">
                 <button
                   onClick={() => setActiveTab('shorten')}
-                  className={`flex-1 py-2.5 px-4 text-sm font-bold rounded-lg transition-all duration-200 ${
+                  className={`flex-1 py-3 px-6 text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 ${
                     activeTab === 'shorten'
-                      ? 'bg-primary text-white shadow-md shadow-primary/30'
-                      : 'bg-white dark:bg-navy-light text-slate-600 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50'
+                      ? 'bg-primary text-white'
+                      : 'bg-gray-100 text-navy hover:bg-gray-200'
                   }`}
                 >
+                  <LinkIcon size={18} />
                   Shorten a Link
                 </button>
                 <button
                   onClick={() => setActiveTab('qr')}
-                  className={`flex-1 py-2.5 px-4 text-sm font-bold rounded-lg transition-all duration-200 ${
+                  className={`flex-1 py-3 px-6 text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 ${
                     activeTab === 'qr'
-                      ? 'bg-primary text-white shadow-md shadow-primary/30'
-                      : 'bg-white dark:bg-navy-light text-slate-600 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50'
+                      ? 'bg-primary text-white'
+                      : 'bg-gray-100 text-navy hover:bg-gray-200'
                   }`}
                 >
+                  <QrCode size={18} />
                   Generate QR Code
                 </button>
               </div>
 
               {/* Form Content */}
-              <div className="p-6 flex flex-col h-[430px]">
+              <div className="p-6 flex flex-col h-auto">
                 {activeTab === 'shorten' ? shortenedUrl ? (
-                  <div className="space-y-3 animate-in fade-in zoom-in duration-300 flex flex-col h-full overflow-visible">
+                  <div className="space-y-4 animate-in fade-in zoom-in duration-300 flex flex-col">
                     <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
-                      <div className="h-[50px] px-4 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 rounded-lg flex items-center">
-                        <span className="text-slate-700 dark:text-slate-300 text-sm truncate block w-full" title={longUrl}>{longUrl}</span>
+                      <label className="text-sm font-bold text-navy">Long URL</label>
+                      <div className="px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg flex items-center">
+                        <span className="text-navy text-sm truncate block w-full" title={longUrl}>{longUrl}</span>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Short URL</label>
-                      <div className="h-[50px] px-4 bg-primary/5 border border-primary/20 dark:bg-primary/10 dark:border-primary/30 rounded-lg flex items-center justify-between gap-2">
-                        <span className="font-mono text-primary dark:text-primary-light font-bold text-sm truncate" title={`https://${shortenedUrl}`}>{`https://${shortenedUrl}`}</span>
+                      <label className="text-sm font-bold text-navy">Short URL</label>
+                      <div className="px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between gap-2">
+                        <span className="font-mono text-blue-600 font-bold text-sm truncate" title={`https://${shortenedUrl}`}>{`https://${shortenedUrl}`}</span>
                         <button
                           type="button"
                           onClick={handleCopy}
-                          className="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors shrink-0"
+                          className="text-gray-600 hover:text-navy transition-colors shrink-0"
                           title="Copy URL"
                         >
                           {copied ? <Check size={18} /> : <Copy size={18} />}
                         </button>
                       </div>
                     </div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Mini Links may earn commissions from this link. <a href="#" className="underline">Learn more.</a>
-                    </p>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-                      <button type="button" onClick={handleVisitShortUrl} className="py-2.5 bg-primary hover:bg-primary-light text-white rounded-lg font-bold transition-all text-sm shadow-sm hover:shadow-md">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-2">
+                      <button type="button" onClick={handleVisitShortUrl} className="py-2.5 bg-primary hover:bg-primary-light text-white rounded-lg font-bold transition-all text-sm">
                         Visit URL
                       </button>
                       <div ref={qrPopoverRef} className="relative">
-                        <button type="button" onClick={handleOpenQrTabFromShorten} className="w-full py-2.5 bg-primary hover:bg-primary-light text-white rounded-lg font-bold transition-all text-sm shadow-sm hover:shadow-md">
+                        <button type="button" onClick={handleOpenQrTabFromShorten} className="w-full py-2.5 bg-primary hover:bg-primary-light text-white rounded-lg font-bold transition-all text-sm">
                           QR
                         </button>
                         {showQrModal && (
@@ -327,7 +316,7 @@ export default function Home() {
                                   className="flex items-center justify-center gap-1.5 px-3 py-2 bg-primary hover:bg-primary-light text-white rounded-lg text-xs font-bold transition-all"
                                 >
                                   <Download size={13} />
-                                  Download SVG (Best for print)
+                                  Download SVG
                                 </button>
                                 <button
                                   type="button"
@@ -350,72 +339,78 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                      <button type="button" onClick={handleShareShortUrl} className="py-2.5 bg-primary hover:bg-primary-light text-white rounded-lg font-bold transition-all text-sm shadow-sm hover:shadow-md">
+                      <button type="button" onClick={handleShareShortUrl} className="py-2.5 bg-primary hover:bg-primary-light text-white rounded-lg font-bold transition-all text-sm">
                         Share
                       </button>
-                      <button type="button" onClick={handleCopy} className="py-2.5 bg-slate-700 hover:bg-slate-800 text-white rounded-lg font-bold transition-all text-sm shadow-sm hover:shadow-md">
+                      <button type="button" onClick={handleCopy} className="py-2.5 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-bold transition-all text-sm">
                         {copied ? 'Copied' : 'Copy'}
                       </button>
                     </div>
                     <button
                       onClick={() => { setShortenedUrl(''); setShowQrModal(false); }}
-                      className="w-full py-2.5 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-bold transition-all mt-auto shadow-sm hover:shadow-md"
+                      className="w-full py-3 bg-success hover:bg-success-dark text-white rounded-lg font-bold transition-all mt-4"
                     >
                       Shorten Another Link
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleShorten} className="space-y-4 flex flex-col h-full overflow-hidden">
+                  <form onSubmit={handleShorten} className="space-y-4 flex flex-col h-auto">
                     <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
-                      <div className="relative">
-                        <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <input
-                          type="url"
-                          required
-                          value={longUrl}
-                          onChange={(e) => setLongUrl(e.target.value)}
-                          placeholder="https://very-long-architectural-url.com/destination-page"
-                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-lg text-slate-900 dark:text-white transition-all placeholder:text-slate-400 outline-none text-sm"
-                        />
-                      </div>
+                      <label className="text-sm font-bold text-navy flex items-center gap-1">
+                        <LinkIcon size={16} />
+                        Long URL <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="url"
+                        required
+                        value={longUrl}
+                        onChange={(e) => setLongUrl(e.target.value)}
+                        placeholder="Paste long URL here"
+                        className="w-full px-4 py-3 bg-white border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg text-navy transition-all placeholder:text-gray-500 outline-none text-sm"
+                      />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Domain</label>
-                        <input
-                          type="text"
-                          value={domain}
-                          readOnly
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-medium transition-all outline-none text-sm cursor-default"
-                        />
+                        <label className="text-sm font-bold text-navy flex items-center gap-1">
+                          <span>🌐</span>
+                          Domain
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={domain}
+                            readOnly
+                            className="flex-1 px-4 py-3 bg-white border border-gray-300 rounded-lg text-navy font-medium outline-none text-sm cursor-default"
+                          />
+                          <span className="text-gray-400">/</span>
+                        </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Alias (Optional)</label>
+                        <label className="text-sm font-bold text-navy flex items-center gap-1">
+                          ✎ Alias (optional)
+                        </label>
                         <input
                           type="text"
                           value={alias}
                           onChange={(e) => setAlias(e.target.value)}
-                          placeholder="custom-alias"
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-lg text-slate-900 dark:text-white transition-all placeholder:text-slate-400 outline-none text-sm"
+                          placeholder="Add alias here"
+                          className="w-full px-4 py-3 bg-white border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg text-navy transition-all placeholder:text-gray-500 outline-none text-sm"
                         />
+                        <p className="text-xs text-gray-500">Must be at least 5 characters</p>
                       </div>
                     </div>
 
-                    <div className="space-y-3 pt-1.5">
+                    <div className="space-y-3 pt-2">
                       <button
                         type="submit"
                         disabled={isShortening}
-                        className="w-full py-3.5 bg-primary hover:bg-primary-light text-white font-bold rounded-lg shadow-lg shadow-primary/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                        className="w-full py-3 bg-success hover:bg-success-dark text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2 disabled:opacity-60"
                       >
                         {isShortening ? (
-                          <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         ) : (
-                          <>
-                            <span>Shorten Link</span>
-                            <Zap size={18} />
-                          </>
+                          <span>Shorten Link</span>
                         )}
                       </button>
                       
@@ -439,7 +434,7 @@ export default function Home() {
                             className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-primary hover:bg-primary-light text-white rounded-lg text-sm font-bold transition-all"
                           >
                             <Download size={13} />
-                            Download SVG (Best for print)
+                            Download SVG
                           </button>
                           <button
                             type="button"
@@ -481,63 +476,68 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={handleGenerateAnotherQr}
-                      className="w-full py-2.5 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-bold transition-all shrink-0 shadow-sm hover:shadow-md"
+                      className="w-full py-3 bg-success hover:bg-success-dark text-white rounded-lg font-bold transition-all"
                     >
                       Generate Another
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleGenerateQr} className="space-y-4 flex flex-col h-full overflow-hidden">
+                  <form onSubmit={handleGenerateQr} className="space-y-4 flex flex-col h-auto">
                     <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Long URL</label>
-                      <div className="relative">
-                        <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <input
-                          type="url"
-                          required
-                          value={qrLongUrl}
-                          onChange={(e) => setQrLongUrl(e.target.value)}
-                          placeholder="https://very-long-architectural-url.com/destination-page"
-                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-lg text-slate-900 dark:text-white transition-all placeholder:text-slate-400 outline-none text-sm"
-                        />
-                      </div>
+                      <label className="text-sm font-bold text-navy flex items-center gap-1">
+                        <LinkIcon size={16} />
+                        Destination URL <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="url"
+                        required
+                        value={qrLongUrl}
+                        onChange={(e) => setQrLongUrl(e.target.value)}
+                        placeholder="Paste long URL here"
+                        className="w-full px-4 py-3 bg-white border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg text-navy transition-all placeholder:text-gray-500 outline-none text-sm"
+                      />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Domain</label>
-                        <input
-                          type="text"
-                          value={qrDomain}
-                          readOnly
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-medium transition-all outline-none text-sm cursor-default"
-                        />
+                        <label className="text-sm font-bold text-navy flex items-center gap-1">
+                          🌐 Domain
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={qrDomain}
+                            readOnly
+                            className="flex-1 px-4 py-3 bg-white border border-gray-300 rounded-lg text-navy font-medium outline-none text-sm cursor-default"
+                          />
+                          <span className="text-gray-400">/</span>
+                        </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Alias (Optional)</label>
+                        <label className="text-sm font-bold text-navy flex items-center gap-1">
+                          ✎ Alias (optional)
+                        </label>
                         <input
                           type="text"
                           value={qrAlias}
                           onChange={(e) => setQrAlias(e.target.value)}
-                          placeholder="custom-alias"
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-lg text-slate-900 dark:text-white transition-all placeholder:text-slate-400 outline-none text-sm"
+                          placeholder="Add alias here"
+                          className="w-full px-4 py-3 bg-white border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg text-navy transition-all placeholder:text-gray-500 outline-none text-sm"
                         />
+                        <p className="text-xs text-gray-500">Must be at least 5 characters</p>
                       </div>
                     </div>
 
-                    <div className="space-y-3 pt-1.5">
+                    <div className="space-y-3 pt-2">
                       <button
                         type="submit"
                         disabled={isQrCreating}
-                        className="w-full py-3.5 bg-primary hover:bg-primary-light text-white font-bold rounded-lg shadow-lg shadow-primary/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                        className="w-full py-3 bg-success hover:bg-success-dark text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2 disabled:opacity-60"
                       >
                         {isQrCreating ? (
-                          <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         ) : (
-                          <>
-                            <span>Generate QR Code</span>
-                            <Zap size={18} />
-                          </>
+                          <span>Generate QR Code</span>
                         )}
                       </button>
 
@@ -554,34 +554,28 @@ export default function Home() {
       </section>
 
       {/* Recent Links Section */}
-      <section id="features" className="bg-surface-container-lowest dark:bg-navy-light py-16 px-6 border-t border-slate-200 dark:border-slate-800">
+      <section id="features" className="bg-navy py-12 px-6 border-t border-navy-light/20">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-end mb-8">
-            <div>
-              <h2 className="text-4xl font-bold font-display text-navy dark:text-white mb-3">Your Recent Links</h2>
-              <p className="text-slate-600 dark:text-slate-400 text-base">Instant access to your latest architectural digital bridges.</p>
-            </div>
-            <Link to="/dashboard" className="flex items-center gap-2 text-primary dark:text-primary-light font-bold hover:gap-3 transition-all hover:text-primary-light">
-              View Analytics <ArrowRight size={18} />
-            </Link>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold font-display text-white mb-2">Your Recent Links:</h2>
           </div>
 
-          <div className="bg-surface-container-lowest dark:bg-navy rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-lg">
+          <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-slate-50 dark:bg-navy-light border-b border-slate-200 dark:border-slate-700">
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Icon</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Short Link</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Original URL</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300 text-right">Actions</th>
+                  <tr className="bg-gray-50 border-b border-gray-200">
+                    <th className="px-6 py-4 text-sm font-bold text-navy">Icon</th>
+                    <th className="px-6 py-4 text-sm font-bold text-navy">Short Link</th>
+                    <th className="px-6 py-4 text-sm font-bold text-navy">Original URL</th>
+                    <th className="px-6 py-4 text-sm font-bold text-navy text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+                <tbody className="divide-y divide-gray-200">
                   {recentGeneratedLinks.map((link) => (
-                    <tr key={link.id} className="hover:bg-slate-50 dark:hover:bg-navy-light/50 transition-colors">
+                    <tr key={link.id} className="hover:bg-gray-50 transition-colors">
                       <td className="px-6 py-4">
-                        <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-navy border border-slate-200 dark:border-slate-700 p-1 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded bg-gray-100 border border-gray-200 p-1 flex items-center justify-center">
                           {getFaviconUrl(link.originalUrl) && !failedFaviconIds[link.id] ? (
                             <img
                               src={getFaviconUrl(link.originalUrl) || undefined}
@@ -597,46 +591,48 @@ export default function Home() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <span className="text-primary dark:text-teal-400 font-bold font-mono text-sm">{link.shortUrl}</span>
-                          <button
-                            type="button"
-                            onClick={() => navigator.clipboard.writeText(`https://${link.shortUrl}`)}
-                            className="text-slate-400 hover:text-navy dark:hover:text-white transition-colors"
-                            title="Copy short link"
-                          >
-                            <Copy size={14} />
-                          </button>
-                        </div>
+                        <span className="text-primary font-bold font-mono text-sm">{link.shortUrl}</span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-slate-500 dark:text-slate-400 text-sm truncate max-w-xs block">{link.originalUrl}</span>
+                        <span className="text-gray-600 text-sm truncate max-w-xs block">{link.originalUrl}</span>
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button
                             type="button"
                             onClick={() => window.open(link.originalUrl, '_blank', 'noopener,noreferrer')}
-                            className="p-2.5 rounded-lg bg-slate-100 dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light hover:bg-primary/10 dark:hover:bg-primary/20 transition-all"
-                            title="Open destination"
+                            className="p-2 rounded bg-primary hover:bg-primary-light text-white transition-all text-xs font-bold flex items-center gap-1"
+                            title="Visit URL"
                           >
-                            <ExternalLink size={18} />
+                            <ExternalLink size={16} />
+                            Visit URL
                           </button>
                           <button
                             type="button"
                             onClick={() => navigator.clipboard.writeText(`https://${link.shortUrl}`)}
-                            className="p-2.5 rounded-lg bg-slate-100 dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light hover:bg-primary/10 dark:hover:bg-primary/20 transition-all"
-                            title="Copy short link"
+                            className="p-2 rounded bg-primary hover:bg-primary-light text-white transition-all text-xs font-bold flex items-center gap-1"
+                            title="QR"
                           >
-                            <QrCode size={18} />
+                            <QrCode size={16} />
+                            QR
                           </button>
                           <button
                             type="button"
                             onClick={() => handleShareRecentLink(link.shortUrl)}
-                            className="p-2.5 rounded-lg bg-slate-100 dark:bg-navy text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light hover:bg-primary/10 dark:hover:bg-primary/20 transition-all"
-                            title="Share short link"
+                            className="p-2 rounded bg-primary hover:bg-primary-light text-white transition-all text-xs font-bold flex items-center gap-1"
+                            title="Share"
                           >
-                            <Share2 size={18} />
+                            <Share2 size={16} />
+                            Share
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => navigator.clipboard.writeText(`https://${link.shortUrl}`)}
+                            className="p-2 rounded bg-gray-800 hover:bg-gray-900 text-white transition-all text-xs font-bold flex items-center gap-1"
+                            title="Copy"
+                          >
+                            <Copy size={16} />
+                            Copy
                           </button>
                         </div>
                       </td>

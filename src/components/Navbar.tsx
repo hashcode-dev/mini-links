@@ -2,7 +2,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Search,
   User,
-  Link as LinkIcon,
+  Menu,
+  X,
   Pencil,
   Link2,
   QrCode,
@@ -13,6 +14,7 @@ import {
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import { clearAuthSession, isAuthenticated } from '../lib/auth';
+import Logo from './Logo';
 
 interface NavbarProps {
   isPublicPage: boolean;
@@ -23,10 +25,12 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isFeaturesModalOpen, setIsFeaturesModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [featuresModalStyle, setFeaturesModalStyle] = useState({ left: 16, top: 72, width: 980 });
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const featuresTriggerRef = useRef<HTMLDivElement>(null);
   const featuresModalRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   const featureItems = [
     {
@@ -115,7 +119,7 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
 
   useEffect(() => {
     const handleDocumentClick = (event: MouseEvent) => {
-      if (!isDropdownOpen) {
+      if (!isDropdownOpen && !isMobileMenuOpen) {
         return;
       }
 
@@ -123,7 +127,12 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
         return;
       }
 
+      if (mobileMenuRef.current?.contains(event.target as Node)) {
+        return;
+      }
+
       setIsDropdownOpen(false);
+      setIsMobileMenuOpen(false);
     };
 
     document.addEventListener('click', handleDocumentClick);
@@ -131,11 +140,12 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
     return () => {
       document.removeEventListener('click', handleDocumentClick);
     };
-  }, [isDropdownOpen]);
+  }, [isDropdownOpen, isMobileMenuOpen]);
 
   useEffect(() => {
     setIsDropdownOpen(false);
     setIsFeaturesModalOpen(false);
+    setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -195,19 +205,14 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
   const isOnHomePage = location.pathname === '/';
 
   return (
-    <header className="sticky top-0 z-30 glass-panel flex justify-between items-center w-full px-6 py-4 border-b border-surface-container-high dark:border-navy shadow-sm">
+    <header className="relative sticky top-0 z-30 glass-panel flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 border-b border-surface-container-high dark:border-navy shadow-sm">
       {/* Left Column: Brand Logo */}
-      <div className="flex-1 flex items-center justify-start">
-        <Link to="/" className={clsx("flex items-center gap-2 text-xl font-bold tracking-tight font-display", !isPublicPage && "md:hidden")}>
-          <span className="w-7 h-7 rounded-md bg-primary flex items-center justify-center">
-            <LinkIcon size={16} className="text-white" />
-          </span>
-          <span className="text-navy dark:text-white">Mini Links</span>
-        </Link>
+      <div className="flex items-center justify-start">
+        <Logo className={clsx(!isPublicPage && "md:hidden")} />
       </div>
-      
-      {/* Center Column: Navigation links */}
-      <nav className="hidden lg:flex flex-initial items-center justify-center gap-6 text-sm font-display font-medium">
+
+      {/* Center Column: Navigation links - Desktop */}
+      <nav className="hidden lg:flex flex-initial items-center justify-center gap-1 text-sm font-display font-medium">
         {navLinks.map((link) => {
           const isActive = isNavLinkActive(link.path);
 
@@ -222,10 +227,10 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
               >
                 <span
                   className={clsx(
-                    "transition-colors pb-1 cursor-default select-none",
+                    "px-3 py-2 rounded-lg transition-all duration-200 cursor-default select-none",
                     isActive
-                      ? "text-primary dark:text-teal-400 border-b-2 border-primary dark:border-teal-400 font-semibold"
-                      : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal-400"
+                      ? "text-white dark:text-teal-300 bg-primary/20 dark:bg-teal-950/40 font-semibold"
+                      : "text-white/80 dark:text-slate-200 hover:text-white dark:hover:text-teal-300 hover:bg-white/10 dark:hover:bg-white/5"
                   )}
                 >
                   {link.name}
@@ -279,10 +284,10 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
               key={link.name}
               to={link.path}
               className={clsx(
-                "transition-colors pb-1",
-                isActive 
-                  ? "text-primary dark:text-teal-400 border-b-2 border-primary dark:border-teal-400 font-semibold" 
-                  : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal-400"
+                "px-3 py-2 rounded-lg transition-all duration-200",
+                isActive
+                  ? "text-white dark:text-teal-300 bg-primary/20 dark:bg-teal-950/40 font-semibold"
+                  : "text-white/80 dark:text-slate-200 hover:text-white dark:hover:text-teal-300 hover:bg-white/10 dark:hover:bg-white/5"
               )}
             >
               {link.name}
@@ -292,18 +297,26 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
       </nav>
 
       {/* Right Column: Actions */}
-      <div className="flex-1 flex items-center justify-end gap-4">
+      <div className="flex items-center justify-end gap-2 md:gap-4">
         {!isPublicPage && (
           <div className="hidden sm:block relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-            <input 
-              type="text" 
-              placeholder="Search..." 
+            <input
+              type="text"
+              placeholder="Search..."
               className="bg-surface-container-low dark:bg-navy border border-surface-container-high dark:border-slate-700 rounded-full py-1.5 pl-9 pr-4 text-sm w-48 focus:w-64 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none dark:text-white"
             />
           </div>
         )}
 
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="lg:hidden p-2 hover:bg-surface-container-low dark:hover:bg-navy rounded-lg transition-colors text-slate-600 dark:text-slate-300"
+          aria-label="Toggle menu"
+        >
+          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
 
         <div ref={profileMenuRef} className="relative">
           <button
@@ -348,6 +361,73 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
           )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div
+          ref={mobileMenuRef}
+          className="lg:hidden bg-surface-container-lowest dark:bg-navy-light border-b border-surface-container-high dark:border-slate-700 px-4 py-4 absolute top-full left-0 right-0 z-40 shadow-lg"
+        >
+          <nav className="flex flex-col gap-2">
+            {navLinks.map((link) => {
+              const isActive = isNavLinkActive(link.path);
+
+              if (isPublicPage && link.name === 'Features') {
+                return (
+                  <div key={link.name} className="space-y-2">
+                    <div className={clsx(
+                      "px-3 py-2 text-sm font-display font-medium rounded-lg transition-colors",
+                      isActive
+                        ? "text-primary dark:text-teal-400 bg-primary/10 dark:bg-teal-950/30"
+                        : "text-slate-700 dark:text-slate-300"
+                    )}>
+                      {link.name}
+                    </div>
+                    <div className="pl-4 space-y-1">
+                      {featureItems.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <div
+                            key={item.title}
+                            className="flex items-start gap-3 p-2 rounded-lg hover:bg-surface-container-low dark:hover:bg-navy/40 transition-colors"
+                          >
+                            <div className="p-1.5 bg-primary/10 dark:bg-teal-950/30 text-primary dark:text-teal-400 rounded-md shrink-0">
+                              <Icon size={16} />
+                            </div>
+                            <div className="space-y-0.5">
+                              <h4 className="text-xs font-bold text-navy dark:text-white">
+                                {item.title}
+                              </h4>
+                              <p className="text-xs text-slate-500 dark:text-slate-400">
+                                {item.description}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={clsx(
+                    "px-3 py-2 text-sm font-display font-medium rounded-lg transition-colors block",
+                    isActive
+                      ? "text-primary dark:text-teal-400 bg-primary/10 dark:bg-teal-950/30"
+                      : "text-slate-700 dark:text-slate-300 hover:bg-surface-container-low dark:hover:bg-navy/40"
+                  )}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
