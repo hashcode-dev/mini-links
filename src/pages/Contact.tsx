@@ -38,7 +38,7 @@ export default function Contact() {
 
   return (
     <div className="p-6 lg:p-10 space-y-16 max-w-7xl mx-auto transition-colors duration-200">
-      
+
       {/* Header */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
         <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Contact Support & Abuse</h1>
@@ -50,13 +50,12 @@ export default function Contact() {
         <div className="space-y-6 lg:col-span-1">
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <h3 className="text-base font-semibold text-slate-900">Get in Touch</h3>
-            
+
             <div className="flex items-start gap-3">
               <Mail className="text-blue-600 shrink-0 mt-0.5" size={18} />
               <div>
                 <h4 className="font-semibold text-xs text-slate-900">Email Communications</h4>
-                <p className="text-xs text-slate-500 mt-0.5">support@minilinks.com</p>
-                <p className="text-[10px] text-slate-400">For abuse reports: abuse@minilinks.com</p>
+                <p className="text-xs text-slate-500 mt-0.5">hashcode.dev@gmail.com</p>
               </div>
             </div>
 
@@ -73,12 +72,11 @@ export default function Contact() {
               <MapPin className="text-blue-600 shrink-0 mt-0.5" size={18} />
               <div>
                 <h4 className="font-semibold text-xs text-slate-900">Headquarters</h4>
-                <p className="text-xs text-slate-500 mt-0.5">100 State St, Suite 500</p>
-                <p className="text-xs text-slate-500">Boston, MA 02109, USA</p>
+                <p className="text-xs text-slate-500 mt-0.5">Prayagraj Uttar Pradesh India</p>
               </div>
             </div>
           </div>
-          
+
           <div className="bg-blue-50/60 border border-blue-200 rounded-2xl p-6 text-xs text-slate-600 leading-relaxed">
             <h4 className="font-semibold text-blue-600 mb-1.5 text-sm">Abuse Takedowns</h4>
             We inspect all submitted spam and phishing complaints within 12 hours. If a shortened Mini Links URL is found to redirect to malicious content, the link will be terminated immediately.

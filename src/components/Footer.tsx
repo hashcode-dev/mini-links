@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className="w-full bg-slate-900 text-white border-t border-slate-800 py-12 px-6 transition-colors duration-200">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-        
+
         {/* Column 1: Brand & E-E-A-T Signal */}
         <div className="space-y-4">
           <Link to="/" className="flex items-center space-x-3 group">
@@ -22,7 +22,7 @@ export default function Footer() {
             Enterprise-grade URL redirection infrastructure and dynamic QR code metrics. Built for secure, fast, and transparent link management.
           </p>
           <div className="text-[11px] text-slate-500">
-            Headquarters: Boston, MA, USA
+            Headquarters: Prayagraj Uttar Pradesh India
           </div>
         </div>
 
