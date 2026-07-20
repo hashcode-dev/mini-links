@@ -68,7 +68,7 @@ export default function Footer() {
             </li>
             <li>
               <Link to="/sitemap" className="text-slate-400 hover:text-white transition-colors">
-                Directory Sitemap
+                Sitemap
               </Link>
             </li>
           </ul>

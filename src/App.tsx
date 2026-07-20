@@ -46,7 +46,7 @@ function PageMetaManager() {
       '/contact': 'Contact Support | Submit Link Abuse & Inquiries',
       '/privacy-policy': 'Privacy Policy | Data Collection, Cookies & GDPR Disclosure',
       '/terms-of-service': 'Terms of Service | User Conduct & Redirect Liability Agreements',
-      '/sitemap': 'HTML Sitemap | Browse Mini-Links Public Directory',
+      '/sitemap': 'Sitemap | Browse Mini-Links Public Directory',
     };
 
     const descriptionMap: Record<string, string> = {
@@ -111,7 +111,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          
+
           {/* Public Core Routes */}
           <Route path="pricing" element={<Pricing />} />
 

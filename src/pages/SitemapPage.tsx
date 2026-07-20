@@ -34,14 +34,14 @@ export default function SitemapPage() {
 
   return (
     <div className="p-6 lg:p-10 space-y-16 max-w-5xl mx-auto transition-colors duration-200">
-      
+
       {/* Header */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-200">
           <Network size={13} />
           <span>Navigation Map</span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">HTML Sitemap</h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Sitemap</h1>
         <p className="text-sm text-slate-500">Direct links to navigate all public sections of the Mini Links portal.</p>
       </div>
 
@@ -58,7 +58,7 @@ export default function SitemapPage() {
                 <h3 className="text-base font-semibold text-slate-900">{section.title}</h3>
               </div>
               <p className="text-xs text-slate-400 mb-6 flex-1">{section.description}</p>
-              
+
               <ul className="space-y-4 pt-4 border-t border-slate-100">
                 {section.links.map((link, lidx) => (
                   <li key={lidx} className="group">
