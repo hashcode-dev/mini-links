@@ -4,6 +4,7 @@ import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useLinks } from '../context/LinksContext';
 import ClicksByDeviceCard from '../components/ClicksByDeviceCard';
 import ClicksByCountryCard from '../components/ClicksByCountryCard';
+import ResultBox from '../components/ResultBox';
 
 const trendData = [
   { date: 'Nov 1', clicks: 1200 }, { date: 'Nov 7', clicks: 2100 },
@@ -12,9 +13,9 @@ const trendData = [
 ];
 
 const deviceData = [
-  { name: 'Mobile', value: 64, color: '#008080' },
-  { name: 'Desktop', value: 28, color: '#4FD1C5' },
-  { name: 'Tablet', value: 8, color: '#E2E8F0' }
+  { name: 'Mobile', value: 64, color: '#4f46e5' },
+  { name: 'Desktop', value: 28, color: '#712ae2' },
+  { name: 'Tablet', value: 8, color: '#059669' }
 ];
 
 const countryData = [
@@ -35,29 +36,47 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
+      {/* Header title */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
+            Dashboard Overview
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Real-time link activity and audience engagement statistics.
+          </p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <Link to="/links/new" className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium rounded-lg shadow-sm transition-all flex items-center justify-center space-x-2">
+            <LinkIcon size={16} />
+            <span>New Link</span>
+          </Link>
+        </div>
+      </div>
+
       {/* Summary Stats */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { title: 'Total Links Created', value: totalLinks.toLocaleString('en-US'), change: '+12%', isPositive: true, icon: LinkIcon },
-          { title: 'Total Clicks Today', value: Math.round(allClicks * 0.08).toLocaleString('en-US'), change: '+24%', isPositive: true, icon: MousePointerClick },
-          { title: 'All-Time Clicks', value: allClicks.toLocaleString('en-US'), change: '-3%', isPositive: false, icon: BarChart2 },
-          { title: 'Active Links', value: activeLinks.toLocaleString('en-US'), change: '+8%', isPositive: true, icon: Activity },
+          { title: 'Total Links Created', value: totalLinks.toLocaleString('en-US'), change: '+12%', isPositive: true, icon: LinkIcon, color: 'text-indigo-600' },
+          { title: 'Total Clicks Today', value: Math.round(allClicks * 0.08).toLocaleString('en-US'), change: '+24%', isPositive: true, icon: MousePointerClick, color: 'text-blue-600' },
+          { title: 'All-Time Clicks', value: allClicks.toLocaleString('en-US'), change: '-3%', isPositive: false, icon: BarChart2, color: 'text-purple-600' },
+          { title: 'Active Redirects', value: activeLinks.toLocaleString('en-US'), change: '+8%', isPositive: true, icon: Activity, color: 'text-emerald-600' },
         ].map((stat, i) => {
           const Icon = stat.icon;
           return (
-            <div key={i} className="bg-surface-container-lowest dark:bg-navy-light p-6 rounded-xl border border-surface-container-high dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex justify-between items-start mb-4">
-                <div className="p-3 bg-primary/10 dark:bg-teal-900/30 rounded-lg text-primary dark:text-teal-400">
-                  <Icon size={24} />
+            <div key={i} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm card-shadow-hover">
+              <div className="flex justify-between items-start mb-3">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-blue-600">
+                  <Icon size={20} />
                 </div>
-                <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${stat.isPositive ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
-                  {stat.isPositive ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
+                <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${stat.isPositive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
+                  {stat.isPositive ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
                   {stat.change}
                 </div>
               </div>
-              <div>
-                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{stat.title}</p>
-                <h3 className="text-3xl font-bold text-navy dark:text-white mt-1 font-display">{stat.value}</h3>
+              <p className="text-xs text-slate-500 font-medium">{stat.title}</p>
+              <div className={`text-2xl font-bold mt-1 ${stat.color}`}>
+                {stat.value}
               </div>
             </div>
           );
@@ -65,18 +84,18 @@ export default function Dashboard() {
       </section>
 
       {/* Middle Chart: Click Trends */}
-      <section className="bg-surface-container-lowest dark:bg-navy-light p-8 rounded-xl border border-surface-container-high dark:border-slate-700 shadow-sm">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+      <section className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div>
-            <h2 className="text-xl font-bold text-navy dark:text-white font-display">Click Trends Over Time</h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Daily interaction metrics for the last 30 days</p>
+            <h2 className="text-xl font-bold text-slate-900 tracking-tight">Click Trends Over Time</h2>
+            <p className="text-slate-500 text-sm mt-0.5">Daily interaction metrics for the last 30 days</p>
           </div>
           <div className="flex gap-3">
-            <button className="px-4 py-2 bg-surface-container-low dark:bg-navy text-slate-700 dark:text-slate-300 text-sm font-bold rounded-lg border border-surface-container-high dark:border-slate-600 hover:bg-surface-container-high dark:hover:bg-slate-800 transition-all flex items-center gap-2">
-              <Download size={16} /> Report
+            <button className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-lg transition-all flex items-center gap-2">
+              <Download size={14} /> Report
             </button>
-            <button className="px-4 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-bold rounded-lg transition-all">
-              Export Data
+            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-all">
+              Export CSV
             </button>
           </div>
         </div>
@@ -86,16 +105,16 @@ export default function Dashboard() {
             <AreaChart data={trendData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorClicks" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#008080" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#008080" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#712ae2" stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} dy={10} />
               <Tooltip
-                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                itemStyle={{ color: '#008080', fontWeight: 'bold' }}
+                contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
+                itemStyle={{ color: '#4f46e5', fontWeight: 'bold' }}
               />
-              <Area type="monotone" dataKey="clicks" stroke="#008080" strokeWidth={3} fillOpacity={1} fill="url(#colorClicks)" />
+              <Area type="monotone" dataKey="clicks" stroke="#4f46e5" strokeWidth={3} fillOpacity={1} fill="url(#colorClicks)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -104,36 +123,36 @@ export default function Dashboard() {
       {/* Bottom Grid */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Top Performing Links Table */}
-        <div className="lg:col-span-2 bg-surface-container-lowest dark:bg-navy-light rounded-xl border border-surface-container-high dark:border-slate-700 shadow-sm overflow-hidden flex flex-col">
-          <div className="p-6 flex justify-between items-center border-b border-surface-container-high dark:border-slate-700">
-            <h2 className="text-lg font-bold text-navy dark:text-white font-display">Top Performing Links</h2>
-            <Link to="/links" className="text-primary dark:text-teal-400 text-sm font-bold hover:underline">View All</Link>
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div className="p-6 flex justify-between items-center border-b border-slate-200">
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight">Top Performing Links</h2>
+            <Link to="/links" className="text-blue-600 text-xs font-semibold hover:underline">View All &rarr;</Link>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="text-slate-500 dark:text-slate-400 text-[11px] uppercase tracking-widest font-bold bg-surface-container-low/50 dark:bg-navy/50">
-                  <th className="px-6 py-4">Short URL</th>
-                  <th className="px-6 py-4">Original URL</th>
-                  <th className="px-6 py-4">Clicks</th>
-                  <th className="px-6 py-4">Status</th>
+                <tr className="text-slate-500 text-xs uppercase tracking-wider font-semibold bg-slate-50 border-b border-slate-200">
+                  <th className="px-6 py-3">Short URL</th>
+                  <th className="px-6 py-3">Original URL</th>
+                  <th className="px-6 py-3">Clicks</th>
+                  <th className="px-6 py-3">Status</th>
                 </tr>
               </thead>
-              <tbody className="text-sm divide-y divide-surface-container-high dark:divide-slate-700">
+              <tbody className="text-sm divide-y divide-slate-100">
                 {topLinks.map((row) => (
-                  <tr key={row.id} className="hover:bg-surface-container-low/30 dark:hover:bg-navy/30 transition-colors">
+                  <tr key={row.id} className="hover:bg-slate-50/80 transition-colors">
                     <td className="px-6 py-4">
-                      <Link to={`/links/${row.id}`} className="text-primary dark:text-teal-400 font-mono font-medium hover:underline flex items-center gap-1">
+                      <Link to={`/links/${row.id}`} className="text-blue-600 font-mono font-medium hover:underline flex items-center gap-1">
                         {row.shortUrl} <ExternalLink size={12} />
                       </Link>
                     </td>
-                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400 truncate max-w-[150px]">{row.originalUrl}</td>
-                    <td className="px-6 py-4 text-navy dark:text-white font-bold">{row.clicks.toLocaleString('en-US')}</td>
+                    <td className="px-6 py-4 text-slate-500 truncate max-w-[180px]">{row.originalUrl}</td>
+                    <td className="px-6 py-4 text-slate-900 font-bold">{row.clicks.toLocaleString('en-US')}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded text-[10px] font-black uppercase tracking-tighter ${
-                        row.status === 'Active' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                        row.status === 'Expired' ? 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400' :
-                        'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                        row.status === 'Active' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                        row.status === 'Expired' ? 'bg-slate-100 text-slate-600 border border-slate-200' :
+                        'bg-rose-50 text-rose-700 border border-rose-200'
                       }`}>
                         {row.status}
                       </span>
@@ -147,10 +166,7 @@ export default function Dashboard() {
 
         {/* Right Side Charts */}
         <div className="flex flex-col gap-6">
-          {/* Clicks by Device */}
           <ClicksByDeviceCard data={deviceData} />
-
-          {/* Clicks by Country */}
           <ClicksByCountryCard data={countryData} />
         </div>
       </section>
