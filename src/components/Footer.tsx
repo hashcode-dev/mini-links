@@ -1,8 +1,14 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Link as LinkIcon, Shield, Globe, BookOpen } from 'lucide-react';
+import { Link as LinkIcon, Shield, Globe, BookOpen, Cookie } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+
+  const handleOpenCookiePreferences = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent('open-cookie-settings'));
+  };
 
   return (
     <footer className="w-full bg-[#121b27] text-white border-t border-slate-800 py-12 px-6 transition-colors duration-200">
@@ -89,6 +95,16 @@ export default function Footer() {
               <Link to="/terms-of-service" className="text-slate-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40 rounded-sm">
                 Terms of Service
               </Link>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={handleOpenCookiePreferences}
+                className="text-slate-400 hover:text-white transition-colors flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-blue-500/40 rounded-sm text-xs"
+              >
+                <Cookie size={12} className="text-blue-400" />
+                <span>Cookie Preferences</span>
+              </button>
             </li>
             <li className="pt-2 text-[10px] text-slate-500">
               Personalized Ad Opt-Out available via Google Ad Settings.

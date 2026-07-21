@@ -3,23 +3,102 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google Consent Mode v2 Initialization (Must be before any Ads/Analytics tags) -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+
+      var savedConsent = localStorage.getItem('cookie-consent');
+      var isGranted = (savedConsent === 'granted' || savedConsent === 'accepted');
+
+      gtag('consent', 'default', {
+        'ad_storage': isGranted ? 'granted' : 'denied',
+        'ad_user_data': isGranted ? 'granted' : 'denied',
+        'ad_personalization': isGranted ? 'granted' : 'denied',
+        'analytics_storage': isGranted ? 'granted' : 'denied',
+        'wait_for_update': 500
+      });
+    </script>
+
     <meta name="description" content="Mini-Links: Create short, user-friendly URLs and dynamic QR codes in seconds. Complete with real-time access analytics, custom branded domains, and secure redirects." />
     <meta name="keywords" content="url shortener, shorten url, link shortener, tinyurl, custom url, branded links, qr code generator, link analytics, dynamic qr code" />
     <title>Mini-Links | URL Shortener, Branded Short Links & Analytics</title>
+
+    <!-- Canonical & Social Meta -->
+    <link rel="canonical" href="https://mini-links.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mini-Links" />
+    <meta property="og:title" content="Mini-Links | URL Shortener, Branded Short Links & Analytics" />
+    <meta property="og:description" content="Mini-Links: Create short, user-friendly URLs and dynamic QR codes in seconds. Complete with real-time access analytics, custom branded domains, and secure redirects." />
+    <meta property="og:url" content="https://mini-links.com/" />
+    <meta property="og:image" content="https://mini-links.com/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mini-Links | URL Shortener, Branded Short Links & Analytics" />
+    <meta name="twitter:description" content="Mini-Links: Create short, user-friendly URLs and dynamic QR codes in seconds." />
+    <meta name="twitter:image" content="https://mini-links.com/og-image.png" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232563eb'/%3E%3Cpath d='M12 20h-1.5a4.5 4.5 0 0 1 0-9H12' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 12h1.5a4.5 4.5 0 0 1 0 9H20' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='11' y1='16' x2='21' y2='16' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
 
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Fallback raw text HTML inside #root so crawlers GETting plain HTML see full text -->
+    <div id="root">
+      <header>
+        <nav aria-label="Main Navigation">
+          <a href="/">Mini-Links</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/about">About Us</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy-policy">Privacy Policy</a>
+          <a href="/terms-of-service">Terms of Service</a>
+          <a href="/sitemap">Sitemap</a>
+        </nav>
+      </header>
+      <main>
+        <article>
+          <h1>Mini-Links | URL Shortener, Branded Short Links & Analytics</h1>
+          <p>Mini-Links is an enterprise-grade link management platform providing instantaneous sub-10ms URL shortening, dynamic QR code generation, click geolocation analytics, and custom domain branding.</p>
+
+          <section>
+            <h2>Step-by-Step Guide: How to Shorten Links</h2>
+            <ol>
+              <li>Paste any destination link into the input field above.</li>
+              <li>Optionally enter a custom branded alias (e.g. <code>minilinks.com/my-brand</code>).</li>
+              <li>Click <strong>Shorten Link</strong> to generate your shortened URL and instant vector QR code.</li>
+            </ol>
+          </section>
+
+          <section>
+            <h2>Frequently Asked Questions</h2>
+            <dl>
+              <dt>Are shortened links permanent?</dt>
+              <dd>Yes, links created on Mini-Links remain active indefinitely unless removed for terms of service violations.</dd>
+              <dt>Does Mini-Links support dynamic QR code downloads?</dt>
+              <dd>Yes, every shortened link automatically generates SVG and high-resolution PNG vector QR codes for download.</dd>
+              <dt>Is Mini-Links compliant with Google Publisher Policies & GDPR?</dt>
+              <dd>Yes, Mini-Links fully enforces Google Consent Mode v2, Google DART cookie disclosures, and GDPR user privacy compliance.</dd>
+            </dl>
+          </section>
+        </article>
+      </main>
+      <footer>
+        <p>&copy; Mini-Links. All rights reserved.</p>
+        <p>
+          <a href="/about">About Us</a> |
+          <a href="/contact">Contact Support</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms-of-service">Terms of Service</a> |
+          <a href="/sitemap">Sitemap</a>
+        </p>
+      </footer>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

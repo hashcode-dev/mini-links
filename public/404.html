@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 Page Not Found | Mini-Links</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: #f8f9ff;
+        color: #0f172a;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 540px;
+        margin: 20px;
+        padding: 40px;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        border: 1px solid #e2e8f0;
+        text-align: center;
+      }
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 9999px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+      h1 {
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0 0 12px 0;
+      }
+      p {
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0 0 24px 0;
+      }
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 20px;
+        background: #2563eb;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 12px;
+        transition: background 0.2s;
+      }
+      .btn:hover {
+        background: #1d4ed8;
+      }
+      .btn-secondary {
+        background: #f1f5f9;
+        color: #334155;
+      }
+      .btn-secondary:hover {
+        background: #e2e8f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <span class="badge">404 Error</span>
+      <h1>Page Not Found</h1>
+      <p>The requested route or resource could not be found on Mini-Links. The link may have expired or been moved.</p>
+      <div class="links">
+        <a href="/" class="btn">Return Home</a>
+        <a href="/about" class="btn btn-secondary">About Us</a>
+        <a href="/contact" class="btn btn-secondary">Contact Support</a>
+        <a href="/sitemap" class="btn btn-secondary">Sitemap</a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,7 +1,13 @@
-import { FileText, Shield, Cookie, Eye } from 'lucide-react';
+import React from 'react';
+import { FileText, Shield, Cookie, Eye, Lock, RefreshCw } from 'lucide-react';
 
 export default function PrivacyPolicy() {
-  const lastUpdated = 'July 4, 2026';
+  const lastUpdated = 'July 21, 2026';
+
+  const handleOpenCookiePreferences = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent('open-cookie-settings'));
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-12 space-y-12">
@@ -24,10 +30,10 @@ export default function PrivacyPolicy() {
             <FileText size={18} className="text-blue-600 dark:text-blue-400" /> 1. Introduction
           </h2>
           <p>
-            Welcome to Mini Links ("we," "our," or "us"). We operate the web application located at <a href="/" className="text-blue-600 dark:text-blue-400 hover:underline font-semibold">https://minilinks.com</a>. This Privacy Policy details our policies regarding the collection, usage, and disclosure of personal data when you utilize our URL shortening, QR code generation, and link tracking services.
+            Welcome to Mini Links ("we," "our," or "us"). We operate the web application located at <a href="/" className="text-blue-600 dark:text-blue-400 hover:underline font-semibold">https://mini-links.com</a>. This Privacy Policy details our policies regarding the collection, usage, and disclosure of personal data when you utilize our URL shortening, dynamic QR code generation, and click tracking analytics services.
           </p>
           <p>
-            By using Mini Links, you agree to the collection and use of information in accordance with this policy. If you do not agree with any terms, please do not access our services.
+            By accessing or using Mini Links, you acknowledge that you have read and agree to the data practices outlined in this policy.
           </p>
         </section>
 
@@ -36,47 +42,63 @@ export default function PrivacyPolicy() {
             <Eye size={18} className="text-blue-600 dark:text-blue-400" /> 2. Information Collection and Usage
           </h2>
           <p>
-            To provide our link analytics and redirection services, we collect several types of data:
+            To deliver high-speed URL shortening and redirect analytics, we process several categories of information:
           </p>
           <ul className="list-disc pl-5 space-y-2">
             <li>
-              <strong>Account Data:</strong> When registering, we collect your name, email address, and authentication sessions to secure your account.
+              <strong>Account Information:</strong> For registered users, we collect account credentials (name, email address, password hashes) to authenticate access to your link dashboard.
             </li>
             <li>
-              <strong>Shortened URL Details:</strong> We store the destination URLs you submit, along with custom aliases, descriptions, and dynamic routing settings.
+              <strong>Shortened URL Data:</strong> We store destination URLs, custom branded aliases, link creation timestamps, and configuration preferences.
             </li>
             <li>
-              <strong>Redirect Analytics Logs:</strong> When an end-user clicks a Mini Links short URL, we collect log metrics to display in your dashboard. This includes browser agent strings, operating system, approximate geographic location, referrer paths, and transaction timestamps.
+              <strong>Click & Redirection Logs:</strong> When an end-user clicks a shortened link, our edge servers record aggregate telemetry including browser user-agent strings, operating systems, coarse geographic location (country/city level derived from IP), referrer headers, and timestamp metrics.
             </li>
           </ul>
         </section>
 
         <section className="space-y-4 p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 card-shadow">
           <h2 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-            <Cookie size={18} className="text-blue-600 dark:text-blue-400" /> 3. Cookies & Advertising (Google AdSense Disclosure)
+            <Cookie size={18} className="text-blue-600 dark:text-blue-400" /> 3. Cookies & Advertising (Google AdSense & Consent Mode v2 Disclosure)
           </h2>
           <p>
-            Mini Links utilizes cookies to improve your user experience and deliver relevant advertisements. Cookies are files with small amounts of data stored on your device.
+            Mini Links uses cookies, web beacons, and local storage technologies to ensure seamless navigation, analyze site performance, and serve non-intrusive advertisements.
           </p>
           <p>
-            Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to our website. Google's use of advertising cookies enables it and its partners to serve ads based on their visit to our sites and/or other sites on the Internet.
+            <strong>Third-Party Advertising & DART Cookies:</strong> Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to Mini Links or other websites. Google's use of advertising cookies enables it and its partners to serve targeted ads based on your visits across the Internet.
           </p>
           <p>
-            Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 underline font-semibold">Google Ad Settings</a> or visiting <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 underline font-semibold">www.aboutads.info</a>.
+            <strong>Google Consent Mode v2 Compliance:</strong> We enforce Google Consent Mode v2 for all visitors. By default, advertising and analytics storage signals (<code>ad_storage</code>, <code>ad_user_data</code>, <code>ad_personalization</code>, <code>analytics_storage</code>) are set to denied until explicit user consent is granted via our Cookie Banner.
           </p>
+          <p>
+            <strong>Opt-Out Options:</strong> You can opt out of personalized Google advertising anytime by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 underline font-semibold">Google Ad Settings</a> or visiting <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 underline font-semibold">www.aboutads.info</a>.
+          </p>
+
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={handleOpenCookiePreferences}
+              className="px-4 py-2 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 text-xs font-semibold rounded-xl transition-all inline-flex items-center gap-2"
+            >
+              <RefreshCw size={14} />
+              <span>Change / Update Cookie Preferences</span>
+            </button>
+          </div>
         </section>
 
         <section className="space-y-3">
-          <h2 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">4. Data Security & Retention</h2>
+          <h2 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <Lock size={18} className="text-blue-600 dark:text-blue-400" /> 4. GDPR / CCPA User Data Rights
+          </h2>
           <p>
-            The security of your data is paramount. We deploy SSL/TLS encryption for all data in transit and rest. Link logs are retained for reporting analytics and purged according to account settings.
+            Under global privacy frameworks including GDPR (EU/UK) and CCPA (California), you have the right to request access to your personal data, request data portability, object to processing, or request complete deletion of your account and short link telemetry.
           </p>
         </section>
 
-        <section className="space-y-3">
-          <h2 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">5. Contact Privacy Officer</h2>
+        <section className="space-y-3 border-t border-slate-200 dark:border-slate-800 pt-6">
+          <h2 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">5. Contact Our Privacy Officer</h2>
           <p>
-            If you have questions regarding this Privacy Policy or wish to request data erasure under GDPR/CCPA, please contact our privacy officer at <a href="mailto:privacy@minilinks.com" className="text-blue-600 dark:text-blue-400 hover:underline font-semibold">privacy@minilinks.com</a>.
+            If you have any questions regarding this Privacy Policy or wish to submit a data erasure request, please contact our privacy compliance officer at <a href="mailto:hashcode.dev@gmail.com" className="text-blue-600 dark:text-blue-400 hover:underline font-semibold">hashcode.dev@gmail.com</a>.
           </p>
         </section>
       </div>
