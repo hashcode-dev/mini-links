@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /contact
+Allow: /privacy-policy
+Allow: /terms-of-service
+Allow: /pricing
+Allow: /sitemap
+Disallow: /dashboard
+Disallow: /links/
+Disallow: /qr
+Disallow: /auth
+Disallow: /*?*
+
+Sitemap: https://mini-links.com/sitemap.xml

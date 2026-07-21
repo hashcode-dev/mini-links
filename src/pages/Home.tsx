@@ -655,21 +655,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-surface-container-lowest dark:bg-navy-light w-full py-6 mt-auto border-t border-surface-container-high dark:border-slate-800">
-        <div className="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-8">
-          <div className="flex flex-col items-center md:items-start gap-2">
-            <span className="font-semibold text-navy dark:text-white font-display">Mini Links</span>
-            <p className="text-slate-500 dark:text-slate-400 text-xs">© 2024 Mini Links Inc. All rights reserved.</p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-8">
-            <a href="#" className="text-slate-500 dark:text-slate-400 text-sm hover:text-navy dark:hover:text-white underline-offset-4 hover:underline transition-all">Privacy Policy</a>
-            <a href="#" className="text-slate-500 dark:text-slate-400 text-sm hover:text-navy dark:hover:text-white underline-offset-4 hover:underline transition-all">Terms of Service</a>
-            <a href="#" className="text-slate-500 dark:text-slate-400 text-sm hover:text-navy dark:hover:text-white underline-offset-4 hover:underline transition-all">Support</a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

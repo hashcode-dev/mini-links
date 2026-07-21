@@ -1,10 +1,12 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import Footer from './Footer';
 
 export default function Layout() {
   const location = useLocation();
-  const isPublicPage = location.pathname === '/' || location.pathname === '/pricing';
+  const publicPaths = ['/', '/pricing', '/about', '/contact', '/privacy-policy', '/terms-of-service', '/sitemap'];
+  const isPublicPage = publicPaths.includes(location.pathname);
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-surface dark:bg-navy text-navy dark:text-surface transition-colors duration-200">
@@ -15,6 +17,7 @@ export default function Layout() {
         <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
+        {isPublicPage && <Footer />}
       </div>
     </div>
   );
