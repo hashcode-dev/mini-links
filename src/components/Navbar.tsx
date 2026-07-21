@@ -10,6 +10,7 @@ import {
   ListChecks,
   Target,
   Code2,
+  Bell,
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
@@ -45,7 +46,7 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
     },
     {
       title: 'QR Code Generator',
-      description: "Elevate your customer\'s experiences with dynamic, scannable codes",
+      description: "Elevate your customer's experiences with dynamic, scannable codes",
       icon: QrCode,
     },
     {
@@ -186,7 +187,7 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
     navigate('/auth');
   };
 
-  const navLinks = isPublicPage 
+  const navLinks = isPublicPage
     ? [
         { name: 'Home', path: '/' },
         { name: 'About Us', path: '/about' },
@@ -201,118 +202,132 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
         { name: 'Links', path: '/links' },
         { name: 'Analytics', path: '/links/1' },
       ];
+
   const isUserAuthenticated = isAuthenticated();
   const isOnHomePage = location.pathname === '/';
 
   return (
-    <header className="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-4 md:px-8 shrink-0 sticky top-0 z-50">
-      {/* Left Column: Brand Logo */}
+    <header className="h-16 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 md:px-8 shrink-0 sticky top-0 z-40">
+      {/* Brand Logo */}
       <div className="flex items-center justify-start">
         <Logo className={clsx(!isPublicPage && "md:hidden")} />
       </div>
 
-      {/* Center Column: Navigation links - Desktop */}
-      <nav className="hidden lg:flex flex-initial items-center justify-center space-x-6 text-sm font-medium">
-        {navLinks.map((link) => {
-          const isActive = isNavLinkActive(link.path);
+      {/* Center Nav for Public Pages */}
+      {isPublicPage && (
+        <nav className="hidden lg:flex items-center space-x-6 text-sm font-medium">
+          {navLinks.map((link) => {
+            const isActive = isNavLinkActive(link.path);
 
-          if (isPublicPage && link.name === 'Features') {
-            return (
-              <div
-                key={link.name}
-                ref={featuresTriggerRef}
-                className="relative"
-                onMouseEnter={handleOpenFeaturesModal}
-                onMouseLeave={handleCloseFeaturesModal}
-              >
-                <span
-                  className={clsx(
-                    "px-3 py-1.5 rounded-lg transition-colors cursor-pointer select-none",
-                    isActive
-                      ? "text-blue-600 bg-blue-50 font-semibold"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                  )}
+            if (link.name === 'Features') {
+              return (
+                <div
+                  key={link.name}
+                  ref={featuresTriggerRef}
+                  className="relative"
+                  onMouseEnter={handleOpenFeaturesModal}
+                  onMouseLeave={handleCloseFeaturesModal}
                 >
-                  {link.name}
-                </span>
-
-                {isFeaturesModalOpen && (
-                  <div
-                    ref={featuresModalRef}
-                    className="fixed z-40 pt-2"
-                    style={{
-                      left: `${featuresModalStyle.left}px`,
-                      top: `${featuresModalStyle.top}px`,
-                      width: `${featuresModalStyle.width}px`,
-                    }}
-                    onMouseEnter={handleOpenFeaturesModal}
-                    onMouseLeave={handleCloseFeaturesModal}
+                  <span
+                    className={clsx(
+                      "px-3 py-2 rounded-xl transition-colors cursor-pointer select-none font-medium",
+                      isActive
+                        ? "text-blue-600 bg-blue-50 dark:bg-blue-950/50 font-semibold"
+                        : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
+                    )}
                   >
-                    <div className="w-full rounded-2xl border border-slate-200 bg-white/95 backdrop-blur-md shadow-xl p-6 transition-all duration-300">
-                      <div className="grid grid-cols-3 gap-4">
-                        {featureItems.map((item) => {
-                          const Icon = item.icon;
-                          return (
-                            <div
-                              key={item.title}
-                              className="flex items-start gap-4 p-4 rounded-xl hover:bg-slate-50 transition-all duration-200 group cursor-pointer border border-transparent hover:border-slate-200"
-                            >
-                              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                <Icon size={18} />
+                    {link.name}
+                  </span>
+
+                  {isFeaturesModalOpen && (
+                    <div
+                      ref={featuresModalRef}
+                      className="fixed z-40 pt-2"
+                      style={{
+                        left: `${featuresModalStyle.left}px`,
+                        top: `${featuresModalStyle.top}px`,
+                        width: `${featuresModalStyle.width}px`,
+                      }}
+                      onMouseEnter={handleOpenFeaturesModal}
+                      onMouseLeave={handleCloseFeaturesModal}
+                    >
+                      <div className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md card-shadow p-6 transition-all duration-300">
+                        <div className="grid grid-cols-3 gap-4">
+                          {featureItems.map((item) => {
+                            const Icon = item.icon;
+                            return (
+                              <div
+                                key={item.title}
+                                className="flex items-start gap-4 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 group cursor-pointer border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                  <Icon size={18} />
+                                </div>
+                                <div className="space-y-1">
+                                  <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                    {item.title}
+                                  </h3>
+                                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                    {item.description}
+                                  </p>
+                                </div>
                               </div>
-                              <div className="space-y-1">
-                                <h3 className="text-sm font-semibold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
-                                  {item.title}
-                                </h3>
-                                <p className="text-xs text-slate-500 leading-relaxed">
-                                  {item.description}
-                                </p>
-                              </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={link.name}
+                to={link.path}
+                className={clsx(
+                  "px-3 py-2 rounded-xl transition-colors font-medium",
+                  isActive
+                    ? "text-blue-600 bg-blue-50 dark:bg-blue-950/50 font-semibold"
+                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
                 )}
-              </div>
+              >
+                {link.name}
+              </Link>
             );
-          }
+          })}
+        </nav>
+      )}
 
-          return (
-            <Link
-              key={link.name}
-              to={link.path}
-              className={clsx(
-                "px-3 py-1.5 rounded-lg transition-colors",
-                isActive
-                  ? "text-blue-600 bg-blue-50 font-semibold"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-              )}
-            >
-              {link.name}
-            </Link>
-          );
-        })}
-      </nav>
+      {/* App Workspace Header Actions (Search & User Profile) */}
+      {!isPublicPage && (
+        <div className="relative flex-1 max-w-md hidden sm:block">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+          <input
+            type="text"
+            placeholder="Search links, clients, reports..."
+            className="w-full min-h-[40px] pl-10 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-600 transition-all"
+            aria-label="Global search"
+          />
+        </div>
+      )}
 
-      {/* Right Column: Actions */}
-      <div className="flex items-center justify-end gap-2 md:gap-4">
+      {/* Right Column Actions */}
+      <div className="flex items-center space-x-3">
         {!isPublicPage && (
-          <div className="hidden sm:block relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-            <input
-              type="text"
-              placeholder="Search links..."
-              className="w-48 focus:w-64 px-4 py-1.5 pl-9 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all placeholder:text-slate-400"
-            />
-          </div>
+          <button
+            type="button"
+            className="p-2 min-h-[44px] min-w-[44px] text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+            aria-label="Notifications"
+          >
+            <Bell size={20} />
+          </button>
         )}
 
-        {/* Mobile Menu Button */}
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="lg:hidden p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+          className="lg:hidden p-2 min-h-[44px] min-w-[44px] text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500/30"
           aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -321,40 +336,45 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
         <div ref={profileMenuRef} className="relative">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="w-9 h-9 rounded-full overflow-hidden bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 hover:bg-blue-100 transition-colors"
+            className="min-h-[44px] min-w-[44px] px-2 py-1 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+            aria-label="User Profile"
           >
-            <User size={18} />
+            <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold shrink-0">
+              <User size={18} />
+            </div>
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-50">
+            <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 py-2 z-50">
               {isUserAuthenticated ? (
                 <>
+                  <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-800">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">User Workspace</p>
+                    <p className="text-[11px] text-slate-400 truncate">user@minilinks.com</p>
+                  </div>
                   {isOnHomePage && (
-                    <Link to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">Dashboard</Link>
+                    <Link to="/dashboard" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">
+                      Dashboard
+                    </Link>
                   )}
-                  <Link to="/settings" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">Profile</Link>
-                  <Link to="/pricing" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">Billing</Link>
-                  {!isOnHomePage && (
-                    <>
-                      <div className="border-t border-slate-100 my-1"></div>
-                      <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
-                      >
-                        Logout
-                      </button>
-                    </>
-                  )}
+                  <Link to="/pricing" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">
+                    Billing & Plan
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="block w-full px-4 py-2.5 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 font-medium"
+                  >
+                    Logout
+                  </button>
                 </>
               ) : (
                 <Link
                   to="/auth"
                   onClick={() => setIsDropdownOpen(false)}
-                  className="block px-4 py-2 text-sm text-blue-600 font-semibold hover:bg-blue-50"
+                  className="block px-4 py-2.5 text-sm text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-blue-950/40"
                 >
-                  Sign In
+                  Sign In / Register
                 </Link>
               )}
             </div>
@@ -362,63 +382,24 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Navigation Drawer */}
       {isMobileMenuOpen && (
         <div
           ref={mobileMenuRef}
-          className="lg:hidden bg-white border-b border-slate-200 px-4 py-4 absolute top-full left-0 right-0 z-40 shadow-lg"
+          className="lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-4 absolute top-full left-0 right-0 z-40 shadow-xl"
         >
           <nav className="flex flex-col gap-2">
             {navLinks.map((link) => {
               const isActive = isNavLinkActive(link.path);
-
-              if (isPublicPage && link.name === 'Features') {
-                return (
-                  <div key={link.name} className="space-y-2">
-                    <div className={clsx(
-                      "px-3 py-2 text-sm font-semibold rounded-lg transition-colors",
-                      isActive
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-slate-700"
-                    )}>
-                      {link.name}
-                    </div>
-                    <div className="pl-4 space-y-1">
-                      {featureItems.map((item) => {
-                        const Icon = item.icon;
-                        return (
-                          <div
-                            key={item.title}
-                            className="flex items-start gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors"
-                          >
-                            <div className="w-7 h-7 bg-blue-50 text-blue-600 rounded-md flex items-center justify-center shrink-0">
-                              <Icon size={14} />
-                            </div>
-                            <div className="space-y-0.5">
-                              <h4 className="text-xs font-semibold text-slate-900">
-                                {item.title}
-                              </h4>
-                              <p className="text-xs text-slate-500">
-                                {item.description}
-                              </p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              }
-
               return (
                 <Link
                   key={link.name}
                   to={link.path}
                   className={clsx(
-                    "px-3 py-2 text-sm font-medium rounded-lg transition-colors block",
+                    "px-4 py-2.5 text-sm font-medium rounded-xl transition-colors block min-h-[44px] flex items-center",
                     isActive
-                      ? "text-blue-600 bg-blue-50 font-semibold"
-                      : "text-slate-700 hover:bg-slate-50"
+                      ? "text-blue-600 bg-blue-50 dark:bg-blue-950/50 font-semibold"
+                      : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
                   )}
                 >
                   {link.name}
@@ -431,4 +412,3 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
     </header>
   );
 }
-

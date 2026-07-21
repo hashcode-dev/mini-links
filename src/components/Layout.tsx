@@ -9,7 +9,7 @@ export default function Layout() {
   const isPublicPage = publicPaths.includes(location.pathname);
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[#faf8ff] text-slate-900 transition-colors duration-200">
+    <div className="min-h-screen flex flex-col md:flex-row bg-[#f8f9ff] text-slate-900 transition-colors duration-200">
       {!isPublicPage && <Sidebar />}
       
       <div className={`flex-1 flex flex-col min-w-0 ${!isPublicPage ? 'md:ml-64' : ''}`}>
@@ -22,4 +22,3 @@ export default function Layout() {
     </div>
   );
 }
-

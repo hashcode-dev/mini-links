@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { isAuthenticated, setAuthSession } from '../lib/auth';
 import { signInWithGoogle } from '../lib/googleAuth';
@@ -49,7 +49,7 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#faf8ff] text-slate-900">
+    <div className="min-h-screen flex bg-[#f8f9ff] dark:bg-slate-950 text-slate-900 dark:text-slate-100">
       {/* Left Side: Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-16 xl:px-24 py-12">
         <div className="max-w-md w-full mx-auto">
@@ -59,11 +59,11 @@ export default function Auth() {
           </div>
 
           <div className="space-y-2 mb-8">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+            <h1 className="font-display text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
               {isLogin ? 'Welcome back' : 'Create your account'}
             </h1>
-            <p className="text-sm text-slate-500">
-              {isLogin ? 'Sign in to your dashboard to manage your links.' : 'Start optimizing your links in seconds.'}
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              {isLogin ? 'Sign in to your workspace to manage your short links.' : 'Start optimizing your short links and tracking clicks.'}
             </p>
           </div>
 
@@ -73,7 +73,7 @@ export default function Auth() {
               type="button"
               onClick={handleGoogleAuth}
               disabled={isGoogleLoading}
-              className="w-full py-2.5 px-4 bg-white border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-all flex items-center justify-center gap-3 shadow-sm disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full min-h-[44px] px-4 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-3 card-shadow disabled:cursor-not-allowed disabled:opacity-70 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -86,74 +86,78 @@ export default function Auth() {
           </div>
 
           {errorMessage && (
-            <p className="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 dark:bg-red-950/40 px-4 py-3 text-sm text-red-700 dark:text-red-400 font-medium">
               {errorMessage}
-            </p>
+            </div>
           )}
 
           <div className="relative flex items-center py-3 mb-4">
-            <div className="flex-grow border-t border-slate-200"></div>
+            <div className="flex-grow border-t border-slate-200 dark:border-slate-800" />
             <span className="flex-shrink-0 mx-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Or email</span>
-            <div className="flex-grow border-t border-slate-200"></div>
+            <div className="flex-grow border-t border-slate-200 dark:border-slate-800" />
           </div>
 
           {/* Email Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Full Name</label>
-                <input 
-                  type="text" 
+              <div className="space-y-1.5">
+                <label htmlFor="auth-name" className="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">Full Name</label>
+                <input
+                  id="auth-name"
+                  type="text"
                   required
-                  placeholder="Your name" 
-                  className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all placeholder:text-slate-400"
+                  placeholder="Your name"
+                  className="w-full min-h-[44px] px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-600 transition-all placeholder:text-slate-400"
                 />
               </div>
             )}
-            
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Email Address</label>
+
+            <div className="space-y-1.5">
+              <label htmlFor="auth-email" className="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                <input 
-                  type="email" 
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                <input
+                  id="auth-email"
+                  type="email"
                   required
-                  placeholder="name@company.com" 
-                  className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all placeholder:text-slate-400"
+                  placeholder="name@company.com"
+                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-600 transition-all placeholder:text-slate-400"
                 />
               </div>
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Password</label>
-                {isLogin && <a href="#" className="text-xs font-semibold text-blue-600 hover:underline">Forgot password?</a>}
+                <label htmlFor="auth-password" className="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">Password</label>
+                {isLogin && <a href="#" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">Forgot password?</a>}
               </div>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                <input 
-                  type="password" 
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                <input
+                  id="auth-password"
+                  type="password"
                   required
-                  placeholder="••••••••" 
-                  className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all placeholder:text-slate-400"
+                  placeholder="••••••••"
+                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-600 transition-all placeholder:text-slate-400"
                 />
               </div>
             </div>
 
-            <button 
+            <button
               type="submit"
-              className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium rounded-lg shadow-sm transition-all flex items-center justify-center space-x-2 mt-2 text-sm"
+              className="w-full min-h-[44px] px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 active:scale-[0.98] text-white font-semibold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
             >
               <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
               <ArrowRight size={16} />
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-6">
+          <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}
-            <button 
+            <button
+              type="button"
               onClick={() => setIsLogin(!isLogin)}
-              className="ml-2 font-semibold text-blue-600 hover:underline"
+              className="ml-2 font-semibold text-blue-600 dark:text-blue-400 hover:underline"
             >
               {isLogin ? 'Sign Up' : 'Sign In'}
             </button>
@@ -161,7 +165,7 @@ export default function Auth() {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="mt-4 w-full rounded-lg border border-slate-200 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+            className="mt-4 w-full min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-800 py-2.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             Back to Home
           </button>
@@ -169,9 +173,9 @@ export default function Auth() {
       </div>
 
       {/* Right Side: Gradient Graphic */}
-      <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-[#3525cd] to-[#712ae2] relative overflow-hidden items-center justify-center p-12">
+      <div className="hidden lg:flex w-1/2 gradient-brand relative overflow-hidden items-center justify-center p-12">
         <div className="relative z-10 max-w-lg text-white space-y-8">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl shadow-xl">
+          <div className="glass-panel p-8 rounded-2xl shadow-2xl">
             <div className="flex gap-1 mb-4 text-amber-300">
               {[1, 2, 3, 4, 5].map((star) => (
                 <svg key={star} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -179,8 +183,8 @@ export default function Auth() {
                 </svg>
               ))}
             </div>
-            <p className="text-lg font-medium leading-relaxed mb-6">
-              "Mini Links has completely transformed how we track our marketing campaigns. The scannability and fast redirects are outstanding."
+            <p className="font-display text-lg font-medium leading-relaxed mb-6">
+              "Mini Links has completely transformed how we track our marketing campaigns. The scannability, fast redirects, and QR codes are outstanding."
             </p>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-base">

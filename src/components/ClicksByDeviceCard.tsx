@@ -14,8 +14,8 @@ export default function ClicksByDeviceCard({ data }: ClicksByDeviceCardProps) {
   const primaryDevice = data.reduce((current, item) => (item.value > current.value ? item : current), data[0]);
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
-      <h2 className="text-base font-semibold text-slate-900 mb-4">Clicks by Device</h2>
+    <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 card-shadow flex flex-col">
+      <h3 className="font-display text-base font-bold text-slate-900 dark:text-slate-100 mb-4">Clicks by Device</h3>
       <div className="flex-1 flex flex-col items-center justify-center relative">
         <div className="h-40 w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -29,8 +29,8 @@ export default function ClicksByDeviceCard({ data }: ClicksByDeviceCardProps) {
           </ResponsiveContainer>
         </div>
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-2xl font-bold text-slate-900">{primaryDevice.value}%</span>
-          <span className="text-[10px] text-slate-500 uppercase font-semibold">{primaryDevice.name}</span>
+          <span className="font-display text-2xl font-extrabold text-slate-900 dark:text-slate-100">{primaryDevice.value}%</span>
+          <span className="text-[10px] text-slate-500 uppercase font-semibold tracking-wider">{primaryDevice.name}</span>
         </div>
       </div>
       <div className="mt-4 grid gap-2" style={{ gridTemplateColumns: `repeat(${data.length}, minmax(0, 1fr))` }}>
@@ -40,12 +40,10 @@ export default function ClicksByDeviceCard({ data }: ClicksByDeviceCardProps) {
               <span className="h-2 w-2 rounded-full" style={{ backgroundColor: device.color }} />
               {device.name}
             </div>
-            <div className="text-sm font-bold text-slate-900">{device.value}%</div>
+            <div className="font-display text-sm font-bold text-slate-900 dark:text-slate-100">{device.value}%</div>
           </div>
         ))}
       </div>
     </div>
   );
 }
-
-

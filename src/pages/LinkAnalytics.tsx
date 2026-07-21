@@ -26,11 +26,14 @@ export default function LinkAnalytics() {
 
   if (!link) {
     return (
-      <div className="p-6 lg:p-10 max-w-4xl mx-auto">
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center shadow-sm">
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Link Not Found</h2>
-          <p className="text-slate-500 mb-6">This link may have been deleted or moved.</p>
-          <Link to="/links" className="px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium shadow-sm">
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 text-center card-shadow space-y-4">
+          <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-slate-100">Link Not Found</h2>
+          <p className="text-slate-500 dark:text-slate-400">This short link may have been deleted or moved.</p>
+          <Link
+            to="/links"
+            className="inline-flex min-h-[44px] px-5 py-2.5 bg-blue-600 text-white font-semibold text-sm rounded-xl shadow-md hover:bg-blue-700 transition-colors items-center justify-center"
+          >
             Back to Links
           </Link>
         </div>
@@ -39,9 +42,9 @@ export default function LinkAnalytics() {
   }
 
   const deviceData = [
-    { name: 'Mobile', value: 64, color: '#4f46e5' },
+    { name: 'Mobile', value: 64, color: '#004bca' },
     { name: 'Desktop', value: 28, color: '#712ae2' },
-    { name: 'Tablet', value: 8, color: '#059669' },
+    { name: 'Tablet', value: 8, color: '#007f57' },
   ];
   const browserData = [
     { name: 'Chrome', value: 64, count: '15,571' },
@@ -83,47 +86,67 @@ export default function LinkAnalytics() {
   };
 
   return (
-    <div className="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
-      {/* Overview Card */}
-      <section className="bg-white rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-sm border border-slate-200">
+    <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+      {/* Overview Hero Card */}
+      <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 card-shadow border border-slate-200 dark:border-slate-800">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-bold font-mono text-blue-600 tracking-tight">{link.shortUrl}</h2>
-            <button type="button" onClick={handleCopy} className="text-slate-400 hover:text-blue-600 transition-colors" title="Copy URL">
+            <h1 className="font-display text-2xl md:text-3xl font-extrabold font-mono text-blue-600 dark:text-blue-400 tracking-tight">
+              {link.shortUrl}
+            </h1>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="p-2 text-slate-400 hover:text-blue-600 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="Copy URL"
+            >
               <Copy size={18} />
             </button>
           </div>
-          <div className="flex items-center gap-2 text-slate-500 text-sm">
-            <LinkIcon size={14} />
-            <span className="truncate max-w-[200px] md:max-w-md">{link.originalUrl}</span>
+          <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-sm">
+            <LinkIcon size={14} className="shrink-0" />
+            <span className="truncate max-w-[200px] md:max-w-md font-mono">{link.originalUrl}</span>
           </div>
-          <div className="flex flex-wrap items-center gap-4 mt-2 text-xs font-semibold text-slate-600">
-            <span className="flex items-center gap-1">
+          <div className="flex flex-wrap items-center gap-4 mt-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
+            <span className="flex items-center gap-1.5">
               <Calendar size={14} />
               Created {new Date(link.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
             </span>
-            <span className="flex items-center gap-1 text-indigo-600 font-bold">
+            <span className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-bold font-display">
               <MousePointerClick size={14} />
               {link.clicks.toLocaleString('en-US')} Total Clicks
             </span>
           </div>
         </div>
+
         <div className="flex items-center gap-3">
-          <button type="button" onClick={() => navigate('/links/new')} className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-lg transition-all flex items-center gap-2">
-            <Edit2 size={14} /> Edit Link
+          <button
+            type="button"
+            onClick={() => navigate('/links/new')}
+            className="min-h-[44px] px-4 py-2.5 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-sm rounded-xl transition-colors flex items-center justify-center gap-2"
+          >
+            <Edit2 size={16} /> Edit Link
           </button>
-          <button type="button" onClick={handleDelete} className="px-4 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-medium rounded-lg transition-all flex items-center gap-2">
-            <Trash2 size={14} /> Delete
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="min-h-[44px] px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm"
+          >
+            <Trash2 size={16} /> Delete
           </button>
         </div>
       </section>
 
-      {/* Activity Chart */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 space-y-6 shadow-sm border border-slate-200">
+      {/* Activity Chart Card */}
+      <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 md:p-8 space-y-6 card-shadow border border-slate-200 dark:border-slate-800">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h3 className="text-lg font-bold text-slate-900 tracking-tight">Click Activity Over Time</h3>
-          <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
-            <button className="px-3 py-1 text-xs font-semibold bg-white text-blue-600 rounded-md shadow-sm">30D</button>
+          <h2 className="font-display text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            Click Activity Over Time
+          </h2>
+          <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
+            <button className="px-3 py-1.5 text-xs font-bold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm">
+              30D
+            </button>
           </div>
         </div>
         <div className="h-72 w-full">
@@ -131,13 +154,13 @@ export default function LinkAnalytics() {
             <AreaChart data={trendData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorClicksDetail" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#712ae2" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#004bca" stopOpacity={0.35} />
+                  <stop offset="95%" stopColor="#0061ff" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} dy={10} />
-              <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }} itemStyle={{ color: '#4f46e5', fontWeight: 'bold' }} />
-              <Area type="monotone" dataKey="clicks" stroke="#4f46e5" strokeWidth={3} fillOpacity={1} fill="url(#colorClicksDetail)" />
+              <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fill: '#5a6072', fontSize: 12 }} dy={10} />
+              <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #c2c6d9', backgroundColor: '#ffffff' }} itemStyle={{ color: '#004bca', fontWeight: 'bold' }} />
+              <Area type="monotone" dataKey="clicks" stroke="#004bca" strokeWidth={3} fillOpacity={1} fill="url(#colorClicksDetail)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -146,22 +169,21 @@ export default function LinkAnalytics() {
       {/* Analytics Breakdown Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <ClicksByCountryCard data={countryData} />
-
         <ClicksByDeviceCard data={deviceData} />
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 card-shadow border border-slate-200 dark:border-slate-800 flex flex-col">
           <div className="flex justify-between items-center mb-6">
-            <h4 className="font-semibold text-base text-slate-900">Clicks by Browser</h4>
+            <h3 className="font-display font-bold text-base text-slate-900 dark:text-slate-100">Clicks by Browser</h3>
             <Monitor className="text-slate-400" size={18} />
           </div>
           <div className="space-y-5 flex-1 justify-center flex flex-col">
             {browserData.map((browser, index) => (
               <div key={browser.name} className="space-y-1.5">
-                <div className="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                <div className="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
                   <span>{browser.name}</span>
-                  <span className="font-bold text-slate-900">{browser.count} ({browser.value}%)</span>
+                  <span className="font-bold text-slate-900 dark:text-slate-100">{browser.count} ({browser.value}%)</span>
                 </div>
-                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div className="h-full bg-blue-600 rounded-full transition-all" style={{ width: `${browser.value}%`, opacity: 1 - (index * 0.2) }} />
                 </div>
               </div>
@@ -171,18 +193,18 @@ export default function LinkAnalytics() {
 
         <ClicksByOperatingSystemCard data={osData} />
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col lg:col-span-2">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 card-shadow border border-slate-200 dark:border-slate-800 flex flex-col lg:col-span-2">
           <div className="flex justify-between items-center mb-6">
-            <h4 className="font-semibold text-base text-slate-900">Activity by Hour</h4>
+            <h3 className="font-display font-bold text-base text-slate-900 dark:text-slate-100">Activity by Hour</h3>
             <Clock className="text-slate-400" size={18} />
           </div>
           <div className="h-48 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={timeData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10 }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10 }} />
-                <Tooltip cursor={{ fill: 'rgba(79, 70, 229, 0.05)' }} contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0' }} />
-                <Bar dataKey="clicks" fill="#4f46e5" radius={[4, 4, 0, 0]} />
+                <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fill: '#5a6072', fontSize: 10 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#5a6072', fontSize: 10 }} />
+                <Tooltip cursor={{ fill: 'rgba(0, 75, 202, 0.05)' }} contentStyle={{ borderRadius: '12px', border: '1px solid #c2c6d9' }} />
+                <Bar dataKey="clicks" fill="#004bca" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
