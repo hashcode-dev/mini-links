@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { isAuthenticated } from '../lib/auth';
+import { isAuthenticated, getAuthSession } from '../lib/auth';
 
 export type LinkStatus = 'Active' | 'Expired' | 'Private';
 
@@ -31,7 +31,7 @@ interface CreateLinkInput {
 interface LinksContextValue {
   links: ShortLink[];
   recentLinks: ShortLink[];
-  createLink: (input: CreateLinkInput) => ShortLink;
+  createLink: (input: CreateLinkInput) => Promise<ShortLink>;
   updateLink: (id: string, updates: Partial<ShortLink>) => void;
   deleteLink: (id: string) => void;
   getLinkById: (id: string) => ShortLink | undefined;
@@ -150,8 +150,16 @@ export function LinksProvider({ children }: { children: ReactNode }) {
 useEffect(() => {
   const fetchLinks = async () => {
     try {
-      const response = await fetch("http://localhost:8080/getAllShortUrls");
+        const session = getAuthSession();
 
+        if (!session) {
+          setLinks([]);
+          return;
+        }
+
+        const response = await fetch(
+          `http://localhost:8080/getAllShortUrls?userId=${encodeURIComponent(session.user.id)}`
+        );
       if (!response.ok) {
         throw new Error("Failed to fetch links");
       }
@@ -192,32 +200,72 @@ useEffect(() => {
     localStorage.setItem(RECENT_LINKS_STORAGE_KEY, JSON.stringify(limitedLinks));
   };
 
-  const createLink = (input: CreateLinkInput): ShortLink => {
-    const createdAt = new Date().toISOString();
-    const alias = sanitizeAlias(input.alias || '');
-    const shortCode = alias || `lnk-${Math.random().toString(36).slice(2, 8)}`;
-    const domain = input.domain.trim();
-    const newLink: ShortLink = {
-      id: crypto.randomUUID(),
-      shortCode,
-      domain,
-      shortUrl: `${domain}/${shortCode}`,
-      originalUrl: withUtmParams(input.originalUrl, input),
-      createdAt,
-      clicks: 0,
-      status: input.passwordProtected ? 'Private' : 'Active',
-      expiresAt: input.expiresAt || undefined,
-      passwordProtected: Boolean(input.passwordProtected),
-    };
+  const createLink = async (input: CreateLinkInput): Promise<ShortLink> => {
+   const session = getAuthSession();
 
-    if (isAuthenticated()) {
-      persist([newLink, ...links]);
-    } else {
-      persistRecent([newLink, ...recentLinks]);
-    }
-    return newLink;
-  };
+   if (!session) {
+     throw new Error('Please log in to create a short URL');
+   }
 
+   const response = await fetch(
+     `http://localhost:8080/shorten?userId=${encodeURIComponent(session.user.id)}`,
+     {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify({
+         originalUrl: withUtmParams(input.originalUrl, input),
+         alias: input.alias?.trim() || undefined,
+       }),
+     }
+   );
+
+   if (!response.ok) {
+     let errorMessage = 'Failed to create short URL';
+
+     try {
+       const errorData = await response.json();
+
+       if (errorData?.message) {
+         errorMessage = errorData.message;
+       }
+     } catch {
+       // Ignore JSON parsing errors
+     }
+
+     throw new Error(errorMessage);
+   }
+
+   const data = await response.json();
+
+   const shortCode = data.shortUrl;
+
+   if (!shortCode) {
+     throw new Error('Short URL was not returned by the API');
+   }
+
+   const newLink: ShortLink = {
+     id: crypto.randomUUID(),
+     shortCode,
+     domain: 'localhost:8080/r',
+     shortUrl: `localhost:8080/r/${shortCode}`,
+     originalUrl: data.originalUrl || input.originalUrl,
+     createdAt: data.createdAt || new Date().toISOString(),
+     clicks: data.clickCount || 0,
+     status: data.active ? 'Active' : 'Expired',
+     expiresAt: input.expiresAt || undefined,
+     passwordProtected: Boolean(input.passwordProtected),
+   };
+
+   if (isAuthenticated()) {
+     persist([newLink, ...links]);
+   } else {
+     persistRecent([newLink, ...recentLinks]);
+   }
+
+   return newLink;
+ };
   const updateLink = (id: string, updates: Partial<ShortLink>) => {
     persist(links.map((link) => (link.id === id ? { ...link, ...updates } : link)));
   };
