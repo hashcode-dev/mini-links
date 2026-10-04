@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { isAuthenticated, setAuthSession } from '../lib/auth';
 import { signInWithGoogle } from '../lib/googleAuth';

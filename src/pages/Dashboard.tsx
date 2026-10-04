@@ -4,7 +4,6 @@ import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useLinks } from '../context/LinksContext';
 import ClicksByDeviceCard from '../components/ClicksByDeviceCard';
 import ClicksByCountryCard from '../components/ClicksByCountryCard';
-import ResultBox from '../components/ResultBox';
 
 const trendData = [
   { date: 'Nov 1', clicks: 1200 }, { date: 'Nov 7', clicks: 2100 },

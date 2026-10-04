@@ -4,6 +4,7 @@ import { Link as LinkIcon, Zap, QrCode, Copy, Check, Download, X, BarChart3 } fr
 import { QRCodeSVG } from 'qrcode.react';
 import { useLinks } from '../context/LinksContext';
 import { isAuthenticated } from '../lib/auth';
+import { normalizeUrl } from '../lib/url';
 import ResultBox from '../components/ResultBox';
 
 export default function Home() {
@@ -19,8 +20,9 @@ export default function Home() {
   const [qrAlias, setQrAlias] = useState('');
   const [qrDomain] = useState('minilinks.com');
   const [qrShortUrl, setQrShortUrl] = useState('');
-  const [copiedQrUrl, setCopiedQrUrl] = useState(false);
   const [showQrModal, setShowQrModal] = useState(false);
+  const [shortenError, setShortenError] = useState<string | null>(null);
+  const [qrError, setQrError] = useState<string | null>(null);
   const [failedFaviconIds, setFailedFaviconIds] = useState<Record<string, boolean>>({});
   const qrTabSvgRef = useRef<SVGSVGElement | null>(null);
   const qrModalSvgRef = useRef<SVGSVGElement | null>(null);
@@ -31,17 +33,6 @@ export default function Home() {
     .slice()
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 10);
-
-  const normalizeUrl = (rawUrl: string): string => {
-    const trimmed = rawUrl.trim();
-    if (!trimmed) {
-      throw new Error('URL is required.');
-    }
-
-    const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
-    new URL(candidate);
-    return candidate;
-  };
 
   const getFaviconUrl = (url: string): string | null => {
     try {
@@ -54,6 +45,7 @@ export default function Home() {
 
   const handleShorten = (e: React.FormEvent) => {
     e.preventDefault();
+    setShortenError(null);
     setIsShortening(true);
     setTimeout(() => {
       try {
@@ -64,6 +56,8 @@ export default function Home() {
           domain,
         });
         setShortenedUrl(link.shortUrl);
+      } catch (err) {
+        setShortenError(err instanceof Error ? err.message : 'Something went wrong.');
       } finally {
         setIsShortening(false);
       }
@@ -117,6 +111,7 @@ export default function Home() {
 
   const handleGenerateQr = (e: React.FormEvent) => {
     e.preventDefault();
+    setQrError(null);
     setIsQrCreating(true);
     setTimeout(() => {
       try {
@@ -127,6 +122,8 @@ export default function Home() {
           domain: qrDomain,
         });
         setQrShortUrl(link.shortUrl);
+      } catch (err) {
+        setQrError(err instanceof Error ? err.message : 'Something went wrong.');
       } finally {
         setIsQrCreating(false);
       }
@@ -388,6 +385,12 @@ export default function Home() {
                         </div>
                       </div>
 
+                      {shortenError && (
+                        <p role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                          {shortenError}
+                        </p>
+                      )}
+
                       <button
                         type="submit"
                         disabled={isShortening}
@@ -470,6 +473,12 @@ export default function Home() {
                           />
                         </div>
                       </div>
+
+                      {qrError && (
+                        <p role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                          {qrError}
+                        </p>
+                      )}
 
                       <button
                         type="submit"

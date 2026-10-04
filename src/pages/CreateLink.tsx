@@ -3,6 +3,7 @@ import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Link as LinkIcon } from 'lucide-react';
 import { useLinks } from '../context/LinksContext';
+import { isHttpUrl } from '../lib/url';
 
 export default function CreateLink() {
   const navigate = useNavigate();
@@ -22,27 +23,23 @@ export default function CreateLink() {
     e.preventDefault();
     setErrorMessage('');
 
-    try {
-      const parsed = new URL(originalUrl);
-      if (!parsed.protocol.startsWith('http')) {
-        throw new Error('Please enter a valid http/https URL.');
-      }
-
-      const created = createLink({
-        originalUrl,
-        alias,
-        domain,
-        expiresAt,
-        passwordProtected,
-        utmSource,
-        utmMedium,
-        utmCampaign,
-      });
-
-      navigate(`/links/${created.id}`);
-    } catch {
-      setErrorMessage('Please enter a valid destination URL.');
+    if (!isHttpUrl(originalUrl)) {
+      setErrorMessage('Please enter a valid http or https destination URL.');
+      return;
     }
+
+    const created = createLink({
+      originalUrl,
+      alias,
+      domain,
+      expiresAt,
+      passwordProtected,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+    });
+
+    navigate(`/links/${created.id}`);
   };
 
   return (

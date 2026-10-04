@@ -45,7 +45,7 @@ export default function Navbar({ isPublicPage }: NavbarProps) {
     },
     {
       title: 'QR Code Generator',
-      description: "Elevate your customer\'s experiences with dynamic, scannable codes",
+      description: 'Elevate your customer’s experiences with dynamic, scannable codes',
       icon: QrCode,
     },
     {

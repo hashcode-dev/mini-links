@@ -1,6 +1,8 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { isAuthenticated } from '../lib/auth';
+import { getAuthSession, subscribeAuth } from '../lib/auth';
+import { safeStorage } from '../lib/storage';
+import { withUtmParams } from '../lib/url';
 
 export type LinkStatus = 'Active' | 'Expired' | 'Private';
 
@@ -17,7 +19,7 @@ export interface ShortLink {
   passwordProtected: boolean;
 }
 
-interface CreateLinkInput {
+export interface CreateLinkInput {
   originalUrl: string;
   domain: string;
   alias?: string;
@@ -28,7 +30,7 @@ interface CreateLinkInput {
   utmCampaign?: string;
 }
 
-interface LinksContextValue {
+export interface LinksContextValue {
   links: ShortLink[];
   recentLinks: ShortLink[];
   createLink: (input: CreateLinkInput) => ShortLink;
@@ -37,8 +39,8 @@ interface LinksContextValue {
   getLinkById: (id: string) => ShortLink | undefined;
 }
 
-const LINKS_STORAGE_KEY = 'mini-links-records';
-const RECENT_LINKS_STORAGE_KEY = 'mini-links-recent-records';
+const LINKS_KEY_PREFIX = 'mini-links:v1';
+const ANON_SUBJECT = 'anon';
 const MAX_RECENT_LINKS = 10;
 
 const seedLinks: ShortLink[] = [
@@ -89,78 +91,99 @@ const seedLinks: ShortLink[] = [
   },
 ];
 
+function subjectFor(userId: string | null | undefined): string {
+  return userId ?? ANON_SUBJECT;
+}
+
+function currentSubject(): string {
+  return subjectFor(getAuthSession()?.user.id);
+}
+
+function storageKeyFor(subject: string): string {
+  return `${LINKS_KEY_PREFIX}:${subject}:records`;
+}
+
+function isValidLink(value: unknown): value is ShortLink {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  const link = value as Partial<ShortLink>;
+  return (
+    typeof link.id === 'string' &&
+    typeof link.shortCode === 'string' &&
+    typeof link.domain === 'string' &&
+    typeof link.shortUrl === 'string' &&
+    typeof link.originalUrl === 'string' &&
+    typeof link.createdAt === 'string' &&
+    typeof link.clicks === 'number' &&
+    typeof link.passwordProtected === 'boolean'
+  );
+}
+
+function trimForSubject(subject: string, list: ShortLink[]): ShortLink[] {
+  return subject === ANON_SUBJECT ? list.slice(0, MAX_RECENT_LINKS) : list;
+}
+
+function loadLinks(subject: string): ShortLink[] {
+  const raw = safeStorage.get(storageKeyFor(subject));
+  const fallback = subject === ANON_SUBJECT ? [] : seedLinks;
+  if (raw === null) {
+    return fallback;
+  }
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      return fallback;
+    }
+    return trimForSubject(subject, parsed.filter(isValidLink));
+  } catch {
+    return fallback;
+  }
+}
+
+function saveLinks(subject: string, list: ShortLink[]): void {
+  safeStorage.set(storageKeyFor(subject), JSON.stringify(list));
+}
+
 function sanitizeAlias(alias: string): string {
-  return alias.toLowerCase().trim().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+  return alias
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
 }
 
-function withUtmParams(url: string, input: CreateLinkInput): string {
-  const parsed = new URL(url);
-  if (input.utmSource) {
-    parsed.searchParams.set('utm_source', input.utmSource);
-  }
-  if (input.utmMedium) {
-    parsed.searchParams.set('utm_medium', input.utmMedium);
-  }
-  if (input.utmCampaign) {
-    parsed.searchParams.set('utm_campaign', input.utmCampaign);
-  }
-  return parsed.toString();
-}
-
-function loadInitialLinks(): ShortLink[] {
-  const stored = localStorage.getItem(LINKS_STORAGE_KEY);
-  if (!stored) {
-    return seedLinks;
-  }
-
-  try {
-    const parsed = JSON.parse(stored) as ShortLink[];
-    if (!Array.isArray(parsed)) {
-      return seedLinks;
-    }
-    return parsed;
-  } catch {
-    return seedLinks;
-  }
-}
-
-function loadRecentLinks(): ShortLink[] {
-  const stored = localStorage.getItem(RECENT_LINKS_STORAGE_KEY);
-  if (!stored) {
-    return [];
-  }
-
-  try {
-    const parsed = JSON.parse(stored) as ShortLink[];
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-    return parsed.slice(0, MAX_RECENT_LINKS);
-  } catch {
-    return [];
-  }
-}
-
-const LinksContext = createContext<LinksContextValue | undefined>(undefined);
+export const LinksContext = createContext<LinksContextValue | undefined>(undefined);
 
 export function LinksProvider({ children }: { children: ReactNode }) {
-  const [links, setLinks] = useState<ShortLink[]>(() => loadInitialLinks());
-  const [recentLinks, setRecentLinks] = useState<ShortLink[]>(() => loadRecentLinks());
+  const [subject, setSubject] = useState<string>(() => currentSubject());
+  const [links, setLinks] = useState<ShortLink[]>(() => loadLinks(subject));
 
-  const persist = (nextLinks: ShortLink[]) => {
-    setLinks(nextLinks);
-    localStorage.setItem(LINKS_STORAGE_KEY, JSON.stringify(nextLinks));
-  };
+  const subjectRef = useRef(subject);
+  useEffect(() => {
+    subjectRef.current = subject;
+  }, [subject]);
 
-  const persistRecent = (nextLinks: ShortLink[]) => {
-    const limitedLinks = nextLinks.slice(0, MAX_RECENT_LINKS);
-    setRecentLinks(limitedLinks);
-    localStorage.setItem(RECENT_LINKS_STORAGE_KEY, JSON.stringify(limitedLinks));
-  };
+  const linksRef = useRef(links);
+  useEffect(() => {
+    linksRef.current = links;
+  }, [links]);
 
-  const createLink = (input: CreateLinkInput): ShortLink => {
-    const createdAt = new Date().toISOString();
-    const alias = sanitizeAlias(input.alias || '');
+  useEffect(() => {
+    return subscribeAuth((session) => {
+      const nextSubject = subjectFor(session?.user.id);
+      setSubject(nextSubject);
+      setLinks(loadLinks(nextSubject));
+    });
+  }, []);
+
+  useEffect(() => {
+    saveLinks(subject, links);
+  }, [subject, links]);
+
+  const createLink = useCallback((input: CreateLinkInput): ShortLink => {
+    const alias = sanitizeAlias(input.alias ?? '');
     const shortCode = alias || `lnk-${Math.random().toString(36).slice(2, 8)}`;
     const domain = input.domain.trim();
     const newLink: ShortLink = {
@@ -168,31 +191,39 @@ export function LinksProvider({ children }: { children: ReactNode }) {
       shortCode,
       domain,
       shortUrl: `${domain}/${shortCode}`,
-      originalUrl: withUtmParams(input.originalUrl, input),
-      createdAt,
+      originalUrl: withUtmParams(input.originalUrl, {
+        source: input.utmSource,
+        medium: input.utmMedium,
+        campaign: input.utmCampaign,
+      }),
+      createdAt: new Date().toISOString(),
       clicks: 0,
       status: input.passwordProtected ? 'Private' : 'Active',
       expiresAt: input.expiresAt || undefined,
       passwordProtected: Boolean(input.passwordProtected),
     };
 
-    if (isAuthenticated()) {
-      persist([newLink, ...links]);
-    } else {
-      persistRecent([newLink, ...recentLinks]);
-    }
+    setLinks((prev) => trimForSubject(subjectRef.current, [newLink, ...prev]));
     return newLink;
-  };
+  }, []);
 
-  const updateLink = (id: string, updates: Partial<ShortLink>) => {
-    persist(links.map((link) => (link.id === id ? { ...link, ...updates } : link)));
-  };
+  const updateLink = useCallback((id: string, updates: Partial<ShortLink>) => {
+    setLinks((prev) => prev.map((link) => (link.id === id ? { ...link, ...updates } : link)));
+  }, []);
 
-  const deleteLink = (id: string) => {
-    persist(links.filter((link) => link.id !== id));
-  };
+  const deleteLink = useCallback((id: string) => {
+    setLinks((prev) => prev.filter((link) => link.id !== id));
+  }, []);
 
-  const getLinkById = (id: string) => links.find((link) => link.id === id);
+  const getLinkById = useCallback((id: string) => {
+    return linksRef.current.find((link) => link.id === id);
+  }, []);
+
+  const recentLinks = useMemo(() => {
+    return [...links]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, MAX_RECENT_LINKS);
+  }, [links]);
 
   const value = useMemo<LinksContextValue>(
     () => ({
@@ -203,13 +234,13 @@ export function LinksProvider({ children }: { children: ReactNode }) {
       deleteLink,
       getLinkById,
     }),
-    [links, recentLinks],
+    [links, recentLinks, createLink, updateLink, deleteLink, getLinkById],
   );
 
   return <LinksContext.Provider value={value}>{children}</LinksContext.Provider>;
 }
 
-export function useLinks() {
+export function useLinks(): LinksContextValue {
   const context = useContext(LinksContext);
   if (!context) {
     throw new Error('useLinks must be used inside LinksProvider');

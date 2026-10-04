@@ -72,10 +72,14 @@ async function fetchGoogleUserInfo(accessToken: string): Promise<GoogleUserInfo>
 
 export async function signInWithGoogle(mode: 'login' | 'signup' = 'login'): Promise<AuthSession> {
   await loadGoogleSdk();
+  const oauth2 = window.google?.accounts?.oauth2;
+  if (!oauth2) {
+    throw new Error('Google Identity Services SDK is not available.');
+  }
   const clientId = getGoogleClientId();
 
-  const tokenResponse = await new Promise<GoogleTokenResponse>((resolve, reject) => {
-    const tokenClient = window.google.accounts.oauth2.initTokenClient({
+  const accessToken = await new Promise<string>((resolve, reject) => {
+    const tokenClient = oauth2.initTokenClient({
       client_id: clientId,
       scope: 'openid email profile',
       callback: (response: GoogleTokenResponse) => {
@@ -83,7 +87,7 @@ export async function signInWithGoogle(mode: 'login' | 'signup' = 'login'): Prom
           reject(new Error(response.error_description || response.error || 'Google sign-in failed.'));
           return;
         }
-        resolve(response);
+        resolve(response.access_token);
       },
     });
 
@@ -92,10 +96,10 @@ export async function signInWithGoogle(mode: 'login' | 'signup' = 'login'): Prom
     });
   });
 
-  const userInfo = await fetchGoogleUserInfo(tokenResponse.access_token);
+  const userInfo = await fetchGoogleUserInfo(accessToken);
   const session: AuthSession = {
     provider: 'google',
-    accessToken: tokenResponse.access_token,
+    accessToken,
     user: {
       id: userInfo.sub,
       email: userInfo.email,
