@@ -5,6 +5,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useLinks } from '../context/LinksContext';
 import { isAuthenticated } from '../lib/auth';
 import { normalizeUrl } from '../lib/url';
+import { shortenUrl, type ShortenResult } from '../lib/shortenApi';
 import ResultBox from '../components/ResultBox';
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
   const [isShortening, setIsShortening] = useState(false);
   const [isQrCreating, setIsQrCreating] = useState(false);
   const [shortenedUrl, setShortenedUrl] = useState('');
+  const [shortenResult, setShortenResult] = useState<ShortenResult | null>(null);
   const [copied, setCopied] = useState(false);
   const [longUrl, setLongUrl] = useState('');
   const [alias, setAlias] = useState('');
@@ -43,39 +45,55 @@ export default function Home() {
     }
   };
 
-  const handleShorten = (e: React.FormEvent) => {
+  const getShortUrlHref = (url: string) => {
+    if (!url) return '';
+    return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+  };
+
+  const handleShorten = async (e: React.FormEvent) => {
     e.preventDefault();
     setShortenError(null);
     setIsShortening(true);
-    setTimeout(() => {
-      try {
-        const validUrl = normalizeUrl(longUrl);
-        const link = createLink({
-          originalUrl: validUrl,
-          alias,
-          domain,
-        });
-        setShortenedUrl(link.shortUrl);
-      } catch (err) {
-        setShortenError(err instanceof Error ? err.message : 'Something went wrong.');
-      } finally {
-        setIsShortening(false);
-      }
-    }, 400);
+
+    try {
+      const validUrl = normalizeUrl(longUrl);
+      const result = await shortenUrl({
+        originalUrl: validUrl,
+        alias: alias.trim() || undefined,
+      });
+
+      setShortenedUrl(result.fullShortUrl);
+      setShortenResult(result);
+
+      // Register link in local context for analytics and recent links list
+      createLink({
+        originalUrl: result.originalUrl,
+        alias: result.alias,
+        shortCode: result.shortCode,
+        shortUrl: result.fullShortUrl,
+        domain,
+      });
+    } catch (err) {
+      setShortenError(err instanceof Error ? err.message : 'Something went wrong while shortening URL.');
+    } finally {
+      setIsShortening(false);
+    }
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`https://${shortenedUrl}`);
+    const targetUrl = getShortUrlHref(shortenedUrl);
+    navigator.clipboard.writeText(targetUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleVisitShortUrl = () => {
-    window.open(`https://${shortenedUrl}`, '_blank', 'noopener,noreferrer');
+    const targetUrl = getShortUrlHref(shortenedUrl);
+    window.open(targetUrl, '_blank', 'noopener,noreferrer');
   };
 
   const handleShareShortUrl = async () => {
-    const shareUrl = `https://${shortenedUrl}`;
+    const shareUrl = getShortUrlHref(shortenedUrl);
     try {
       if (navigator.share) {
         await navigator.share({ url: shareUrl, title: 'Mini Link' });
@@ -229,6 +247,8 @@ export default function Home() {
               {/* Tab Selector */}
               <div className="flex border-b border-slate-200 bg-slate-50/50">
                 <button
+                  id="shorten-tab-btn"
+                  aria-label="Shorten Link Tab"
                   onClick={() => setActiveTab('shorten')}
                   className={`flex-1 py-3 px-4 text-sm font-semibold transition-all flex items-center justify-center space-x-2 ${
                     activeTab === 'shorten'
@@ -286,22 +306,60 @@ export default function Home() {
                       <div className="space-y-1">
                         <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Original Long URL</label>
                         <div className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg">
-                          <span className="text-slate-900 text-sm truncate block" title={longUrl}>{longUrl}</span>
+                          <span className="text-slate-900 text-sm truncate block" title={shortenResult?.originalUrl || longUrl}>
+                            {shortenResult?.originalUrl || longUrl}
+                          </span>
                         </div>
                       </div>
                       <div className="space-y-1">
-                        <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Shortened Link</label>
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Shortened Link</label>
+                          {shortenResult?.alias && (
+                            <span className="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                              Alias: {shortenResult.alias}
+                            </span>
+                          )}
+                        </div>
                         <div className="px-4 py-2.5 bg-blue-50/70 border border-blue-200 rounded-lg flex items-center justify-between gap-2">
-                          <span className="font-mono text-blue-600 font-bold text-sm truncate">{`https://${shortenedUrl}`}</span>
+                          <a
+                            href={getShortUrlHref(shortenedUrl)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-mono text-blue-600 hover:text-blue-700 font-bold text-sm truncate hover:underline"
+                          >
+                            {getShortUrlHref(shortenedUrl)}
+                          </a>
                           <button
                             type="button"
                             onClick={handleCopy}
-                            className="text-slate-500 hover:text-blue-600 transition-colors shrink-0"
+                            aria-label="Copy short URL"
+                            className="text-slate-500 hover:text-blue-600 transition-colors shrink-0 p-1"
                           >
                             {copied ? <Check size={18} className="text-emerald-600" /> : <Copy size={18} />}
                           </button>
                         </div>
                       </div>
+
+                      {shortenResult && (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-slate-600 bg-slate-50/80 p-3 rounded-lg border border-slate-200/80">
+                          <div>
+                            <span className="text-slate-400 block text-[10px] uppercase font-semibold">Status</span>
+                            <span className="inline-flex items-center gap-1 text-emerald-600 font-semibold">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                              Active
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400 block text-[10px] uppercase font-semibold">Short Code</span>
+                            <span className="font-mono font-medium text-slate-800">{shortenResult.shortCode}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400 block text-[10px] uppercase font-semibold">Created</span>
+                            <span className="font-medium text-slate-800">Just now</span>
+                          </div>
+                        </div>
+                      )}
+
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2">
                         <button type="button" onClick={handleVisitShortUrl} className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-lg transition-all">
                           Visit
@@ -313,7 +371,7 @@ export default function Home() {
                           {showQrModal && (
                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-50 w-[280px] bg-white rounded-xl shadow-xl border border-slate-200 p-4 animate-in fade-in duration-200">
                               <div className="flex gap-3 items-center mb-3">
-                                <QRCodeSVG ref={qrModalSvgRef} value={`https://${shortenedUrl}`} size={80} level="M" />
+                                <QRCodeSVG ref={qrModalSvgRef} value={getShortUrlHref(shortenedUrl)} size={80} level="M" />
                                 <div className="space-y-1">
                                   <h4 className="text-xs font-bold text-slate-900">QR Code Ready</h4>
                                   <button
@@ -343,7 +401,7 @@ export default function Home() {
                         </button>
                       </div>
                       <button
-                        onClick={() => { setShortenedUrl(''); setShowQrModal(false); }}
+                        onClick={() => { setShortenedUrl(''); setShortenResult(null); setShowQrModal(false); }}
                         className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-sm font-medium transition-all mt-2"
                       >
                         Shorten Another URL
@@ -392,12 +450,17 @@ export default function Home() {
                       )}
 
                       <button
+                        id="shorten-submit-btn"
+                        data-testid="shorten-submit-btn"
                         type="submit"
                         disabled={isShortening}
-                        className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium rounded-lg shadow-sm transition-all flex items-center justify-center space-x-2"
+                        className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-400 text-white font-medium rounded-lg shadow-sm transition-all flex items-center justify-center space-x-2"
                       >
                         {isShortening ? (
-                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          <>
+                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>Shortening...</span>
+                          </>
                         ) : (
                           <span>Shorten Link</span>
                         )}

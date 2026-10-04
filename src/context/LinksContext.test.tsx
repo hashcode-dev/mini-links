@@ -177,6 +177,21 @@ describe('LinksProvider', () => {
     expect(result.current.links).toEqual([]);
   });
 
+  it('accepts explicit shortCode and shortUrl when provided from external API', () => {
+    const { result } = renderHook(() => useLinks(), { wrapper });
+    act(() => {
+      result.current.createLink({
+        originalUrl: 'https://facebook.com',
+        shortCode: 'customApiCode',
+        shortUrl: 'https://shorten-url-67086831017.asia-south1.run.app/r/customApiCode',
+      });
+    });
+    expect(result.current.links[0].shortCode).toBe('customApiCode');
+    expect(result.current.links[0].shortUrl).toBe(
+      'https://shorten-url-67086831017.asia-south1.run.app/r/customApiCode',
+    );
+  });
+
   it('returns undefined from getLinkById for unknown ids', () => {
     const { result } = renderHook(() => useLinks(), { wrapper });
     expect(result.current.getLinkById('does-not-exist')).toBeUndefined();

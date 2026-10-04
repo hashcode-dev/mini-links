@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Calendar, Link as LinkIcon } from 'lucide-react';
 import { useLinks } from '../context/LinksContext';
 import { isHttpUrl } from '../lib/url';
+import { shortenUrl } from '../lib/shortenApi';
 
 export default function CreateLink() {
   const navigate = useNavigate();
@@ -18,8 +19,9 @@ export default function CreateLink() {
   const [utmMedium, setUtmMedium] = useState('');
   const [utmCampaign, setUtmCampaign] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
 
@@ -28,18 +30,34 @@ export default function CreateLink() {
       return;
     }
 
-    const created = createLink({
-      originalUrl,
-      alias,
-      domain,
-      expiresAt,
-      passwordProtected,
-      utmSource,
-      utmMedium,
-      utmCampaign,
-    });
+    setIsSubmitting(true);
+    try {
+      const result = await shortenUrl({
+        originalUrl,
+        alias: alias.trim() || undefined,
+      });
 
-    navigate(`/links/${created.id}`);
+      const created = createLink({
+        originalUrl: result.originalUrl,
+        alias: result.alias,
+        shortCode: result.shortCode,
+        shortUrl: result.fullShortUrl,
+        domain,
+        expiresAt,
+        passwordProtected,
+        utmSource,
+        utmMedium,
+        utmCampaign,
+      });
+
+      navigate(`/links/${created.id}`);
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : 'Failed to create short link.',
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -141,10 +159,25 @@ export default function CreateLink() {
         )}
 
         <footer className="flex flex-col sm:flex-row items-center gap-4 pt-2">
-          <button type="submit" className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium rounded-lg shadow-sm transition-all">
-            Shorten Link
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-400 text-white font-medium rounded-lg shadow-sm transition-all flex items-center justify-center gap-2"
+          >
+            {isSubmitting ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>Creating...</span>
+              </>
+            ) : (
+              <span>Shorten Link</span>
+            )}
           </button>
-          <button type="button" onClick={() => navigate('/links')} className="w-full sm:w-auto px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-medium rounded-lg transition-all text-sm">
+          <button
+            type="button"
+            onClick={() => navigate('/links')}
+            className="w-full sm:w-auto px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-medium rounded-lg transition-all text-sm"
+          >
             Cancel
           </button>
         </footer>

@@ -21,8 +21,10 @@ export interface ShortLink {
 
 export interface CreateLinkInput {
   originalUrl: string;
-  domain: string;
+  domain?: string;
   alias?: string;
+  shortCode?: string;
+  shortUrl?: string;
   expiresAt?: string;
   passwordProtected?: boolean;
   utmSource?: string;
@@ -183,14 +185,15 @@ export function LinksProvider({ children }: { children: ReactNode }) {
   }, [subject, links]);
 
   const createLink = useCallback((input: CreateLinkInput): ShortLink => {
-    const alias = sanitizeAlias(input.alias ?? '');
+    const alias = input.shortCode ? input.shortCode.trim() : sanitizeAlias(input.alias ?? '');
     const shortCode = alias || `lnk-${Math.random().toString(36).slice(2, 8)}`;
-    const domain = input.domain.trim();
+    const domain = (input.domain ?? 'minilinks.com').trim();
+    const shortUrl = input.shortUrl || `${domain}/${shortCode}`;
     const newLink: ShortLink = {
       id: crypto.randomUUID(),
       shortCode,
       domain,
-      shortUrl: `${domain}/${shortCode}`,
+      shortUrl,
       originalUrl: withUtmParams(input.originalUrl, {
         source: input.utmSource,
         medium: input.utmMedium,
