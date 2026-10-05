@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Link as LinkIcon, MousePointerClick, BarChart2, Activity, TrendingUp, TrendingDown, Download, ExternalLink } from 'lucide-react';
-import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useLinks } from '../context/LinksContext';
 import ClicksByDeviceCard from '../components/ClicksByDeviceCard';
 import ClicksByCountryCard from '../components/ClicksByCountryCard';
@@ -68,10 +68,16 @@ export default function Dashboard() {
                 <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-blue-600">
                   <Icon size={20} />
                 </div>
-                <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${stat.isPositive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
-                  {stat.isPositive ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
-                  {stat.change}
-                </div>
+                {totalLinks > 0 ? (
+                  <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${stat.isPositive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
+                    {stat.isPositive ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
+                    {stat.change}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 text-slate-400 border border-slate-200">
+                    —
+                  </div>
+                )}
               </div>
               <p className="text-xs text-slate-500 font-medium">{stat.title}</p>
               <div className={`text-2xl font-bold mt-1 ${stat.color}`}>
@@ -101,7 +107,7 @@ export default function Dashboard() {
         
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={trendData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+            <AreaChart data={trendData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorClicks" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.3}/>
@@ -109,6 +115,7 @@ export default function Dashboard() {
                 </linearGradient>
               </defs>
               <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} dy={10} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11 }} width={40} />
               <Tooltip
                 contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
                 itemStyle={{ color: '#4f46e5', fontWeight: 'bold' }}

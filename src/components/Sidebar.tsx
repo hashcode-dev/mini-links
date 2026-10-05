@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Link as LinkIcon, QrCode, BarChart3, Settings, HelpCircle, LogOut, Plus } from 'lucide-react';
+import { LayoutDashboard, Link as LinkIcon, QrCode, BarChart3, HelpCircle, LogOut, Plus } from 'lucide-react';
 import clsx from 'clsx';
 import { clearAuthSession } from '../lib/auth';
 
@@ -16,8 +16,7 @@ export default function Sidebar() {
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Links', path: '/links', icon: LinkIcon },
     { name: 'QR Codes', path: '/qr', icon: QrCode },
-    { name: 'Analytics', path: '/links/1', icon: BarChart3 }, // Example link for analytics
-    { name: 'Settings', path: '/settings', icon: Settings },
+    { name: 'Analytics', path: '/dashboard', icon: BarChart3 },
   ];
 
   return (
@@ -60,10 +59,13 @@ export default function Sidebar() {
           <span>Create Link</span>
         </Link>
         
-        <div className="px-3 py-2 text-slate-500 flex items-center gap-3 hover:bg-slate-100 hover:text-slate-700 rounded-lg cursor-pointer transition-all text-sm font-medium">
+        <Link
+          to="/contact"
+          className="w-full px-3 py-2 text-slate-500 flex items-center gap-3 hover:bg-slate-100 hover:text-slate-700 rounded-lg transition-all text-sm font-medium"
+        >
           <HelpCircle size={18} />
           <span>Support</span>
-        </div>
+        </Link>
         <button
           type="button"
           onClick={handleLogout}

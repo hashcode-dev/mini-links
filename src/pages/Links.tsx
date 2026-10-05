@@ -150,7 +150,7 @@ export default function Links() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <div className="flex justify-end gap-1.5 text-slate-400 group-hover:opacity-100 transition-opacity">
+                    <div className="flex justify-end gap-1.5 text-slate-400">
                       <button type="button" onClick={() => navigate(`/links/${link.id}`)} className="p-1.5 text-slate-400 hover:text-blue-600 rounded-lg hover:bg-slate-100 transition-colors" title="Edit">
                         <Edit2 size={16} />
                       </button>
@@ -183,9 +183,9 @@ export default function Links() {
             Showing <span className="font-bold text-slate-900">{filteredLinks.length}</span> of {links.length} links
           </p>
           <div className="flex items-center gap-2">
-            <button className="px-3 py-1 text-xs font-medium text-slate-500 disabled:opacity-50" disabled>Previous</button>
+            <button className="px-3 py-1.5 text-xs font-medium text-slate-500 border border-slate-200 rounded-lg bg-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors" disabled>Previous</button>
             <button className="w-7 h-7 flex items-center justify-center text-xs font-semibold bg-blue-600 text-white rounded-lg">1</button>
-            <button className="px-3 py-1 text-xs font-medium text-slate-500 disabled:opacity-50" disabled>Next</button>
+            <button className="px-3 py-1.5 text-xs font-medium text-slate-500 border border-slate-200 rounded-lg bg-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors" disabled>Next</button>
           </div>
         </div>
       </div>

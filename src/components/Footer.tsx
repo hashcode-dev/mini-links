@@ -29,21 +29,21 @@ export default function Footer() {
         {/* Column 2: Products */}
         <div>
           <h3 className="text-xs font-semibold text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
-            <Globe size={13} className="text-blue-500" /> Products
+            <Globe size={13} className="text-blue-400" /> Products
           </h3>
           <ul className="space-y-2 text-xs">
             <li>
-              <Link to="/pricing" className="text-slate-400 hover:text-white transition-colors">
+              <Link to="/pricing" className="text-slate-300 hover:text-white transition-colors">
                 Pricing Plans
               </Link>
             </li>
             <li>
-              <Link to="/#features" className="text-slate-400 hover:text-white transition-colors">
+              <Link to="/#features" className="text-slate-300 hover:text-white transition-colors">
                 Link Redirection
               </Link>
             </li>
             <li>
-              <Link to="/#features" className="text-slate-400 hover:text-white transition-colors">
+              <Link to="/#features" className="text-slate-300 hover:text-white transition-colors">
                 Dynamic QR Engine
               </Link>
             </li>
@@ -53,44 +53,43 @@ export default function Footer() {
         {/* Column 3: Company */}
         <div>
           <h3 className="text-xs font-semibold text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
-            <BookOpen size={13} className="text-blue-500" /> Company
+            <BookOpen size={13} className="text-blue-400" /> Company
           </h3>
           <ul className="space-y-2 text-xs">
             <li>
-              <Link to="/about" className="text-slate-400 hover:text-white transition-colors">
+              <Link to="/about" className="text-slate-300 hover:text-white transition-colors">
                 About Us
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="text-slate-400 hover:text-white transition-colors">
+              <Link to="/contact" className="text-slate-300 hover:text-white transition-colors">
                 Contact Support
               </Link>
             </li>
             <li>
-              <Link to="/sitemap" className="text-slate-400 hover:text-white transition-colors">
+              <Link to="/sitemap" className="text-slate-300 hover:text-white transition-colors">
                 Sitemap
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Column 4: Legal & Policy */}
         <div>
           <h3 className="text-xs font-semibold text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
-            <Shield size={13} className="text-blue-500" /> Legal & Terms
+            <Shield size={13} className="text-blue-400" /> Legal &amp; Terms
           </h3>
           <ul className="space-y-2 text-xs">
             <li>
-              <Link to="/privacy-policy" className="text-slate-400 hover:text-white transition-colors">
+              <Link to="/privacy-policy" className="text-slate-300 hover:text-white transition-colors">
                 Privacy Policy
               </Link>
             </li>
             <li>
-              <Link to="/terms-of-service" className="text-slate-400 hover:text-white transition-colors">
+              <Link to="/terms-of-service" className="text-slate-300 hover:text-white transition-colors">
                 Terms of Service
               </Link>
             </li>
-            <li className="pt-2 text-[10px] text-slate-500">
+            <li className="pt-2 text-[10px] text-slate-400">
               Personalized Ad Opt-Out available via Google Ad Settings.
             </li>
           </ul>
@@ -99,11 +98,11 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-700 flex flex-col sm:flex-row justify-between items-center gap-4">
         <p className="text-[11px] text-slate-400">
           &copy; {currentYear} Mini-Links. All rights reserved.
         </p>
-        <p className="text-[10px] text-slate-500 text-center sm:text-right">
+        <p className="text-[10px] text-slate-400 text-center sm:text-right">
           Disclaimer: Mini-Links has no affiliation with Google Inc. Google AdSense is a registered trademark of Google LLC.
         </p>
       </div>

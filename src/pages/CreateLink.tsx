@@ -20,6 +20,7 @@ export default function CreateLink() {
   const [utmCampaign, setUtmCampaign] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [linkPassword, setLinkPassword] = useState('');
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -128,27 +129,57 @@ export default function CreateLink() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
-            <div>
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-600">Password Protection</label>
-              <p className="text-xs text-slate-400 mt-0.5">Restrict access with a passphrase key.</p>
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-600">Password Protection</label>
+                <p className="text-xs text-slate-400 mt-0.5">Restrict access with a passphrase key.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setPasswordProtected((prev) => !prev);
+                  if (passwordProtected) setLinkPassword('');
+                }}
+                className={`w-11 h-6 rounded-full relative transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${passwordProtected ? 'bg-blue-600' : 'bg-slate-200'}`}
+              >
+                <span className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${passwordProtected ? 'left-6' : 'left-1'}`} />
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => setPasswordProtected((prev) => !prev)}
-              className={`w-11 h-6 rounded-full relative transition-colors ${passwordProtected ? 'bg-blue-600' : 'bg-slate-200'}`}
-            >
-              <span className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${passwordProtected ? 'left-6' : 'left-1'}`} />
-            </button>
+            {passwordProtected && (
+              <div className="space-y-1">
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">Set Passphrase</label>
+                <input
+                  type="password"
+                  value={linkPassword}
+                  onChange={(e) => setLinkPassword(e.target.value)}
+                  placeholder="Enter passphrase for this link"
+                  required={passwordProtected}
+                  minLength={6}
+                  className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all placeholder:text-slate-400"
+                />
+                <p className="text-[11px] text-slate-400">Minimum 6 characters.</p>
+              </div>
+            )}
           </div>
         </section>
 
         <section className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
           <h3 className="text-sm font-semibold text-slate-900">UTM Campaign Parameters</h3>
+          <p className="text-xs text-slate-400">Optional tracking parameters appended to the destination URL for analytics attribution.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input value={utmSource} onChange={(e) => setUtmSource(e.target.value)} placeholder="utm_source (e.g. twitter)" className="bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600" />
-            <input value={utmMedium} onChange={(e) => setUtmMedium(e.target.value)} placeholder="utm_medium (e.g. social)" className="bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600" />
-            <input value={utmCampaign} onChange={(e) => setUtmCampaign(e.target.value)} placeholder="utm_campaign (e.g. launch)" className="bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600" />
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Source</label>
+              <input value={utmSource} onChange={(e) => setUtmSource(e.target.value)} placeholder="e.g. twitter, newsletter" className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 placeholder:text-slate-400" />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Medium</label>
+              <input value={utmMedium} onChange={(e) => setUtmMedium(e.target.value)} placeholder="e.g. social, email" className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 placeholder:text-slate-400" />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Campaign</label>
+              <input value={utmCampaign} onChange={(e) => setUtmCampaign(e.target.value)} placeholder="e.g. product-launch" className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 placeholder:text-slate-400" />
+            </div>
           </div>
         </section>
 

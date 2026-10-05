@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight, User, ChevronLeft, Sparkles } from 'lucide-react';
 import { isAuthenticated, setAuthSession } from '../lib/auth';
 import { signInWithGoogle } from '../lib/googleAuth';
 import Logo from '../components/Logo';
@@ -101,13 +101,17 @@ export default function Auth() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Full Name</label>
-                <input 
-                  type="text" 
-                  required
-                  placeholder="Your name" 
-                  className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all placeholder:text-slate-400"
-                />
+                <label htmlFor="full-name" className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Full Name</label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                  <input 
+                    id="full-name"
+                    type="text" 
+                    required
+                    placeholder="Your name" 
+                    className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all placeholder:text-slate-400"
+                  />
+                </div>
               </div>
             )}
             
@@ -161,35 +165,69 @@ export default function Auth() {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="mt-4 w-full rounded-lg border border-slate-200 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+            className="mt-4 w-full rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-colors flex items-center justify-center gap-1.5"
           >
+            <ChevronLeft size={16} />
             Back to Home
           </button>
         </div>
       </div>
 
       {/* Right Side: Gradient Graphic */}
-      <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-[#3525cd] to-[#712ae2] relative overflow-hidden items-center justify-center p-12">
+      <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-[#3525cd] via-[#4f35e0] to-[#712ae2] relative overflow-hidden items-center justify-center p-12">
+        {/* Ambient background glows */}
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl pointer-events-none" />
+
         <div className="relative z-10 max-w-lg text-white space-y-8">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl shadow-xl">
-            <div className="flex gap-1 mb-4 text-amber-300">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-xs font-medium text-purple-100">
+              <Sparkles size={13} className="text-amber-300" />
+              <span>Enterprise Link Infrastructure</span>
+            </div>
+            <h2 className="text-3xl font-extrabold tracking-tight leading-tight">
+              Power your brand with intelligent short links &amp; dynamic QR codes.
+            </h2>
+            <p className="text-sm text-white/80 leading-relaxed">
+              Real-time click stream analytics, custom branded domains, and instant edge redirection trusted by growth teams worldwide.
+            </p>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl shadow-xl">
+            <div className="flex gap-1 mb-3 text-amber-300">
               {[1, 2, 3, 4, 5].map((star) => (
-                <svg key={star} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <svg key={star} className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               ))}
             </div>
-            <p className="text-lg font-medium leading-relaxed mb-6">
-              "Mini Links has completely transformed how we track our marketing campaigns. The scannability and fast redirects are outstanding."
+            <p className="text-base font-medium leading-relaxed mb-4 text-white/95">
+              "Mini Links has completely transformed how we track our marketing campaigns. The scannability, UTM attribution, and fast redirects are outstanding."
             </p>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-base">
+              <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-bold text-sm">
                 S
               </div>
               <div>
                 <p className="font-semibold text-sm">Sarah Jenkins</p>
                 <p className="text-xs text-white/70">Marketing Director, TechFlow</p>
               </div>
+            </div>
+          </div>
+
+          {/* Quick Metrics */}
+          <div className="grid grid-cols-3 gap-4 pt-2 border-t border-white/10">
+            <div>
+              <p className="text-2xl font-bold tracking-tight text-white">10M+</p>
+              <p className="text-xs text-white/70 mt-0.5">Links Redirected</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold tracking-tight text-white">99.9%</p>
+              <p className="text-xs text-white/70 mt-0.5">Uptime SLA</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold tracking-tight text-white">150+</p>
+              <p className="text-xs text-white/70 mt-0.5">Countries Served</p>
             </div>
           </div>
         </div>

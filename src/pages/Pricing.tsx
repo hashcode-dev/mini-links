@@ -15,8 +15,11 @@ export default function Pricing() {
         <div className="flex items-center justify-center gap-3 pt-6">
           <span className={`text-sm font-semibold ${!isAnnual ? 'text-slate-900' : 'text-slate-400'}`}>Monthly</span>
           <button 
+            role="switch"
+            aria-checked={isAnnual}
+            aria-label="Toggle annual billing"
             onClick={() => setIsAnnual(!isAnnual)}
-            className="w-14 h-7 bg-blue-600 rounded-full relative transition-colors"
+            className="w-14 h-7 bg-blue-600 rounded-full relative transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             <div className={`w-5 h-5 bg-white rounded-full absolute top-1 transition-all ${isAnnual ? 'left-8' : 'left-1'}`}></div>
           </button>
@@ -50,8 +53,8 @@ export default function Pricing() {
         </div>
 
         {/* Pro Plan */}
-        <div className="bg-white p-8 rounded-2xl border-2 border-blue-600 shadow-md relative flex flex-col transform md:-translate-y-2 card-shadow-hover">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white text-xs font-semibold uppercase tracking-wider px-4 py-1 rounded-full shadow-sm">
+        <div className="bg-white p-8 rounded-2xl border-2 border-blue-600 shadow-md relative flex flex-col mt-4 md:mt-0 md:-translate-y-2 card-shadow-hover">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-blue-600 text-white text-xs font-semibold uppercase tracking-wider px-4 py-1 rounded-full shadow-sm whitespace-nowrap">
             Most Popular
           </div>
           <h3 className="text-xl font-bold text-slate-900 mb-2">Pro</h3>
@@ -59,6 +62,7 @@ export default function Pricing() {
           <div className="mb-8">
             <span className="text-4xl font-extrabold text-slate-900">${isAnnual ? '13' : '16'}</span>
             <span className="text-slate-500">/mo</span>
+            {isAnnual && <p className="text-xs text-emerald-600 font-semibold mt-1">Billed annually ($156/yr)</p>}
           </div>
           <button className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium rounded-lg shadow-sm transition-all mb-8 text-sm">
             Upgrade to Pro
@@ -80,6 +84,7 @@ export default function Pricing() {
           <div className="mb-8">
             <span className="text-4xl font-extrabold text-slate-900">${isAnnual ? '69' : '85'}</span>
             <span className="text-slate-500">/mo</span>
+            {isAnnual && <p className="text-xs text-emerald-600 font-semibold mt-1">Billed annually ($828/yr)</p>}
           </div>
           <button className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 font-medium rounded-lg transition-all mb-8 text-sm">
             Contact Sales

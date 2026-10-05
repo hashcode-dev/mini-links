@@ -212,7 +212,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-[#faf8ff]">
       {/* Hero Section */}
-      <section className="bg-slate-50 border-b border-slate-200 py-12 lg:py-16 px-4 md:px-8">
+      <section className="bg-[#faf8ff] border-b border-slate-200 py-12 lg:py-16 px-4 md:px-8">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Headline */}
           <div className="lg:col-span-6 space-y-4">
@@ -630,8 +630,23 @@ export default function Home() {
                 ))}
                 {recentGeneratedLinks.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="px-6 py-8 text-center text-sm text-slate-500">
-                      No recent links created yet. Use the form above to shorten a link.
+                    <td colSpan={4} className="px-6 py-12 text-center">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center">
+                          <LinkIcon size={22} className="text-slate-400" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-slate-700">No links yet</p>
+                          <p className="text-xs text-slate-400 mt-0.5">Paste a URL above to create your first short link.</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('shorten')}
+                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-all"
+                        >
+                          Shorten a Link
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 )}
@@ -674,7 +689,7 @@ export default function Home() {
             <p className="text-sm text-slate-500 mb-4">
               Vector SVG & HD PNG generation with instant target URL editing capabilities.
             </p>
-            <Link to="/qr" className="w-full py-2 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-1">
+            <Link to="/qr" className="w-full py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-600 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-1">
               <span>Generate QR</span>
             </Link>
           </div>
@@ -687,7 +702,7 @@ export default function Home() {
             <p className="text-sm text-slate-500 mb-4">
               Track country metrics, device breakdowns, and daily click momentum instantly.
             </p>
-            <Link to="/dashboard" className="w-full py-2 bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-600 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-1">
+            <Link to="/dashboard" className="w-full py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-600 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-1">
               <span>View Dashboard</span>
             </Link>
           </div>
