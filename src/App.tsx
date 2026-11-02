@@ -17,6 +17,7 @@ import Contact from './pages/Contact';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import SitemapPage from './pages/SitemapPage';
+import RedirectHandler from './pages/RedirectHandler';
 
 // Helper component to dynamically inject Canonical links and Document Titles
 function PageMetaManager() {
@@ -104,34 +105,42 @@ function PageMetaManager() {
   return null;
 }
 
+export function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+
+        {/* Public Core Routes */}
+        <Route path="pricing" element={<Pricing />} />
+
+        {/* Compliance & Trust Routes */}
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="terms-of-service" element={<TermsOfService />} />
+        <Route path="sitemap" element={<SitemapPage />} />
+
+        {/* Secured User Workspace Routes */}
+        <Route path="dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
+        <Route path="links" element={<RequireAuth><Links /></RequireAuth>} />
+        <Route path="links/new" element={<RequireAuth><CreateLink /></RequireAuth>} />
+        <Route path="links/:id" element={<RequireAuth><LinkAnalytics /></RequireAuth>} />
+        <Route path="qr" element={<RequireAuth><QRCode /></RequireAuth>} />
+      </Route>
+      <Route path="/auth" element={<Auth />} />
+      {/* Dynamic short link redirect: Extra input after / invokes backend redirect API */}
+      <Route path="/:shortCode" element={<RedirectHandler />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
 export default function App() {
   return (
     <Router>
       <PageMetaManager />
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-
-          {/* Public Core Routes */}
-          <Route path="pricing" element={<Pricing />} />
-
-          {/* Compliance & Trust Routes */}
-          <Route path="about" element={<About />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="terms-of-service" element={<TermsOfService />} />
-          <Route path="sitemap" element={<SitemapPage />} />
-
-          {/* Secured User Workspace Routes */}
-          <Route path="dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
-          <Route path="links" element={<RequireAuth><Links /></RequireAuth>} />
-          <Route path="links/new" element={<RequireAuth><CreateLink /></RequireAuth>} />
-          <Route path="links/:id" element={<RequireAuth><LinkAnalytics /></RequireAuth>} />
-          <Route path="qr" element={<RequireAuth><QRCode /></RequireAuth>} />
-        </Route>
-        <Route path="/auth" element={<Auth />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <AppRoutes />
     </Router>
   );
 }

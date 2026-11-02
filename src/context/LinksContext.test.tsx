@@ -192,6 +192,27 @@ describe('LinksProvider', () => {
     );
   });
 
+  it('throws an error when alias matches a reserved web application route', () => {
+    const { result } = renderHook(() => useLinks(), { wrapper });
+    expect(() => {
+      act(() => {
+        result.current.createLink({
+          originalUrl: 'https://example.com',
+          alias: 'pricing',
+        });
+      });
+    }).toThrow('The alias "pricing" is a reserved web application route');
+
+    expect(() => {
+      act(() => {
+        result.current.createLink({
+          originalUrl: 'https://example.com',
+          shortCode: 'dashboard',
+        });
+      });
+    }).toThrow('The alias "dashboard" is a reserved web application route');
+  });
+
   it('returns undefined from getLinkById for unknown ids', () => {
     const { result } = renderHook(() => useLinks(), { wrapper });
     expect(result.current.getLinkById('does-not-exist')).toBeUndefined();

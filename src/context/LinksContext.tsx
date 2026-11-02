@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { getAuthSession, subscribeAuth } from '../lib/auth';
 import { safeStorage } from '../lib/storage';
 import { withUtmParams } from '../lib/url';
+import { isReservedRoute } from '../lib/reservedRoutes';
 
 export type LinkStatus = 'Active' | 'Expired' | 'Private';
 
@@ -185,6 +186,12 @@ export function LinksProvider({ children }: { children: ReactNode }) {
   }, [subject, links]);
 
   const createLink = useCallback((input: CreateLinkInput): ShortLink => {
+    const rawAlias = input.shortCode ? input.shortCode.trim() : (input.alias ?? '').trim();
+    if (rawAlias && isReservedRoute(rawAlias)) {
+      throw new Error(
+        `The alias "${rawAlias}" is a reserved web application route and cannot be used.`,
+      );
+    }
     const alias = input.shortCode ? input.shortCode.trim() : sanitizeAlias(input.alias ?? '');
     const shortCode = alias || `lnk-${Math.random().toString(36).slice(2, 8)}`;
     const domain = (input.domain ?? 'minilinks.com').trim();

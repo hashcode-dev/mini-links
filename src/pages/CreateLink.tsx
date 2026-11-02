@@ -5,6 +5,7 @@ import { Calendar, Link as LinkIcon } from 'lucide-react';
 import { useLinks } from '../context/LinksContext';
 import { isHttpUrl } from '../lib/url';
 import { shortenUrl } from '../lib/shortenApi';
+import { validateCustomAlias } from '../lib/reservedRoutes';
 
 export default function CreateLink() {
   const navigate = useNavigate();
@@ -29,6 +30,15 @@ export default function CreateLink() {
     if (!isHttpUrl(originalUrl)) {
       setErrorMessage('Please enter a valid http or https destination URL.');
       return;
+    }
+
+    const trimmedAlias = alias.trim();
+    if (trimmedAlias) {
+      const aliasError = validateCustomAlias(trimmedAlias);
+      if (aliasError) {
+        setErrorMessage(aliasError);
+        return;
+      }
     }
 
     setIsSubmitting(true);

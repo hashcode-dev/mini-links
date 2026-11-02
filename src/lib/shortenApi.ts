@@ -1,4 +1,5 @@
 import { normalizeUrl } from './url';
+import { validateCustomAlias } from './reservedRoutes';
 
 export const DEFAULT_SHORTEN_API_URL =
   'https://shorten-url-67086831017.asia-south1.run.app/shorten';
@@ -71,6 +72,13 @@ export async function shortenUrl(
     DEFAULT_SHORTEN_REDIRECT_BASE;
 
   const trimmedAlias = input.alias?.trim();
+  if (trimmedAlias) {
+    const aliasError = validateCustomAlias(trimmedAlias);
+    if (aliasError) {
+      throw new Error(aliasError);
+    }
+  }
+
   const requestBody: { originalUrl: string; alias?: string } = {
     originalUrl: normalizedOriginalUrl,
   };

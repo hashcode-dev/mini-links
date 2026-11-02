@@ -165,4 +165,25 @@ describe('Home Component URL Shortening', () => {
       screen.getByTestId('shorten-submit-btn'),
     ).toBeInTheDocument();
   });
+
+  it('rejects reserved web application paths when entered as an alias', async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderHome();
+
+    const urlInput = screen.getByPlaceholderText(/Paste long URL/i);
+    const aliasInput = screen.getByPlaceholderText(/e\.g\. promo2026/i);
+    const submitButton = screen.getByTestId('shorten-submit-btn');
+
+    await user.type(urlInput, 'https://example.com');
+    await user.type(aliasInput, 'pricing');
+    await user.click(submitButton);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      /The alias "pricing" is a reserved web application route and cannot be used/i,
+    );
+  });
 });

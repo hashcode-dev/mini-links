@@ -6,6 +6,7 @@ import { useLinks } from '../context/LinksContext';
 import { isAuthenticated } from '../lib/auth';
 import { normalizeUrl } from '../lib/url';
 import { shortenUrl, type ShortenResult } from '../lib/shortenApi';
+import { validateCustomAlias } from '../lib/reservedRoutes';
 import ResultBox from '../components/ResultBox';
 
 export default function Home() {
@@ -53,13 +54,23 @@ export default function Home() {
   const handleShorten = async (e: React.FormEvent) => {
     e.preventDefault();
     setShortenError(null);
+
+    const trimmedAlias = alias.trim();
+    if (trimmedAlias) {
+      const aliasError = validateCustomAlias(trimmedAlias);
+      if (aliasError) {
+        setShortenError(aliasError);
+        return;
+      }
+    }
+
     setIsShortening(true);
 
     try {
       const validUrl = normalizeUrl(longUrl);
       const result = await shortenUrl({
         originalUrl: validUrl,
-        alias: alias.trim() || undefined,
+        alias: trimmedAlias || undefined,
       });
 
       setShortenedUrl(result.fullShortUrl);
@@ -130,13 +141,23 @@ export default function Home() {
   const handleGenerateQr = (e: React.FormEvent) => {
     e.preventDefault();
     setQrError(null);
+
+    const trimmedQrAlias = qrAlias.trim();
+    if (trimmedQrAlias) {
+      const aliasError = validateCustomAlias(trimmedQrAlias);
+      if (aliasError) {
+        setQrError(aliasError);
+        return;
+      }
+    }
+
     setIsQrCreating(true);
     setTimeout(() => {
       try {
         const validUrl = normalizeUrl(qrLongUrl);
         const link = createLink({
           originalUrl: validUrl,
-          alias: qrAlias,
+          alias: trimmedQrAlias,
           domain: qrDomain,
         });
         setQrShortUrl(link.shortUrl);

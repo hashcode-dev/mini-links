@@ -328,6 +328,27 @@ describe('shortenApi', () => {
       ).rejects.toThrow('Request timed out. Please check your connection and try again.');
     });
 
+    it('rejects aliases that match reserved web application routes', async () => {
+      const fetchMock = vi.fn();
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        shortenUrl({
+          originalUrl: 'https://example.com',
+          alias: 'pricing',
+        }),
+      ).rejects.toThrow('The alias "pricing" is a reserved web application route');
+
+      await expect(
+        shortenUrl({
+          originalUrl: 'https://example.com',
+          alias: 'DASHBOARD',
+        }),
+      ).rejects.toThrow('The alias "DASHBOARD" is a reserved web application route');
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
     it('handles unknown non-Error rejections', async () => {
       const fetchMock = vi.fn().mockRejectedValue('network catastrophic error');
       vi.stubGlobal('fetch', fetchMock);
@@ -340,3 +361,4 @@ describe('shortenApi', () => {
     });
   });
 });
+
